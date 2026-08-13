@@ -144,5 +144,4 @@ Rules of thumb:
 - Subfolders are namespace segments: `Queries/PhonesQuery.php` is
   `App\Islands\Phones\Queries\PhonesQuery`.
 
-Real-time updates and translations are covered in [events](events.md) and
-[translations](translations.md).
+Translations are covered in [translations](translations.md).
