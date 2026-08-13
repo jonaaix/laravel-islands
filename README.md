@@ -63,7 +63,7 @@ resolved for the frontend.
 
 ```vue
 <script setup>
-import { useModel } from '@aaix/laravel-vue-islands';
+import { useModel } from '@aaix/laravel-islands/vue';
 
 const { data: product, isDeleted } = useModel('product');
 </script>
@@ -81,7 +81,7 @@ full control.
 ## Real-time on the model
 
 ```php
-use Aaix\VueIslands\Concerns\InteractsWithIslands;
+use Aaix\LaravelIslands\Concerns\InteractsWithIslands;
 
 class Product extends Model
 {
@@ -97,17 +97,24 @@ using Laravel's core `BroadcastsEvents`. Authorize the channel in
 
 ```js
 // resources/js/app.js
-import { startIslands } from '@aaix/laravel-vue-islands';
+import { startVueIslands } from '@aaix/laravel-islands/vue';
 
-startIslands(import.meta.glob('./islands/**/*.island.vue', { eager: true }));
+startVueIslands({
+    ...import.meta.glob('./islands/**/*.island.vue', { eager: true }),
+    // feature folders keep their island next to its endpoints
+    ...import.meta.glob('../../app/Islands/**/*.island.vue', { eager: true }),
+});
 ```
 
 ```js
 // vite.config.js
 import vue from '@vitejs/plugin-vue';
-// plugins: [vue(), ...]
-// resolve.alias: { '@aaix/laravel-vue-islands': '.../resources/js/index.js' }
+// plugins: [laravel({ /* ... */ }), vue()]
+// resolve.alias: { '@aaix/laravel-islands': '.../vendor/aaix/laravel-islands/resources/js' }
 ```
+
+Three entry points hang off that name: `@aaix/laravel-islands` (core),
+`/vue` (adapter and composables), `/vue/helpers` (optional UI).
 
 ## Scaffolding an island
 

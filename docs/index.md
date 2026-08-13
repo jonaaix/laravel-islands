@@ -33,7 +33,7 @@ keeps the client in sync — no glue code in the page.
 **`<x-island>`** serializes props, resolves broadcast channels, emits the
 markup the runtime looks for.
 
-**The JS runtime** (`startIslands` plus composables) mounts every
+**The JS runtime** (`startVueIslands` plus composables) mounts every
 `[data-island]` element it finds, hydrates it with the server props, and
 opens the subscriptions.
 

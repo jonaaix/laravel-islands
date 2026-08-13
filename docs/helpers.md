@@ -10,6 +10,26 @@ import { Tooltip, Icon, Modal, provideIcons } from '@aaix/laravel-islands/vue/he
 Nothing here is required. Use them, or bring your own — the bridge works either
 way.
 
+| Import | What it is |
+| --- | --- |
+| `Checkbox` | `modelValue`, `indeterminate`, `disabled`, `ariaLabel` → `update:modelValue` |
+| `Switch` | as above plus `tone`, for a setting that takes effect at once |
+| `Radio` | `value`, `modelValue`, `name`, `disabled`, `ariaLabel` — loose comparison, like the native one |
+| `RadioGroup` | wraps `Radio`s, owns `modelValue` and `orientation`, names the group for you |
+| `Badge` | `tone`, `icon`, `numeric` — a status word, `numeric` keeps digits from jittering |
+| `PersonChip` | `name`, `image` — an avatar with a fallback built from the name |
+| `List` / `ListItem` | a hairline-divided list; the item takes `label`, `description`, `descriptionTone` |
+| `EditButton` | the quiet pencil beside an editable value: `label`, `size` → `click` |
+| `IconButton` | `label`, `size`, `tone`, `tooltip`, `disabled` → `click` — the label is the aria-label and the tooltip |
+| `Tabs` | `items` (`{ key, label, icon?, count?, mark?, disabled? }`), `modelValue` → `update:modelValue` |
+| `Popover` | anchored layer: `anchor`, `open`, `width`, `offset`, `margin` → `close` |
+| `WysiwygEditor` | `modelValue` → `update:modelValue`, for the one field that needs rich text |
+| `ToastHost` + `provideToasts` / `useToast` | short-lived messages in four tones — `info`, `success`, `warning`, `danger`; without a host they go nowhere instead of throwing |
+| `Tooltip`, `Icon`, `Modal`, `useConfirm` | detailed below |
+
+Every one of them is a plain component: no store, no provider, except where a
+host is named.
+
 > [!NOTE]
 > The helpers carry Tailwind classes. Register the package with your build or
 > they are dropped and the components render unstyled:

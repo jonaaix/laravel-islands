@@ -22,11 +22,13 @@ export default defineConfig({
             text: 'Guide',
             items: [
                { text: 'Installation & Usage', link: '/installation-and-usage' },
+               { text: 'Island Structure', link: '/island-structure' },
             ],
          },
          {
             text: 'Reference',
             items: [
+               { text: 'Composables', link: '/composables' },
                { text: 'Helpers', link: '/helpers' },
                { text: 'Translations', link: '/translations' },
             ],

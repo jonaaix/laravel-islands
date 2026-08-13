@@ -14,24 +14,17 @@ framework-agnostic; a Vue adapter ships today (a React adapter is planned).
 
 ## Installation
 
-The package is a local path package in this repository, so it is already wired.
-For a fresh project:
-
-```jsonc
-// composer.json — repositories
-{
-    "type": "path",
-    "url": "packages/Aaix/*",
-    "options": { "symlink": true }
-}
-```
-
 ```bash
-composer require aaix/laravel-islands:@dev
+composer require aaix/laravel-islands
 npm install vue @vitejs/plugin-vue
 ```
 
+The service provider is discovered automatically. The frontend half ships as plain
+sources in the same package — no build step of its own.
+
 ### Vite
+
+Point the import name at those sources:
 
 ```js
 // vite.config.js
@@ -42,13 +35,18 @@ export default defineConfig({
     resolve: {
         alias: {
             '@aaix/laravel-islands': fileURLToPath(
-                new URL('./packages/Aaix/laravel-islands/resources/js', import.meta.url),
+                new URL('./vendor/aaix/laravel-islands/resources/js', import.meta.url),
             ),
         },
     },
-    plugins: [laravel({ /* ... */ }), vue(), tailwindcss()],
+    plugins: [laravel({ /* ... */ }), vue()],
 });
 ```
+
+Three entry points hang off that name: `@aaix/laravel-islands` (framework-agnostic
+core), `@aaix/laravel-islands/vue` (the adapter and its composables) and
+`@aaix/laravel-islands/vue/helpers` (optional UI, see [helpers](helpers.md) — those
+carry Tailwind classes and need an `@source` line).
 
 ### App entry
 
@@ -60,8 +58,27 @@ startVueIslands(import.meta.glob('./islands/**/*.island.vue', { eager: true }));
 ```
 
 `startVueIslands` scans the DOM for `[data-island][data-island-adapter="vue"]`
-elements, resolves the matching component from the glob and mounts it. It also
-re-scans after `livewire:navigated`, so islands work inside Filament pages.
+elements, resolves the matching component from the registry you handed it and
+mounts it. It also re-scans after `livewire:navigated`, so islands work inside
+Filament pages.
+
+A registry key is looked up as `./islands/<name>.island.vue` first and as
+`./<name>.island.vue` second, so whatever the glob's keys look like decides how
+deep a `name` may reach. Feature folders under `app/Islands` are registered by
+adding a second glob and normalising its keys:
+
+```js
+const featureIslands = Object.fromEntries(
+    Object.entries(import.meta.glob('../../app/Islands/**/*.island.vue', { eager: true }))
+        .map(([path, module]) => [`./islands/${path.split('/').pop()}`, module]),
+);
+
+startVueIslands({ ...import.meta.glob('./islands/**/*.island.vue', { eager: true }), ...featureIslands });
+```
+
+With that normalisation the mount name is the entry file's basename —
+`<x-island name="Products">` finds `app/Islands/Products/Products.island.vue`,
+and two islands must not share an entry file name.
 
 ## Usage
 
@@ -103,45 +120,23 @@ const { props } = useIsland();
 </script>
 ```
 
-### File conventions
+### Where island components live
 
-- Island components live in `resources/js/islands/**` and end in `.island.vue`.
-- The Blade `name` is the path relative to `resources/js/islands/` without the
-  suffix.
+Two homes, both registered in the app entry above:
 
-## Inside an island
+| Home | Mount name | Good for |
+| --- | --- | --- |
+| `resources/js/islands/**` | the path without the suffix, e.g. `product-view/ProductView` | a component that is only markup |
+| `app/Islands/<Island>/` | the entry file's basename, e.g. `Products` | a feature that owns endpoints, queries and state as well |
 
-`php artisan make:island Phones` scaffolds a feature folder that names its own
-responsibilities, so the tenth file lands where the first one did:
+Either way the file ends in `.island.vue`. A feature folder is what
+`make:island` scaffolds — see [island structure](island-structure.md).
 
-```text
-app/Islands/Phones/
-├── Phones.island.vue            the island itself
-├── PhonesIslandController.php   the only door: validate, guard, hand over
-├── PhonesProps.php              what it starts up with
-├── Routes.php                   its endpoints (this name is fixed — see below)
-├── Page.blade.php               the mount point, if it owns a page
-├── Queries/                     reading
-├── Writers/                     writing
-├── Presenters/                  a record turned into what the wire carries
-├── State/                       what a user remembers: preferences, saved views
-├── Support/                     the rest: URL lists, column definitions, helpers
-└── Components/                  the island's own Vue components
-```
+## Next
 
-Rules of thumb:
-
-- **A folder from the first file on**, not from the second. The point is that the
-  next reader — human or agent — can guess where something is.
-- **Nothing new at the root.** The five files above are the island's wiring; every
-  addition belongs to a role.
-- **`Routes.php` cannot move.** The package looks for exactly this file in each
-  island directory (`routes.file` in the config renames it globally, not per
-  island).
-- **An exception lives with whoever throws it**, not in a folder of its own.
-- **`Support/` holds both languages.** PHP helpers and loose `.js` modules —
-  `Components/` is only for `.vue` files.
-- Subfolders are namespace segments: `Queries/PhonesQuery.php` is
-  `App\Islands\Phones\Queries\PhonesQuery`.
-
-Translations are covered in [translations](translations.md).
+- [Island structure](island-structure.md) — what `make:island` scaffolds and
+  where each kind of file belongs.
+- [Composables](composables.md) — `useIsland`, `useModel`, `useEcho`,
+  `useSortableTiles`.
+- [Helpers](helpers.md) — the optional UI that ships with the package.
+- [Translations](translations.md) — how `t()` gets its lines.
