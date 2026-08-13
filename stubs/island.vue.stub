@@ -1,0 +1,68 @@
+<script setup>
+/**
+ * @ai-agent Do not hand-roll UI or plumbing — the installed @aaix/laravel-islands… packages
+ * ship components and composables for most of it, today from
+ *
+ *   @aaix/laravel-islands/vue           composables
+ *   @aaix/laravel-islands/vue/helpers   generic UI
+ *   @aaix/laravel-islands-datagrid/vue  table, filters, pagination
+ *
+ * Each package lists its entry points under "exports" in its package.json.
+ */
+import { onMounted, ref } from 'vue';
+import { useIsland, useTranslations } from '@aaix/laravel-islands/vue';
+
+const island = useIsland();
+const props = island.props;
+const { t } = useTranslations();
+
+const rows = ref([]);
+const loading = ref(false);
+const failed = ref(false);
+
+async function load() {
+    loading.value = true;
+    failed.value = false;
+
+    try {
+        const response = await fetch(props.dataUrl, {
+            credentials: 'same-origin',
+            headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        });
+
+        if (!response.ok) {
+            throw new Error(String(response.status));
+        }
+
+        const body = await response.json();
+        rows.value = body?.data?.rows ?? [];
+    } catch (e) {
+        failed.value = true;
+    } finally {
+        loading.value = false;
+    }
+}
+
+onMounted(load);
+</script>
+
+<template>
+    <div>
+        <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ t('{{ title }}') }}</h1>
+
+        <p v-if="loading" class="mt-4 text-sm text-gray-500 dark:text-gray-400">{{ t('Loading…') }}</p>
+
+        <div v-else-if="failed" class="mt-4 flex items-center gap-3">
+            <p class="text-sm text-red-600 dark:text-red-400">{{ t('Could not load the data') }}</p>
+            <button
+                type="button"
+                @click="load()"
+                class="rounded-md bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+            >{{ t('Retry') }}</button>
+        </div>
+
+        <p v-else class="mt-4 text-sm text-gray-500 dark:text-gray-400">
+            {{ t(':count rows', { count: rows.length }) }}
+        </p>
+    </div>
+</template>

@@ -1,0 +1,23 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Http\Request;
+
+/**
+ * Everything the island needs to start up: the endpoints it may call, plus the state
+ * it should open with. Endpoints are handed over as route-generated URLs so the island
+ * never builds a path of its own.
+ */
+class {{ class }}Props
+{
+    public function build(Request $request): array
+    {
+        return [
+            'dataUrl' => route('{{ routeName }}data'),
+            'initial' => [
+                //
+            ],
+        ];
+    }
+}

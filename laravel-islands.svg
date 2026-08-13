@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bg-core" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+
+    <!-- Island Surface Gradient -->
+    <linearGradient id="island-surface" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+
+    <!-- Core Accent Glow Gradient -->
+    <linearGradient id="archipelago-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="100%" stop-color="#FB7185" />
+    </linearGradient>
+
+    <!-- Signal Line Gradient -->
+    <linearGradient id="signal-line" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#34D399" stop-opacity="0.3" />
+    </linearGradient>
+
+    <!-- Pure Blur Filter (Isolated for background glow layers only) -->
+    <filter id="soft-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" />
+    </filter>
+  </defs>
+
+  <!-- Base Card Frame (App Icon) -->
+  <rect x="8" y="8" width="184" height="184" rx="36" fill="url(#bg-core)" stroke="#334155" stroke-width="1.5" />
+
+  <!-- Oceanic Topography / Depth Lines -->
+  <path d="M 15,115 Q 45,95 85,120 T 185,110" fill="none" stroke="#334155" stroke-width="1" stroke-dasharray="3 4" opacity="0.3" />
+  <path d="M 15,55 Q 65,85 125,45 T 185,75" fill="none" stroke="#334155" stroke-width="1" stroke-dasharray="3 4" opacity="0.3" />
+
+  <!-- Outer Reef Bathymetry Line around Archipelago -->
+  <path d="M 52,95 C 45,62 72,42 108,44 C 142,46 160,68 156,108 C 152,140 120,154 86,148 C 58,142 48,118 52,95 Z" fill="none" stroke="#38BDF8" stroke-width="1" stroke-dasharray="2 4" opacity="0.25" />
+
+  <!-- Signal Lines linking outer satellites -->
+  <path d="M 82,78 Q 62,68 48,62" fill="none" stroke="url(#signal-line)" stroke-width="1.5" stroke-dasharray="3 3" />
+  <path d="M 122,78 Q 138,68 152,62" fill="none" stroke="url(#signal-line)" stroke-width="1.5" stroke-dasharray="3 3" />
+  <path d="M 118,112 Q 132,130 142,148" fill="none" stroke="url(#signal-line)" stroke-width="1.5" stroke-dasharray="3 3" />
+  <path d="M 72,112 Q 55,128 42,138" fill="none" stroke="url(#signal-line)" stroke-width="1.5" stroke-dasharray="3 3" />
+
+  <!-- OUTER SATELLITE ISLANDS -->
+
+  <!-- NW Satellite -->
+  <path d="M 40,55 C 44,50 56,52 58,58 C 60,65 52,72 45,70 C 38,68 36,60 40,55 Z" fill="none" stroke="#38BDF8" stroke-width="4" filter="url(#soft-glow)" opacity="0.8" />
+  <path d="M 40,55 C 44,50 56,52 58,58 C 60,65 52,72 45,70 C 38,68 36,60 40,55 Z" fill="url(#island-surface)" stroke="#38BDF8" stroke-width="1.5" />
+  <circle cx="48" cy="62" r="2.5" fill="#38BDF8" />
+
+  <!-- NE Satellite -->
+  <path d="M 144,55 C 152,52 162,58 160,66 C 158,74 148,75 142,70 C 138,65 140,58 144,55 Z" fill="none" stroke="#34D399" stroke-width="4" filter="url(#soft-glow)" opacity="0.8" />
+  <path d="M 144,55 C 152,52 162,58 160,66 C 158,74 148,75 142,70 C 138,65 140,58 144,55 Z" fill="url(#island-surface)" stroke="#34D399" stroke-width="1.5" />
+  <circle cx="152" cy="62" r="2.5" fill="#34D399" />
+
+  <!-- SE Satellite -->
+  <path d="M 134,140 C 142,138 152,142 150,150 C 148,158 138,160 132,154 C 128,148 130,142 134,140 Z" fill="none" stroke="#FB7185" stroke-width="4" filter="url(#soft-glow)" opacity="0.8" />
+  <path d="M 134,140 C 142,138 152,142 150,150 C 148,158 138,160 132,154 C 128,148 130,142 134,140 Z" fill="url(#island-surface)" stroke="#FB7185" stroke-width="1.5" />
+  <circle cx="142" cy="148" r="2.5" fill="#FB7185" />
+
+  <!-- SW Satellite -->
+  <path d="M 36,132 C 42,130 48,136 46,142 C 44,148 36,150 32,144 C 30,138 32,134 36,132 Z" fill="none" stroke="#38BDF8" stroke-width="4" filter="url(#soft-glow)" opacity="0.8" />
+  <path d="M 36,132 C 42,130 48,136 46,142 C 44,148 36,150 32,144 C 30,138 32,134 36,132 Z" fill="url(#island-surface)" stroke="#38BDF8" stroke-width="1.5" />
+  <circle cx="42" cy="138" r="2.5" fill="#38BDF8" />
+
+  <!-- CENTRAL ARCHIPELAGO CLUSTER -->
+
+  <!-- 1. Central Main Island (Large) -->
+  <path d="M 72,82 C 68,72 80,64 92,66 C 102,68 110,75 106,88 C 103,98 90,105 78,102 C 68,98 65,90 72,82 Z" fill="none" stroke="url(#archipelago-glow)" stroke-width="5" filter="url(#soft-glow)" opacity="0.85" />
+  <path d="M 72,82 C 68,72 80,64 92,66 C 102,68 110,75 106,88 C 103,98 90,105 78,102 C 68,98 65,90 72,82 Z" fill="url(#island-surface)" stroke="url(#archipelago-glow)" stroke-width="2" />
+
+  <!-- 2. East Island (Medium) -->
+  <path d="M 118,85 C 112,78 124,70 134,72 C 144,74 148,85 142,94 C 136,102 122,102 116,95 C 112,90 114,88 118,85 Z" fill="none" stroke="#34D399" stroke-width="4" filter="url(#soft-glow)" opacity="0.85" />
+  <path d="M 118,85 C 112,78 124,70 134,72 C 144,74 148,85 142,94 C 136,102 122,102 116,95 C 112,90 114,88 118,85 Z" fill="url(#island-surface)" stroke="#34D399" stroke-width="1.8" />
+
+  <!-- 3. South Island (Medium-Small) -->
+  <path d="M 88,116 C 82,110 94,104 104,106 C 114,108 118,118 112,126 C 105,133 90,131 85,124 C 82,118 85,114 88,116 Z" fill="none" stroke="#FB7185" stroke-width="4" filter="url(#soft-glow)" opacity="0.85" />
+  <path d="M 88,116 C 82,110 94,104 104,106 C 114,108 118,118 112,126 C 105,133 90,131 85,124 C 82,118 85,114 88,116 Z" fill="url(#island-surface)" stroke="#FB7185" stroke-width="1.8" />
+
+  <!-- 4. North-East Islet (Small) -->
+  <path d="M 98,55 C 94,50 105,45 112,48 C 118,51 116,60 110,61 C 102,62 95,58 98,55 Z" fill="url(#island-surface)" stroke="#38BDF8" stroke-width="1.5" />
+
+  <!-- 5. West Lagoon Islet (Tiny Atoll) -->
+  <path d="M 58,98 C 55,92 63,88 66,92 C 68,96 62,102 58,98 Z" fill="url(#island-surface)" stroke="#38BDF8" stroke-width="1.2" />
+
+  <!-- 6. Micro-Islets & Node Accents -->
+  <circle cx="112" cy="78" r="2.5" fill="#34D399" />
+  <circle cx="82" cy="110" r="2" fill="#FB7185" />
+  <circle cx="128" cy="106" r="2" fill="#FB7185" opacity="0.8" />
+  <circle cx="92" cy="74" r="3" fill="#38BDF8" />
+
+  <!-- Neutral Central Core Crosshair -->
+  <circle cx="90" cy="86" r="5" fill="none" stroke="#34D399" stroke-width="1" stroke-dasharray="2 2" opacity="0.8" />
+</svg>

@@ -1,0 +1,23 @@
+<?php
+
+namespace {{ namespace }}\Queries;
+
+use Illuminate\Http\Request;
+
+/**
+ * What this island reads. Everything the browser asks for is answered here, in the shape the
+ * frontend draws — never a model, so the view cannot start following relations of its own.
+ *
+ * @ai-agent Reading belongs here, writing in Writers, turning a record into rows in Presenters,
+ * what a user remembers in State, and the rest in Support. Nothing new at the island's root.
+ */
+class {{ class }}Query
+{
+    public function data(Request $request): array
+    {
+        return [
+            'rows' => [],
+            'meta' => [],
+        ];
+    }
+}

@@ -1,0 +1,44 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ namespace }}\Queries\{{ class }}Query;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+
+/**
+ * The island's only door. It validates, guards and hands over — the work itself belongs to
+ * Queries, Writers and Presenters beside it.
+ *
+ * @ai-agent Do not hand-roll the recurring work behind an island — the installed
+ * Aaix\Laravel… packages carry traits and services for it, today from
+ *
+ *   Aaix\LaravelIslands\Concerns              island plumbing
+ *   Aaix\LaravelIslandsDatagrid\Concerns      table endpoints
+ *   Aaix\LaravelIslandsDatagrid\ViewProfiles  saved views
+ *
+ * Look up what they offer before writing an endpoint of your own.
+ */
+class {{ class }}IslandController extends Controller
+{
+    public function __construct(private readonly {{ class }}Query $query)
+    {
+    }
+
+    public function data(Request $request): JsonResponse
+    {
+        $this->authorizeAccess();
+
+        return response()->json(['data' => $this->query->data($request)]);
+    }
+
+    /**
+     * Guard every endpoint of this island. An island is reachable over HTTP like any
+     * other route, so leaving this open would publish whatever it returns.
+     */
+    private function authorizeAccess(): void
+    {
+        //
+    }
+}

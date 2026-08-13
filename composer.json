@@ -1,0 +1,30 @@
+{
+    "name": "aaix/laravel-islands",
+    "description": "Elegant frontend islands for Laravel: a framework-agnostic core with server-driven props, real-time subscriptions, actions and translations. Ships a Vue adapter; React adapter planned.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.3",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "illuminate/view": "^12.0|^13.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aaix\\LaravelIslands\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aaix\\LaravelIslands\\IslandsServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
