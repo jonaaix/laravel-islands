@@ -24,8 +24,9 @@ way.
 | `Tabs` | `items` (`{ key, label, icon?, count?, mark?, disabled? }`), `modelValue` → `update:modelValue` |
 | `Popover` | anchored layer: `anchor`, `open`, `width`, `offset`, `margin` → `close` |
 | `WysiwygEditor` | `modelValue` → `update:modelValue`, for the one field that needs rich text |
+| `FieldCaption` | the 10px uppercase caption style, always a `<span>`; the callsite wraps it in the semantic element it belongs to (`<dt>`, `<label>`, `<p>`, …) |
 | `ToastHost` + `provideToasts` / `useToast` | short-lived messages in four tones — `info`, `success`, `warning`, `danger`; without a host they go nowhere instead of throwing |
-| `Tooltip`, `Icon`, `Modal`, `useConfirm` | detailed below |
+| `Tooltip`, `Icon`, `Modal`, `Table`, `useConfirm` | detailed below |
 
 Every one of them is a plain component: no store, no provider, except where a
 host is named.
@@ -180,3 +181,46 @@ Sizing and colour stay with the caller — the component sets no dimensions, so
 A naming prefix per style keeps a mixed set readable. Heroicons, for instance:
 `s-` solid 24, `o-` outline 24, `m-` mini 20. The renderer does not care; the
 convention is yours.
+
+## Table
+
+A thin wrapper around a native `<table>`. It applies the shared frame — width,
+text size, cell padding, header typography — via `:where()`, which carries zero
+specificity, so any utility class on an individual cell wins without
+`!important`.
+
+```vue
+<script setup>
+import { Table } from '@aaix/laravel-islands/vue/helpers';
+</script>
+
+<template>
+    <Table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Order</th>
+                <th class="text-right">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>2026-08-01</td>
+                <td>#4711</td>
+                <td class="text-right tabular-nums">EUR 189.00</td>
+            </tr>
+        </tbody>
+    </Table>
+</template>
+```
+
+The primitive owns:
+
+- `<table>`: `w-full text-sm`.
+- `<th>`: uniform `whitespace-nowrap px-3 py-2 text-left`, plus the 10px uppercase
+  caption typography — a header cell needs no wrapper of its own.
+- `<td>`: `whitespace-nowrap px-3 py-2`. Truncation is intentionally opt-in:
+  never clip a value silently; let the row region scroll instead.
+
+Anything else — alignment, tone, tabular numbers, the card frame around the
+table — is up to the caller.
