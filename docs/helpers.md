@@ -16,6 +16,7 @@ way.
 | `Switch` | as above plus `tone`, for a setting that takes effect at once |
 | `Radio` | `value`, `modelValue`, `name`, `disabled`, `ariaLabel` — loose comparison, like the native one |
 | `RadioGroup` | wraps `Radio`s, owns `modelValue` and `orientation`, names the group for you |
+| `Slider` | snap-value slider: `modelValue`, `options` (`{ value, label? }[]`), `disabled`, `ariaLabel` — picks the nearest option on drag/click |
 | `Badge` | `tone`, `icon`, `numeric` — a status word, `numeric` keeps digits from jittering |
 | `PersonChip` | `name`, `image` — an avatar with a fallback built from the name |
 | `List` / `ListItem` | a hairline-divided list; the item takes `label`, `description`, `descriptionTone` |
