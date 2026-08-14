@@ -132,6 +132,36 @@ Two homes, both registered in the app entry above:
 Either way the file ends in `.island.vue`. A feature folder is what
 `make:island` scaffolds — see [island structure](island-structure.md).
 
+## Real-time on the model
+
+`useModel` on the frontend keeps a record in sync — the Laravel side needs to
+broadcast the record's lifecycle onto a channel the runtime can find. The
+`InteractsWithIslands` trait wraps that in one line:
+
+```php
+use Aaix\LaravelIslands\Concerns\InteractsWithIslands;
+
+class Product extends Model
+{
+    use InteractsWithIslands;
+}
+```
+
+Under the hood this composes Laravel's own `BroadcastsEvents` and pins the
+channel to `App.Models.Product.{id}` — the same shape `<x-island>` writes into
+the mount attributes when you pass `:subscribe="$product"`. `created`,
+`updated` and `deleted` events go out automatically.
+
+Authorize the channel in `routes/channels.php` as usual:
+
+```php
+Broadcast::channel('App.Models.Product.{id}', fn (User $user, int $id) => true);
+```
+
+Nothing else changes on the frontend — the [`useModel`](composables.md#usemodel)
+consumer picks up the events off the same private channel and reconciles its
+reactive state.
+
 ## Next
 
 - [Island structure](island-structure.md) — what `make:island` scaffolds and
