@@ -38,7 +38,10 @@ const emit = defineEmits(['update:modelValue']);
 
             {{ item.label }}<span
                 v-if="item.count !== null && item.count !== undefined"
-                class="ml-0.5 tabular-nums text-gray-400 dark:text-gray-500"
+                class="font-accent ml-0.5 rounded-md px-1.5 py-0.5 text-xs font-semibold tabular-nums"
+                :class="modelValue === item.key
+                    ? 'bg-primary-100 text-primary-700 dark:bg-primary-500/20 dark:text-primary-300'
+                    : 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'"
             >{{ item.count }}</span>
 
             <!-- A verdict about what is inside, as a shape rather than a colour. -->
