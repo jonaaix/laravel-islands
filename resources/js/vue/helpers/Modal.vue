@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
 
 const props = defineProps({
     open: { type: Boolean, default: false },
@@ -81,6 +82,9 @@ function focusables() {
     return [...(panel.value?.querySelectorAll(selector) ?? [])].filter((el) => el.offsetParent !== null || el.tagName === 'IFRAME');
 }
 
+const overlayId = ref(null);
+const overlayStyle = computed(() => overlayId.value !== null ? { zIndex: overlayZIndex(overlayId.value) } : {});
+
 watch(() => props.open, async (open) => {
     if (!open) {
         returnFocusTo?.focus?.();
@@ -88,22 +92,35 @@ watch(() => props.open, async (open) => {
         return;
     }
 
+    overlayId.value = registerOverlay();
+
     returnFocusTo = document.activeElement;
     await nextTick();
     (focusables()[0] ?? panel.value)?.focus?.();
 });
 
+function releaseOverlay() {
+    if (overlayId.value === null) {
+        return;
+    }
+
+    unregisterOverlay(overlayId.value);
+    overlayId.value = null;
+}
+
 onBeforeUnmount(() => {
     returnFocusTo = null;
+    releaseOverlay();
 });
 </script>
 
 <template>
     <Teleport to="body">
-        <Transition name="island-modal">
+        <Transition name="island-modal" @after-leave="releaseOverlay">
             <div
                 v-if="open"
-                class="fixed inset-0 z-[70] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-[2px]"
+                class="fixed inset-0 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-[2px]"
+                :style="overlayStyle"
                 @click.self="onBackdrop"
                 @keydown="onKeydown"
             >
