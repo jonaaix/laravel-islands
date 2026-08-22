@@ -10,6 +10,8 @@ const props = defineProps({
     offset: { type: Number, default: 4 },
     /** Room kept between the panel and the window, so it never touches the edge. */
     margin: { type: Number, default: 16 },
+    /** Layer to render above (default 60 sits under modals 70; pass 80+ to overlay a modal). */
+    zIndex: { type: Number, default: 60 },
 });
 
 const emit = defineEmits(['close']);
@@ -65,12 +67,12 @@ defineExpose({ position });
 <template>
     <Teleport to="body">
         <!-- A click beside the panel means no, the same as Escape. -->
-        <div v-if="open" class="fixed inset-0 z-[60]" @click="emit('close')"></div>
+        <div v-if="open" class="fixed inset-0" :style="{ zIndex }" @click="emit('close')"></div>
 
         <div
             v-if="open"
-            class="fixed z-[61] overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10"
-            :style="style"
+            class="fixed overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10"
+            :style="{ ...style, zIndex: zIndex + 1 }"
             @keydown.esc.stop="emit('close')"
             @click.stop
         >
