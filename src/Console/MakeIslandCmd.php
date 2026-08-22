@@ -43,7 +43,18 @@ class MakeIslandCmd extends Command
         }
 
         $slug = Str::kebab($class);
-        $directory = base_path((string) config('laravel-islands.path', 'app/Islands')) . '/' . $class;
+        $root = base_path((string) config('laravel-islands.path', 'app/Islands'));
+        $core = $root . '/@Core';
+        $directory = $root . '/' . $class;
+
+        if (!is_dir($core) && !mkdir($core, 0755, true) && !is_dir($core)) {
+            $this->components->error("Could not create {$core}.");
+
+            return self::FAILURE;
+        }
+        if (!file_exists($core . '/.gitkeep')) {
+            touch($core . '/.gitkeep');
+        }
 
         $replacements = [
             '{{ class }}' => $class,
