@@ -14,8 +14,12 @@ const props = defineProps({
     loading: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
     fullWidth: { type: Boolean, default: false },
-    /** For submit buttons inside forms. */
+    /** For submit buttons inside forms. Ignored when `href` is set. */
     type: { type: String, default: 'button' },
+    /** When set, the helper renders as `<a href>` instead of `<button>` — same look, keeps native link behaviour (middle-click, right-click "open in new tab"). */
+    href: { type: String, default: null },
+    target: { type: String, default: null },
+    rel: { type: String, default: null },
     /** `pill` is full-rounded (Material-style), `rounded` a soft-corner rectangle. */
     shape: { type: String, default: null },
     /** Material-style ripple on press. Skipped when the button is disabled or loading. */
@@ -87,19 +91,31 @@ function spawnRipple(event) {
 }
 
 function onClick(event) {
-    if (isDisabled.value) return;
+    if (isDisabled.value) {
+        event.preventDefault();
+        return;
+    }
     spawnRipple(event);
     emit('click', event);
 }
+
+const isAnchor = computed(() => props.href !== null);
+const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'noopener' : null));
 </script>
 
 <template>
-    <button
+    <component
+        :is="isAnchor ? 'a' : 'button'"
         v-bind="attrs"
-        :type="type"
-        :disabled="isDisabled"
+        :type="isAnchor ? null : type"
+        :href="isAnchor ? (isDisabled ? null : href) : null"
+        :target="isAnchor ? target : null"
+        :rel="isAnchor ? resolvedRel : null"
+        :disabled="isAnchor ? null : isDisabled"
+        :aria-disabled="isAnchor && isDisabled ? 'true' : null"
         :class="[
             'relative inline-flex shrink-0 items-center justify-center overflow-hidden whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60',
+            isAnchor && isDisabled ? 'cursor-not-allowed opacity-60' : '',
             size.box,
             shapeClass,
             toneClass,
@@ -138,7 +154,7 @@ function onClick(event) {
         >
             <slot name="iconRight" />
         </span>
-    </button>
+    </component>
 </template>
 
 <style scoped>

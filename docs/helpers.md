@@ -63,7 +63,10 @@ Material-style ripple on press.
 | `loading` | `false` | Replaces the leading icon with a spinner and disables the button. |
 | `disabled` | `false` | Standard disabled state. |
 | `fullWidth` | `false` | Stretches to the container width. |
-| `type` | `'button'` | For submit buttons inside forms. |
+| `type` | `'button'` | For submit buttons inside forms. Ignored when `href` is set. |
+| `href` | `null` | Sets the destination and renders the helper as `<a>` instead of `<button>`, so middle-click and right-click "Open in new tab" keep working. |
+| `target` | `null` | Anchor `target`. When `'_blank'` and `rel` is unset, `rel="noopener"` is added automatically. |
+| `rel` | `null` | Explicit override for the anchor's `rel`. |
 | `ripple` | `true` | The pressed ripple. Skipped when disabled or loading. |
 
 Slots: `#icon` for a leading glyph, default for the label, `#iconRight` for a
