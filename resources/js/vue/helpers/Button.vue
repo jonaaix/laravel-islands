@@ -94,11 +94,11 @@ const SPLIT_HALF = {
 };
 
 const SPLIT_DIVIDER = {
-    cta: 'bg-white/25',
-    primary: 'bg-primary-800/15 dark:bg-primary-200/15',
-    secondary: 'bg-gray-300 dark:bg-white/10',
-    ghost: 'bg-gray-200 dark:bg-white/10',
-    danger: 'bg-white/25',
+    cta: 'bg-white/15',
+    primary: 'bg-primary-800/10 dark:bg-primary-200/10',
+    secondary: 'bg-gray-300/60 dark:bg-white/5',
+    ghost: 'bg-gray-200/70 dark:bg-white/5',
+    danger: 'bg-white/15',
 };
 
 const resolvedTone = computed(() => props.tone ?? defaults.tone ?? PACKAGE_DEFAULTS.tone);
