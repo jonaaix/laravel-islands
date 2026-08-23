@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import IconButton from './IconButton.vue';
 import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
 
 const props = defineProps({
@@ -141,26 +142,29 @@ onBeforeUnmount(() => {
                         <slot name="actions" />
                     </div>
 
-                    <button
+                    <IconButton
                         v-if="closable"
-                        type="button"
+                        size="sm"
+                        tone="quiet"
+                        :label="closeLabel"
+                        :tooltip="false"
                         @click="close"
-                        :aria-label="closeLabel"
-                        class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                     >
                         <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"/></svg>
-                    </button>
+                    </IconButton>
                 </div>
 
-                <button
+                <IconButton
                     v-else-if="closable"
-                    type="button"
+                    size="sm"
+                    tone="quiet"
+                    :label="closeLabel"
+                    :tooltip="false"
+                    class="absolute right-2 top-2"
                     @click="close"
-                    :aria-label="closeLabel"
-                    class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                 >
                     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"/></svg>
-                </button>
+                </IconButton>
 
                 <div class="min-h-0 flex-1" :class="fills ? 'overflow-hidden' : 'overflow-y-auto p-5'">
                     <slot />
