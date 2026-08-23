@@ -154,17 +154,17 @@ onBeforeUnmount(() => {
                     </IconButton>
                 </div>
 
-                <IconButton
-                    v-else-if="closable"
-                    size="sm"
-                    tone="quiet"
-                    :label="closeLabel"
-                    :tooltip="false"
-                    class="absolute right-2 top-2"
-                    @click="close"
-                >
-                    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"/></svg>
-                </IconButton>
+                <span v-else-if="closable" class="absolute right-2 top-2 z-10">
+                    <IconButton
+                        size="sm"
+                        tone="quiet"
+                        :label="closeLabel"
+                        :tooltip="false"
+                        @click="close"
+                    >
+                        <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"/></svg>
+                    </IconButton>
+                </span>
 
                 <div class="min-h-0 flex-1" :class="fills ? 'overflow-hidden' : 'overflow-y-auto p-5'">
                     <slot />
