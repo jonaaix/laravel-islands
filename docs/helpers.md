@@ -68,6 +68,16 @@ Material-style ripple on press.
 | `target` | `null` | Anchor `target`. When `'_blank'` and `rel` is unset, `rel="noopener"` is added automatically. |
 | `rel` | `null` | Explicit override for the anchor's `rel`. |
 | `ripple` | `true` | The pressed ripple. Skipped when disabled or loading. |
+| `menuLabel` | `'Open menu'` | Accessible label of the chevron half when the `menu` slot is filled. |
+| `menuWidth` | `240` | Width of the popover in pixels — passed through to `Popover`. |
+
+### Slots
+
+- `#icon`: leading glyph.
+- default: label text.
+- `#chip`: an inline chip after the label — a badge, locale tag or version pill.
+- `#iconRight`: trailing glyph (single-mode only, ignored when `#menu` is filled).
+- `#menu`: turns the button into a split-button with a chevron half. Receives `{ close }` — call it after picking an option. Each half runs its own ripple.
 
 Slots: `#icon` for a leading glyph, default for the label, `#iconRight` for a
 trailing glyph. Each icon slot sizes itself to the button's height — pass raw
