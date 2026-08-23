@@ -20,8 +20,9 @@ way.
 | `Badge` | `tone`, `icon`, `numeric` — a status word, `numeric` keeps digits from jittering |
 | `PersonChip` | `name`, `image` — an avatar with a fallback built from the name |
 | `List` / `ListItem` | a hairline-divided list; the item takes `label`, `description`, `descriptionTone` |
+| `Button` | `label`, `tone`, `size`, `shape`, `loading`, `disabled`, `fullWidth`, `ripple` + slots `icon` · default · `iconRight` → `click` |
 | `EditButton` | the quiet pencil beside an editable value: `label`, `size` → `click` |
-| `IconButton` | `label`, `size`, `tone`, `tooltip`, `disabled` → `click` — the label is the aria-label and the tooltip |
+| `IconButton` | `label`, `size`, `tone`, `tooltip`, `disabled`, `ripple` → `click` — the label is the aria-label and the tooltip |
 | `Tabs` | `items` (`{ key, label, icon?, count?, mark?, disabled? }`), `modelValue` → `update:modelValue` |
 | `Popover` | anchored layer: `anchor`, `open`, `width`, `offset`, `margin` → `close` |
 | `WysiwygEditor` | `modelValue` → `update:modelValue`, for the one field that needs rich text |
@@ -38,6 +39,57 @@ host is named.
 > ```css
 > @source '../vendor/aaix/laravel-islands/resources/js/**/*';
 > ```
+
+## Button
+
+A standard button with tone, size, shape, loading state, icon slots and a
+Material-style ripple on press.
+
+```vue
+<Button tone="cta" @click="save">
+    <template #icon>
+        <Icon name="s-arrow-down-tray" />
+    </template>
+    {{ t('Save changes') }}
+</Button>
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `label` | `''` | Fallback text when no default slot is passed. |
+| `tone` | `'primary'` | `cta` · `primary` · `secondary` · `ghost` · `danger`. `cta` is the one-off ask, `primary` the persistent action, the rest quiet neighbours. |
+| `size` | `'md'` | `sm` (h-7 text-xs) · `md` (h-9 text-sm) · `lg` (h-10 text-sm). |
+| `shape` | `'rounded'` | `pill` for full-rounded, `rounded` for soft-cornered. The default is `rounded` so the button is safe to drop into any project; opt into `pill` app-wide with `provideButtonDefaults`. |
+| `loading` | `false` | Replaces the leading icon with a spinner and disables the button. |
+| `disabled` | `false` | Standard disabled state. |
+| `fullWidth` | `false` | Stretches to the container width. |
+| `type` | `'button'` | For submit buttons inside forms. |
+| `ripple` | `true` | The pressed ripple. Skipped when disabled or loading. |
+
+Slots: `#icon` for a leading glyph, default for the label, `#iconRight` for a
+trailing glyph. Each icon slot sizes itself to the button's height — pass raw
+SVG or an `<Icon>`; the wrapper does not colour the glyph, so `text-*` on the
+button paints it.
+
+### Application-wide defaults
+
+Set once at boot to let every button pick up the same shape, size or default
+tone without touching each callsite:
+
+```js
+import { startVueIslands } from '@aaix/laravel-islands/vue';
+import { BUTTON_DEFAULTS_KEY } from '@aaix/laravel-islands/vue/helpers';
+
+startVueIslands(registry, {
+    setup(app) {
+        app.provide(BUTTON_DEFAULTS_KEY, { shape: 'pill' });
+    },
+});
+```
+
+Any explicit prop still wins per callsite. From a component's setup the
+equivalent is `provideButtonDefaults({ shape: 'pill' })` — same key, scoped
+to that subtree instead of the whole app.
 
 ## Tooltip
 
