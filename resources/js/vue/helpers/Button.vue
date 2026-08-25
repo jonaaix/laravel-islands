@@ -73,7 +73,8 @@ const TONES = {
     cta: 'bg-primary-600 text-white font-medium shadow-sm hover:bg-primary-500 focus-visible:ring-primary-500',
     primary: 'bg-primary-100 text-primary-800 font-medium hover:bg-primary-200 focus-visible:ring-primary-500 dark:bg-primary-500/15 dark:text-primary-200 dark:hover:bg-primary-500/25',
     secondary: 'bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 focus-visible:ring-gray-500 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700',
-    ghost: 'bg-transparent text-gray-700 font-medium ring-1 ring-gray-200 hover:bg-gray-100 focus-visible:ring-gray-500 dark:text-gray-200 dark:ring-white/10 dark:hover:bg-white/5',
+    outlined: 'bg-transparent text-gray-700 font-medium ring-1 ring-gray-200 hover:bg-gray-100 focus-visible:ring-gray-500 dark:text-gray-200 dark:ring-white/10 dark:hover:bg-white/5',
+    ghost: 'bg-transparent text-gray-600 font-medium hover:bg-gray-100 hover:text-gray-900 focus-visible:ring-gray-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-100',
     danger: 'bg-red-600 text-white font-medium shadow-sm hover:bg-red-500 focus-visible:ring-red-500',
 };
 
@@ -81,7 +82,8 @@ const SPLIT_FRAME = {
     cta: 'shadow-sm',
     primary: '',
     secondary: '',
-    ghost: 'ring-1 ring-gray-200 dark:ring-white/10',
+    outlined: 'ring-1 ring-gray-200 dark:ring-white/10',
+    ghost: '',
     danger: 'shadow-sm',
 };
 
@@ -89,7 +91,8 @@ const SPLIT_HALF = {
     cta: 'bg-primary-600 text-white font-medium hover:bg-primary-500 focus-visible:ring-primary-500',
     primary: 'bg-primary-100 text-primary-800 font-medium hover:bg-primary-200 focus-visible:ring-primary-500 dark:bg-primary-500/15 dark:text-primary-200 dark:hover:bg-primary-500/25',
     secondary: 'bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 focus-visible:ring-gray-500 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700',
-    ghost: 'bg-transparent text-gray-700 font-medium hover:bg-gray-100 focus-visible:ring-gray-500 dark:text-gray-200 dark:hover:bg-white/5',
+    outlined: 'bg-transparent text-gray-700 font-medium hover:bg-gray-100 focus-visible:ring-gray-500 dark:text-gray-200 dark:hover:bg-white/5',
+    ghost: 'bg-transparent text-gray-600 font-medium hover:bg-gray-100 hover:text-gray-900 focus-visible:ring-gray-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-100',
     danger: 'bg-red-600 text-white font-medium hover:bg-red-500 focus-visible:ring-red-500',
 };
 
@@ -97,6 +100,7 @@ const SPLIT_DIVIDER = {
     cta: 'bg-white/15',
     primary: 'bg-primary-800/10 dark:bg-primary-200/10',
     secondary: 'bg-gray-300/60 dark:bg-white/5',
+    outlined: 'bg-gray-200/70 dark:bg-white/5',
     ghost: 'bg-gray-200/70 dark:bg-white/5',
     danger: 'bg-white/15',
 };

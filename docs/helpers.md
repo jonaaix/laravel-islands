@@ -57,7 +57,7 @@ Material-style ripple on press.
 | Prop | Default | Purpose |
 | --- | --- | --- |
 | `label` | `''` | Fallback text when no default slot is passed. |
-| `tone` | `'primary'` | `cta` · `primary` · `secondary` · `ghost` · `danger`. `cta` is the one-off ask, `primary` the persistent action, the rest quiet neighbours. |
+| `tone` | `'primary'` | `cta` · `primary` · `secondary` · `outlined` · `ghost` · `danger`. `cta` is the one-off ask, `primary` the persistent action, `outlined` a hairline outline over transparent, `ghost` transparent without any border. `secondary` and the outlined variants are quiet neighbours. |
 | `size` | `'md'` | `sm` (h-7 text-xs) · `md` (h-9 text-sm) · `lg` (h-10 text-sm). |
 | `shape` | `'rounded'` | `pill` for full-rounded, `rounded` for soft-cornered. The default is `rounded` so the button is safe to drop into any project; opt into `pill` app-wide with `provideButtonDefaults`. |
 | `loading` | `false` | Replaces the leading icon with a spinner and disables the button. |
