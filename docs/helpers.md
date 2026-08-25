@@ -150,13 +150,68 @@ window around it.
 | `closeOnEscape` | `true` | Escape closes it. |
 | `closeLabel` | `'Close'` | Accessible label of the close button — pass a translated string. |
 
-It emits `close`; nothing closes itself, so a dialog can refuse to go away while
-a request is in flight. The `footer` slot is optional and only draws its divider
-when filled.
+Modals are controlled: `closeOnEscape` / `closeOnBackdrop` only emit `close`,
+they never close themselves. The callsite owns `:open` — that's what makes a
+dirty-check before closing possible. The `footer` slot is optional and only
+draws its divider when filled.
 
 The window is teleported to the end of the page, so no scrolling ancestor or
 `overflow-hidden` card can clip it. While it is open, focus stays inside it and
 Tab wraps around; closing hands focus back to whatever opened it.
+
+## FormModal
+
+The `Modal` wrapper for a Save-form: the fields sit inside a `<form>`, Cancel and
+the primary action sit in a shared footer, and both live in the same submit
+lifecycle. Use it whenever the modal's job is to collect fields and hand them
+back — anything else stays with plain `Modal`.
+
+```vue
+<FormModal
+    :open="editing"
+    size="lg"
+    :title="editing ? t('Edit user') : t('New user')"
+    :cancel-label="t('Cancel')"
+    :submit-label="editing ? t('Save changes') : t('Create user')"
+    submit-tone="cta"
+    :submit-disabled="!canSubmit"
+    :busy="saving"
+    @cancel="editing = false"
+    @submit="save"
+>
+    <!-- fields, sections, alerts -->
+</FormModal>
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `open` | `false` | Same as `Modal`. |
+| `title` | `''` | Same as `Modal`. Use the `#title` slot when a badge, subline or counter has to sit beside it. |
+| `size` | `'md'` | Passed through to `Modal`. |
+| `closeOnBackdrop` | `false` | Defaults to `false` — a stray click beside the window must not drop typed values. Opt in with `true` where safe. |
+| `closeOnEscape` | `true` | Passed through. Modal only *emits* on Escape; the callsite decides via `:open` (see the note on the `Modal` section). |
+| `cancelLabel` | `'Cancel'` | Doubles as the Modal's `close-label`. |
+| `submitLabel` | `'Save'` | The primary button's label. |
+| `submitTone` | `'cta'` | `cta` or `danger` for the primary button. |
+| `submitDisabled` | `false` | Grays the primary button while the form is not valid — orthogonal to `busy`. |
+| `busy` | `false` | Disables both buttons and shows the spinner on the primary one. |
+
+Events: `cancel` fires on Escape, close-icon, Cancel-button or backdrop (when
+allowed) — the callsite owns `:open`. `submit` fires when the form submits.
+
+**Two slots, no more:**
+
+- **`#title`** — replaces the `title` prop when set; use it for a badge, counter
+  or subline that sits beside the title.
+- **`#footer`** — replaces the two default buttons while keeping the footer
+  chrome (`border-t border-gray-200 pt-4 dark:border-white/10 flex justify-end
+  gap-2`). Use it for a third action or a split-button. Never override the
+  chrome — that is what keeps the footer looking the same across every form.
+
+Anatomy is fixed: header comes from `Modal`, content is the default slot inside
+a `<form @submit.prevent>`, footer sits at the end of the form so a submit-typed
+button posts naturally. The buttons are in `Modal`'s default size (36 px) —
+never `size="sm"`; that reads as a confirmation dialog and drifts.
 
 ## Confirm
 

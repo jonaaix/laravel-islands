@@ -11,6 +11,7 @@ export { default as Badge } from './Badge.vue';
 export { default as Tooltip } from './Tooltip.vue';
 export { default as Icon } from './Icon.vue';
 export { default as Modal } from './Modal.vue';
+export { default as FormModal } from './FormModal.vue';
 export { default as Popover } from './Popover.vue';
 export { default as Button } from './Button.vue';
 export { provideButtonDefaults, useButtonDefaults, BUTTON_DEFAULTS_KEY } from './buttonDefaults.js';

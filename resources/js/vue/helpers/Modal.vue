@@ -134,8 +134,12 @@ onBeforeUnmount(() => {
                 :class="[sizeClass, fills ? 'h-full' : 'max-h-full']"
             >
                 <!-- Without a title there is no bar to hang the close button in; it floats instead. -->
-                <div v-if="title" class="flex shrink-0 items-center gap-4 border-b border-gray-200 px-4 py-2 dark:border-white/10">
-                    <p class="min-w-0 flex-1 truncate text-sm font-semibold text-gray-900 dark:text-gray-100">{{ title }}</p>
+                <div v-if="title || $slots.title" class="flex shrink-0 items-center gap-4 border-b border-gray-200 px-4 py-2 dark:border-white/10">
+                    <div class="min-w-0 flex-1">
+                        <slot name="title">
+                            <p class="truncate text-sm font-semibold text-gray-900 dark:text-gray-100">{{ title }}</p>
+                        </slot>
+                    </div>
 
                     <!-- The bar has the room, so what acts on the content sits beside its name. -->
                     <div v-if="$slots.actions" class="flex shrink-0 items-center gap-2">
