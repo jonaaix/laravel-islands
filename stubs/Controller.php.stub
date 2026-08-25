@@ -8,17 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 /**
- * The island's only door. It validates, guards and hands over — the work itself belongs to
- * Queries, Writers and Presenters beside it.
- *
- * @ai-agent Do not hand-roll the recurring work behind an island — the installed
- * Aaix\Laravel… packages carry traits and services for it, today from
- *
- *   Aaix\LaravelIslands\Concerns              island plumbing
- *   Aaix\LaravelIslandsDatagrid\Concerns      table endpoints
- *   Aaix\LaravelIslandsDatagrid\ViewProfiles  saved views
- *
- * Look up what they offer before writing an endpoint of your own.
+ * @ai-agent For a list-view island, follow `base-datagrid-recipe.md` in the
+ * islands-datagrid-development skill.
  */
 class {{ class }}IslandController extends Controller
 {

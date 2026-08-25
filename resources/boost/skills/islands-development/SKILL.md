@@ -5,6 +5,12 @@ description: Build a feature view with aaix/laravel-islands — scaffolding an i
 
 # Working on an Island
 
+> **Before writing any markup,** open [`helpers-index.md`](./helpers-index.md) — a
+> full inventory of the components, composables and hosts shipped by
+> `@aaix/laravel-islands` and `@aaix/laravel-islands-datagrid`. The single most
+> common avoidable diff is a hand-rolled modal, tooltip, sort menu or toolbar
+> layer that already exists behind a one-line import.
+
 An island is a feature folder that owns both halves of a view: the endpoints it
 reads and writes, and the Vue component that draws them. Filament or Blade only
 provides the page it is mounted into.
@@ -113,24 +119,14 @@ const props = island.props;
 const { t } = useTranslations();  // English source strings are the keys
 ```
 
-- `useModel(key, options)` — keeps a subscribed model in step with server-side
-  changes over Echo.
-- `useEcho()` — the raw connection, for events that are not a model.
-- `useSortableTiles({ container, list })` — pointer-event dragging with a
-  threshold and capture on the container.
-- `@aaix/laravel-islands/vue/helpers` — Checkbox, Switch, Radio, RadioGroup,
-  Badge, Tooltip, Icon, Modal, Popover, Tabs, List, ListItem, PersonChip,
-  EditButton, IconButton, WysiwygEditor, plus `useConfirm` and `useToast` with
-  their hosts.
-
-Read the package's `exports` before writing markup: a hand-rolled modal or
-checkbox is the most common avoidable diff in an island. Tables, filters and
-pagination live in `@aaix/laravel-islands-datagrid` — see
-`islands-datagrid-development`.
-
 `t()` reads the application's JSON translation lines for the current locale,
-shipped with the payload — English source strings are the keys, so a string that
-never passes through `t()` can never be translated.
+shipped with the payload — a string that never passes through `t()` can never
+be translated.
+
+Every composable, helper component and host shipped by the package (plus the
+datagrid additions) is listed in [`helpers-index.md`](./helpers-index.md).
+Read it before writing markup — tables, filters and pagination live in the
+sibling `islands-datagrid-development` skill.
 
 ## Stubs
 

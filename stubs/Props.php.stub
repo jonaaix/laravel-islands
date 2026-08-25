@@ -5,9 +5,8 @@ namespace {{ namespace }};
 use Illuminate\Http\Request;
 
 /**
- * Everything the island needs to start up: the endpoints it may call, plus the state
- * it should open with. Endpoints are handed over as route-generated URLs so the island
- * never builds a path of its own.
+ * @ai-agent Props shape and validation live in `base-datagrid-recipe.md`
+ * (islands-datagrid-development skill).
  */
 class {{ class }}Props
 {
