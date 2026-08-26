@@ -26,6 +26,7 @@ way.
 | `vRipple` | the press feedback of this package as a directive, so it works on anything a pointer lands on: `<tr v-ripple>`, `<button v-ripple="!disabled">`. Spawns on pointerdown, because the feedback belongs to the press — on release a link has already navigated. The element is made `relative` and clipped if it was not already, and the one CSS rule the circle needs is placed once on first use, so there is still no stylesheet to import |
 | `Tabs` | `items` (`{ key, label, icon?, count?, mark?, disabled? }`), `modelValue` → `update:modelValue` |
 | `Popover` | anchored layer: `anchor`, `open`, `width`, `offset`, `margin` → `close` |
+| `Menu` + `MenuItem` | a dropdown of actions: the trigger goes in `#trigger` (it receives `toggle` and `open`), the rows in the default slot (it receives `close`). `MenuItem` is a `<button>`, or a link opening a new tab when given `href`, and takes `tone="danger"` for the destructive row. Beyond three actions in a row, this is what replaces them |
 | `WysiwygEditor` | `modelValue` → `update:modelValue`, for the one field that needs rich text |
 | `FieldCaption` | the 10px uppercase caption style, always a `<span>`; the callsite wraps it in the semantic element it belongs to (`<dt>`, `<label>`, `<p>`, …) |
 | `ToastHost` + `provideToasts` / `useToast` | short-lived messages in four tones — `info`, `success`, `warning`, `danger`; without a host they go nowhere instead of throwing |
