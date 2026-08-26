@@ -2,7 +2,6 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-    /** Given, the row becomes a link that opens in a new tab. */
     href: { type: String, default: '' },
     tone: { type: String, default: 'default' },
     disabled: { type: Boolean, default: false },
