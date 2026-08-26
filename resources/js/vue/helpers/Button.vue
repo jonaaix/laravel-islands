@@ -123,8 +123,12 @@ const hasMenu = computed(() => Boolean(slots.menu));
 
 const ripple = useRipple();
 
+/**
+ * On press, not on release: a click fires when the pointer comes back up, by which time a
+ * link has already navigated and the feedback plays on a page nobody is looking at.
+ */
 function spawnRipple(key, event) {
-    if (!props.ripple || isDisabled.value) return;
+    if (!props.ripple || isDisabled.value || event.button !== 0) return;
 
     ripple.press(event, key);
 }
@@ -134,7 +138,6 @@ function onActionClick(event) {
         event.preventDefault();
         return;
     }
-    spawnRipple('action', event);
     emit('click', event);
 }
 
@@ -146,7 +149,6 @@ function onMenuClick(event) {
         event.preventDefault();
         return;
     }
-    spawnRipple('menu', event);
     menuOpen.value = !menuOpen.value;
     emit(menuOpen.value ? 'menu-open' : 'menu-close');
 }
@@ -181,6 +183,7 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
             toneClass,
             fullWidth ? 'w-full' : '',
         ]"
+        @pointerdown="spawnRipple('action', $event)"
         @click="onActionClick"
     >
         <Ripples :items="ripple.on('action')" />
@@ -233,6 +236,7 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
                 size.splitAction,
                 splitHalfClass,
             ]"
+            @pointerdown="spawnRipple('action', $event)"
             @click="onActionClick"
         >
             <Ripples :items="ripple.on('action')" />
@@ -263,6 +267,7 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
                 size.splitMenu,
                 splitHalfClass,
             ]"
+            @pointerdown="spawnRipple('menu', $event)"
             @click="onMenuClick"
         >
             <Ripples :items="ripple.on('menu')" />

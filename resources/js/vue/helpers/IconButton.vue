@@ -21,12 +21,15 @@ const emit = defineEmits(['click']);
 
 const ripple = useRipple();
 
+/** On press, not on release — see Button.vue. */
+function spawnRipple(event) {
+    if (!props.ripple || props.disabled || event.button !== 0) return;
+
+    ripple.press(event);
+}
+
 function onClick(event) {
     if (props.disabled) return;
-
-    if (props.ripple) {
-        ripple.press(event);
-    }
 
     emit('click', event);
 }
@@ -59,6 +62,7 @@ const tone = computed(() => TONES[props.tone] ?? TONES.quiet);
         <button
             type="button"
             v-bind="attrs"
+            @pointerdown="spawnRipple"
             @click="onClick"
             :aria-label="label"
             :disabled="disabled"
