@@ -23,7 +23,7 @@ way.
 | `Button` | `label`, `tone`, `size`, `shape`, `loading`, `disabled`, `fullWidth`, `ripple` + slots `icon` · default · `iconRight` → `click` |
 | `EditButton` | the quiet pencil beside an editable value: `label`, `size` → `click` |
 | `IconButton` | `label`, `size`, `tone`, `tooltip`, `disabled`, `ripple` → `click` — the label is the aria-label and the tooltip |
-| `useRipple` + `Ripples` | the press feedback the round controls share: `press(event, key?)` on pointerdown — feedback belongs to the press, not to the release, or a link navigates before it is seen — `<Ripples :items="ripple.on(key?)" />` inside a `relative overflow-hidden` control. Name the key to host several surfaces in one caller — a split button's halves, a row of page numbers. Whether a press is allowed stays with the caller, the only place that knows about `disabled` and `loading` |
+| `vRipple` | the press feedback of this package as a directive, so it works on anything a pointer lands on: `<tr v-ripple>`, `<button v-ripple="!disabled">`. Spawns on pointerdown, because the feedback belongs to the press — on release a link has already navigated. The element is made `relative` and clipped if it was not already, and the one CSS rule the circle needs is placed once on first use, so there is still no stylesheet to import |
 | `Tabs` | `items` (`{ key, label, icon?, count?, mark?, disabled? }`), `modelValue` → `update:modelValue` |
 | `Popover` | anchored layer: `anchor`, `open`, `width`, `offset`, `margin` → `close` |
 | `WysiwygEditor` | `modelValue` → `update:modelValue`, for the one field that needs rich text |

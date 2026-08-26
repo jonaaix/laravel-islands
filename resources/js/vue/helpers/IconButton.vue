@@ -1,8 +1,7 @@
 <script setup>
 import { computed, useAttrs } from 'vue';
 import Tooltip from './Tooltip.vue';
-import Ripples from './Ripples.vue';
-import { useRipple } from './useRipple.js';
+import { vRipple } from './ripple.js';
 
 defineOptions({ inheritAttrs: false });
 
@@ -18,15 +17,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['click']);
-
-const ripple = useRipple();
-
-/** On press, not on release — see Button.vue. */
-function spawnRipple(event) {
-    if (!props.ripple || props.disabled || event.button !== 0) return;
-
-    ripple.press(event);
-}
 
 function onClick(event) {
     if (props.disabled) return;
@@ -62,15 +52,14 @@ const tone = computed(() => TONES[props.tone] ?? TONES.quiet);
         <button
             type="button"
             v-bind="attrs"
-            @pointerdown="spawnRipple"
+            v-ripple="ripple && !disabled"
             @click="onClick"
             :aria-label="label"
             :disabled="disabled"
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full transition-colors duration-[250ms] ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-60"
             :class="[box, tone]"
         >
-            <Ripples :items="ripple.on()" />
-            <span :class="glyph" class="flex items-center justify-center [&>svg]:h-full [&>svg]:w-full">
+                <span :class="glyph" class="flex items-center justify-center [&>svg]:h-full [&>svg]:w-full">
                 <slot />
             </span>
         </button>

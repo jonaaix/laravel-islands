@@ -1,8 +1,7 @@
 <script setup>
 import { computed, ref, useAttrs, useSlots } from 'vue';
 import Popover from './Popover.vue';
-import Ripples from './Ripples.vue';
-import { useRipple } from './useRipple.js';
+import { vRipple } from './ripple.js';
 import { useButtonDefaults } from './buttonDefaults.js';
 
 defineOptions({ inheritAttrs: false });
@@ -121,17 +120,7 @@ const splitDividerClass = computed(() => SPLIT_DIVIDER[resolvedTone.value] ?? SP
 const isDisabled = computed(() => props.disabled || props.loading);
 const hasMenu = computed(() => Boolean(slots.menu));
 
-const ripple = useRipple();
-
-/**
- * On press, not on release: a click fires when the pointer comes back up, by which time a
- * link has already navigated and the feedback plays on a page nobody is looking at.
- */
-function spawnRipple(key, event) {
-    if (!props.ripple || isDisabled.value || event.button !== 0) return;
-
-    ripple.press(event, key);
-}
+const rippleOn = computed(() => props.ripple && !isDisabled.value);
 
 function onActionClick(event) {
     if (isDisabled.value) {
@@ -183,10 +172,9 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
             toneClass,
             fullWidth ? 'w-full' : '',
         ]"
-        @pointerdown="spawnRipple('action', $event)"
+        v-ripple="rippleOn"
         @click="onActionClick"
     >
-        <Ripples :items="ripple.on('action')" />
         <span v-if="loading" :class="[size.glyph, 'flex items-center justify-center']">
             <svg class="animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" d="M12 3a9 9 0 1 0 9 9" />
@@ -236,11 +224,10 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
                 size.splitAction,
                 splitHalfClass,
             ]"
-            @pointerdown="spawnRipple('action', $event)"
+            v-ripple="rippleOn"
             @click="onActionClick"
         >
-            <Ripples :items="ripple.on('action')" />
-            <span v-if="loading" :class="[size.glyph, 'flex items-center justify-center']">
+                <span v-if="loading" :class="[size.glyph, 'flex items-center justify-center']">
                 <svg class="animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" d="M12 3a9 9 0 1 0 9 9" />
                 </svg>
@@ -267,10 +254,9 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
                 size.splitMenu,
                 splitHalfClass,
             ]"
-            @pointerdown="spawnRipple('menu', $event)"
+            v-ripple="rippleOn"
             @click="onMenuClick"
         >
-            <Ripples :items="ripple.on('menu')" />
             <svg :class="[size.chevron, 'transition-transform']" :style="{ transform: menuOpen ? 'rotate(180deg)' : 'none' }" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.25a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08Z" clip-rule="evenodd" />
             </svg>
