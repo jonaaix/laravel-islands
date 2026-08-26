@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref, useAttrs, useSlots } from 'vue';
 import Popover from './Popover.vue';
+import Ripples from './Ripples.vue';
+import { useRipple } from './useRipple.js';
 import { useButtonDefaults } from './buttonDefaults.js';
 
 defineOptions({ inheritAttrs: false });
@@ -119,23 +121,12 @@ const splitDividerClass = computed(() => SPLIT_DIVIDER[resolvedTone.value] ?? SP
 const isDisabled = computed(() => props.disabled || props.loading);
 const hasMenu = computed(() => Boolean(slots.menu));
 
-const actionRipples = ref([]);
-const menuRipples = ref([]);
-let rippleId = 0;
+const ripple = useRipple();
 
-function spawnRipple(list, event) {
+function spawnRipple(key, event) {
     if (!props.ripple || isDisabled.value) return;
-    const target = event.currentTarget;
-    const rect = target.getBoundingClientRect();
-    const x = (event.clientX ?? rect.left + rect.width / 2) - rect.left;
-    const y = (event.clientY ?? rect.top + rect.height / 2) - rect.top;
-    const rippleSize = Math.max(rect.width, rect.height) * 2;
 
-    const id = ++rippleId;
-    list.value.push({ id, x, y, size: rippleSize });
-    setTimeout(() => {
-        list.value = list.value.filter((r) => r.id !== id);
-    }, 400);
+    ripple.press(event, key);
 }
 
 function onActionClick(event) {
@@ -143,7 +134,7 @@ function onActionClick(event) {
         event.preventDefault();
         return;
     }
-    spawnRipple(actionRipples, event);
+    spawnRipple('action', event);
     emit('click', event);
 }
 
@@ -155,7 +146,7 @@ function onMenuClick(event) {
         event.preventDefault();
         return;
     }
-    spawnRipple(menuRipples, event);
+    spawnRipple('menu', event);
     menuOpen.value = !menuOpen.value;
     emit(menuOpen.value ? 'menu-open' : 'menu-close');
 }
@@ -192,17 +183,7 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
         ]"
         @click="onActionClick"
     >
-        <span
-            v-for="r in actionRipples"
-            :key="r.id"
-            class="pointer-events-none absolute rounded-full bg-current opacity-30 aaix-ripple"
-            :style="{
-                left: `${r.x - r.size / 2}px`,
-                top: `${r.y - r.size / 2}px`,
-                width: `${r.size}px`,
-                height: `${r.size}px`,
-            }"
-        ></span>
+        <Ripples :items="ripple.on('action')" />
         <span v-if="loading" :class="[size.glyph, 'flex items-center justify-center']">
             <svg class="animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" d="M12 3a9 9 0 1 0 9 9" />
@@ -254,12 +235,7 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
             ]"
             @click="onActionClick"
         >
-            <span
-                v-for="r in actionRipples"
-                :key="r.id"
-                class="pointer-events-none absolute rounded-full bg-current opacity-30 aaix-ripple"
-                :style="{ left: `${r.x - r.size / 2}px`, top: `${r.y - r.size / 2}px`, width: `${r.size}px`, height: `${r.size}px` }"
-            ></span>
+            <Ripples :items="ripple.on('action')" />
             <span v-if="loading" :class="[size.glyph, 'flex items-center justify-center']">
                 <svg class="animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" d="M12 3a9 9 0 1 0 9 9" />
@@ -289,12 +265,7 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
             ]"
             @click="onMenuClick"
         >
-            <span
-                v-for="r in menuRipples"
-                :key="r.id"
-                class="pointer-events-none absolute rounded-full bg-current opacity-30 aaix-ripple"
-                :style="{ left: `${r.x - r.size / 2}px`, top: `${r.y - r.size / 2}px`, width: `${r.size}px`, height: `${r.size}px` }"
-            ></span>
+            <Ripples :items="ripple.on('menu')" />
             <svg :class="[size.chevron, 'transition-transform']" :style="{ transform: menuOpen ? 'rotate(180deg)' : 'none' }" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.25a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08Z" clip-rule="evenodd" />
             </svg>
@@ -311,22 +282,3 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
     </span>
 </template>
 
-<style scoped>
-.aaix-ripple {
-    transform: scale(0);
-    opacity: 0.35;
-    animation-name: aaix-ripple-scale, aaix-ripple-fade;
-    animation-duration: 220ms, 400ms;
-    animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1), linear;
-    animation-fill-mode: forwards, forwards;
-}
-
-@keyframes aaix-ripple-scale {
-    to { transform: scale(1); }
-}
-
-@keyframes aaix-ripple-fade {
-    0% { opacity: 0.35; }
-    100% { opacity: 0; }
-}
-</style>

@@ -30,6 +30,8 @@ export { default as ChoiceSegment } from './ChoiceSegment.vue';
 export { default as EditSegment } from './EditSegment.vue';
 export { default as InlineEdit } from './InlineEdit.vue';
 export { default as IconButton } from './IconButton.vue';
+export { default as Ripples } from './Ripples.vue';
+export { useRipple } from './useRipple.js';
 export { default as Table } from './Table.vue';
 export { default as Tabs } from './Tabs.vue';
 export { default as WysiwygEditor } from './WysiwygEditor.vue';
