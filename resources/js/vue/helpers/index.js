@@ -24,6 +24,7 @@ export { default as NumberField } from './NumberField.vue';
 export { default as TextArea } from './TextArea.vue';
 export { default as SelectField } from './SelectField.vue';
 export { default as FileField } from './FileField.vue';
+export { default as Combobox } from './Combobox.vue';
 export { fieldClasses, textareaClasses, FIELD_SHAPES, FIELD_SIZES } from './fieldStyles.js';
 export { default as ChoiceSegment } from './ChoiceSegment.vue';
 export { default as EditSegment } from './EditSegment.vue';
