@@ -34,14 +34,14 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 | --- | --- |
 | `Button` | tone/size/shape/loading + `icon`/default/`iconRight`/`menu` slots — the split-button lives here |
 | `provideButtonDefaults({ shape?, size?, tone? })` / `BUTTON_DEFAULTS_KEY` | app-wide button defaults (see the SKILL) |
-| `IconButton` | icon-only, `label` doubles as aria-label and tooltip |
+| `IconButton` | icon-only, `label` doubles as aria-label and tooltip; `href` makes it a link |
 | `EditButton` | the quiet pencil beside an editable value |
 
 ### Fields & inline editing
 
 | Import | Purpose |
 | --- | --- |
-| `TextField`, `NumberField`, `TextArea`, `SelectField`, `FileField` | standard form fields on the shared 36 px control-height frame |
+| `TextField`, `NumberField`, `TextArea`, `SelectField`, `FileField` | standard form fields on the shared 36 px control-height frame — `NumberField` takes `prefix`/`suffix` for a unit and `stepper` for a minus/plus pair |
 | `Checkbox`, `Switch`, `Radio`, `RadioGroup`, `Slider` | boolean and choice controls |
 | `ChoiceSegment`, `EditSegment` | segmented controls for inline choice / edit rows |
 | `InlineEdit` | the in-place edit contract — Enter saves, Esc cancels, spinner in the value's place |
