@@ -12,6 +12,9 @@ const props = defineProps({
     tone: { type: String, default: 'quiet' },
     tooltip: { type: Boolean, default: true },
     disabled: { type: Boolean, default: false },
+    /** Set to open a link instead of acting in place; `target` follows it. */
+    href: { type: String, default: '' },
+    target: { type: String, default: '_blank' },
     /** Material-style ripple on press. Skipped when the button is disabled. */
     ripple: { type: Boolean, default: true },
 });
@@ -19,7 +22,12 @@ const props = defineProps({
 const emit = defineEmits(['click']);
 
 function onClick(event) {
-    if (props.disabled) return;
+    if (props.disabled) {
+        // A disabled anchor still follows its href, so the navigation has to be called off.
+        event.preventDefault();
+
+        return;
+    }
 
     emit('click', event);
 }
@@ -49,20 +57,25 @@ const tone = computed(() => TONES[props.tone] ?? TONES.quiet);
 
 <template>
     <Tooltip :text="tooltip ? label : ''">
-        <button
-            type="button"
+        <component
+            :is="href ? 'a' : 'button'"
+            :type="href ? undefined : 'button'"
+            :href="href || undefined"
+            :target="href ? target : undefined"
+            :rel="href ? 'noopener' : undefined"
             v-bind="attrs"
             v-ripple="ripple && !disabled"
             @click="onClick"
             :aria-label="label"
-            :disabled="disabled"
+            :disabled="href ? undefined : disabled"
+            :aria-disabled="href && disabled ? 'true' : undefined"
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full transition-colors duration-[250ms] ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-60"
             :class="[box, tone]"
         >
                 <span :class="glyph" class="flex items-center justify-center [&>svg]:h-full [&>svg]:w-full">
                 <slot />
             </span>
-        </button>
+        </component>
     </Tooltip>
 </template>
 
