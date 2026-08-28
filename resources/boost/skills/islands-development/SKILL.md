@@ -5,6 +5,11 @@ description: Build a feature view with aaix/laravel-islands — scaffolding an i
 
 # Working on an Island
 
+> **Building a view that is not a datagrid** — settings, statistics, a form, a
+> small dashboard? Read [`free-view-recipe.md`](./free-view-recipe.md) first: the
+> shape that keeps free views from drifting apart, and the four layout faults that
+> only show up in a screenshot.
+>
 > **Before writing any markup,** open [`helpers-index.md`](./helpers-index.md) — a
 > full inventory of the components, composables and hosts shipped by
 > `@aaix/laravel-islands` and `@aaix/laravel-islands-datagrid`. The single most
