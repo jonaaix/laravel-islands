@@ -60,19 +60,35 @@ The endpoint list travels in the props. A view never builds a path of its own.
 The single most common reason a hand-built view looks restless: every block
 brings its own font size. Each one is defensible, the set is not.
 
-Decide it once, in the host application's theme, scoped to the view class and
-wrapped in `:where()` so a utility on any single element still wins:
+Decide it once, in the host application's theme, scoped to the view class,
+wrapped in `:where()` and **inside the base layer**:
 
 ```css
-:where(.island-view) h1 { font-size: 1.25rem; font-weight: 600; }
-:where(.island-view) h2 { font-size: 0.875rem; font-weight: 600; }
-:where(.island-view) p  { font-size: 0.875rem; color: … }
-:where(.island-view) th { font-size: 0.75rem; text-transform: uppercase; … }
-:where(.island-view) td { font-size: 0.875rem; … }
+@layer base {
+    :where(.island-view) h1 { font-size: 1.5rem; font-weight: 700; }
+    :where(.island-view) h2 { font-size: 0.875rem; font-weight: 600; }
+    :where(.island-view) p  { font-size: 0.875rem; color: … }
+    :where(.island-view) th { font-size: 0.75rem; text-transform: uppercase; … }
+    :where(.island-view) td { font-size: 0.875rem; … }
+    :where(.island-view .island-card) { border-radius: 0.75rem; padding: 1rem; … }
+}
 ```
+
+Both halves matter. `:where()` drops the specificity so a utility class on one
+element outranks the scope — but specificity only decides between rules in the
+same layer, and an unlayered rule beats every utility whatever it looks like.
+Left outside a layer, the scope silently swallows the `p-2` on the one element
+that needed it. Note also that a scope written as
+`:where(.island-view) .island-card` keeps the class's own specificity; wrap the
+whole selector to give it up.
 
 The same scope carries the view's own top and bottom room, so a heading never
 sits against the topbar, and the card look, so no view invents its own.
+
+**The page title is the application's title, not the view's.** Take the size,
+weight and the icon box beside it from a list view that already ships — a free
+view that scales its own heading reads as a page from another product, whether
+it lands too big or too small.
 
 ## 4 Layout rules that only show up in a screenshot
 
