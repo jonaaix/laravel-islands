@@ -3,6 +3,7 @@ export { default as Switch } from './Switch.vue';
 export { default as Radio } from './Radio.vue';
 export { default as RadioGroup } from './RadioGroup.vue';
 export { default as Slider } from './Slider.vue';
+export { default as MultiSelect } from './MultiSelect.vue';
 export { default as OptionStrip } from './OptionStrip.vue';
 export { default as TreeSelect } from './TreeSelect.vue';
 export { nextRadioGroupName, RADIO_GROUP_KEY } from './radioGroup.js';
