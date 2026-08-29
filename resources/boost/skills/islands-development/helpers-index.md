@@ -106,7 +106,8 @@ table but not the other is a bug in waiting.
 | `TreeSelect` | a hierarchy with a searchable path, cached per URL |
 | `OptionStrip` | micro switcher — `variant` = `pills` (row of switches) or `segmented` (one question, n answers) |
 | `FilterPanel` | the panel beside the table, docking with the toolbar |
-| `useFilterPanelDock(storageKey, { baseWidth })` | keeps the panel docked when there is room, overlaid otherwise |
+| `useViewWidth()` | `root` + `rootStyle` for the island's outermost element: the shared maximum width and `--table-toolbar-h` |
+| `useFilterPanelDock(storageKey, { baseWidth })` | the same `root` + `rootStyle`, widened while the panel is docked; keeps the panel docked when there is room, overlaid otherwise |
 
 ### Sorting & columns
 

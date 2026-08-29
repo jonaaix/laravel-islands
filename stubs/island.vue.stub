@@ -2,6 +2,10 @@
 /**
  * @ai-agent Read the islands-development skill's `helpers-index.md` before writing markup,
  * and `base-datagrid-recipe.md` in islands-datagrid-development if this is a list view.
+ *
+ * A list view takes `root` and `rootStyle` from `useViewWidth()` (or from
+ * `useFilterPanelDock`, which wraps it) and binds both on the outermost element below.
+ * The width of a view is never a `max-w-*` class of its own.
  */
 import { useIsland, useTranslations } from '@aaix/laravel-islands/vue';
 
