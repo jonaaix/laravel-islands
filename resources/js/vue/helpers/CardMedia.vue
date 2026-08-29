@@ -1,21 +1,28 @@
 <script setup>
+import { computed } from 'vue';
+import { useCardDefaults } from './cardDefaults.js';
+
 /**
  * The picture area of a card.
  *
  * No shape of its own: which ratio pictures are shown in is the application's decision, and a
- * package that picks one imposes its house style on every other project. Left unset, the box
- * takes the height its content asks for.
+ * package that picks one imposes its house style on every project that installs it. An
+ * application names it once through `provideCardDefaults`; a single callsite may still differ.
  */
-defineProps({
-    /** Any CSS aspect ratio, e.g. `3 / 2`. Unset lets the content decide. */
+const props = defineProps({
+    /** Any CSS aspect ratio, e.g. `3 / 2`. Falls back to the application's, then to the content. */
     ratio: { type: String, default: '' },
 });
+
+const defaults = useCardDefaults();
+
+const shape = computed(() => props.ratio || defaults.mediaRatio || '');
 </script>
 
 <template>
     <div
         class="card-media relative w-full overflow-hidden bg-gray-100 dark:bg-white/5"
-        :style="ratio ? { aspectRatio: ratio } : {}"
+        :style="shape ? { aspectRatio: shape } : {}"
     >
         <slot />
     </div>
