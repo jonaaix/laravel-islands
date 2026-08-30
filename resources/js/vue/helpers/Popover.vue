@@ -5,6 +5,7 @@ const props = defineProps({
     /** The element the panel hangs under. Pass the ref, not its value. */
     anchor: { type: Object, default: null },
     open: { type: Boolean, default: false },
+    /** `null` leaves the width to the panel's own classes, for a menu that grows with its longest entry. */
     width: { type: Number, default: 260 },
     /** Distance between the anchor's bottom edge and the panel. */
     offset: { type: Number, default: 4 },
@@ -28,17 +29,17 @@ const placed = ref(false);
  * left it opens to the right, in the middle it stays centred under the anchor, on the right
  * it opens to the left. Then it is pulled back far enough to stay on screen.
  */
-function left(rect) {
+function left(rect, width) {
     const third = window.innerWidth / 3;
     const centre = rect.left + rect.width / 2;
 
     const preferred = centre < third
         ? rect.left
         : centre < third * 2
-            ? centre - props.width / 2
-            : rect.right - props.width;
+            ? centre - width / 2
+            : rect.right - width;
 
-    return Math.max(props.margin, Math.min(preferred, window.innerWidth - props.width - props.margin));
+    return Math.max(props.margin, Math.min(preferred, window.innerWidth - width - props.margin));
 }
 
 /**
@@ -66,11 +67,12 @@ function position() {
 
     const rect = el.getBoundingClientRect();
     const height = panel.value?.offsetHeight ?? 0;
+    const width = props.width ?? panel.value?.offsetWidth ?? 0;
 
     style.value = {
         top: `${top(rect, height)}px`,
-        left: `${left(rect)}px`,
-        width: `${props.width}px`,
+        left: `${left(rect, width)}px`,
+        ...(props.width === null ? {} : { width: `${props.width}px` }),
     };
 
     if (height > 0) {
