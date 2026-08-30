@@ -9,7 +9,11 @@ use Throwable;
 
 trait InteractsWithIslands
 {
-    use BroadcastsEvents;
+    // Aliased, not reached through `parent`: the method below replaces this one, and the
+    // original lives in a trait on the same class rather than on an ancestor of it.
+    use BroadcastsEvents {
+        broadcastIfBroadcastChannelsExistForEvent as private broadcastThroughLaravel;
+    }
 
     /**
      * @param  string  $event
@@ -32,7 +36,7 @@ trait InteractsWithIslands
     protected function broadcastIfBroadcastChannelsExistForEvent($instance, $event, $channels = null)
     {
         try {
-            return parent::broadcastIfBroadcastChannelsExistForEvent($instance, $event, $channels);
+            return $this->broadcastThroughLaravel($instance, $event, $channels);
         } catch (Throwable $e) {
             Log::warning('Island broadcast skipped: ' . $e->getMessage(), [
                 'model' => static::class,
