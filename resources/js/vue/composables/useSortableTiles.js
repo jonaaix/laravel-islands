@@ -145,9 +145,9 @@ export function useSortableTiles({ container, list, attribute = 'data-tile', onR
      * because a list animation owns `transform` — kept apart, the two compose instead of
      * overwriting each other.
      *
-     * It also drops whatever transition the tile carries for the others' sake. The offset is
-     * rewritten on every pointer event, so a duration on `translate` makes each one the start
-     * of a new animation and the tile crawls after the pointer instead of following it.
+     * The held one also loses its transition: the offset is rewritten on every pointer event,
+     * so a duration on `translate` would restart the animation each time and the tile would
+     * crawl after the pointer.
      */
     function styleFor(index) {
         if (index === heldIndex.value) {
