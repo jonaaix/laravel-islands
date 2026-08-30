@@ -3,7 +3,11 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import Tooltip from './Tooltip.vue';
 
 const props = defineProps({
-    /** `{ value, label, hint?, count?, icon?, hideLabel? }` — the application owns every word of it. */
+    /**
+     * `{ value, label, hint?, count?, icon?, hideLabel?, disabled? }` — the application owns
+     * every word of it. A single option can be closed off while the rest stay open, for an
+     * answer the state does not allow yet.
+     */
     options: { type: Array, default: () => [] },
     /** One value when picking one of them, an array of values when each is its own switch. */
     modelValue: { type: [String, Number, Boolean, Object, Array], default: null },
@@ -31,8 +35,14 @@ function isTaken(value) {
         : props.modelValue === value;
 }
 
+function closed(option) {
+    return props.disabled || option.disabled === true;
+}
+
 function pick(value) {
-    if (props.disabled) {
+    const option = props.options.find((entry) => entry.value === value);
+
+    if (props.disabled || option?.disabled === true) {
         return;
     }
 
@@ -169,12 +179,12 @@ watch(() => [props.modelValue, props.options, props.variant], remeasure, { deep:
             <Tooltip v-if="option.hideLabel" :text="option.label">
                 <button
                     type="button"
-                    :disabled="disabled"
+                    :disabled="closed(option)"
                     :aria-pressed="multiple ? (isTaken(option.value) ? 'true' : 'false') : undefined"
                     :aria-checked="multiple ? undefined : (isTaken(option.value) ? 'true' : 'false')"
                     :aria-label="option.label"
                     :role="multiple ? undefined : 'radio'"
-                    :class="[skin.base, isTaken(option.value) ? skin.on : skin.off, !slides && isTaken(option.value) ? skin.surface ?? '' : '', disabled ? 'cursor-not-allowed opacity-50' : '', option.icon ? 'px-2' : '']"
+                    :class="[skin.base, isTaken(option.value) ? skin.on : skin.off, !slides && isTaken(option.value) ? skin.surface ?? '' : '', closed(option) ? 'cursor-not-allowed opacity-50' : '', option.icon ? 'px-2' : '']"
                     @click="pick(option.value)"
                 >
                     <component :is="option.icon" v-if="option.icon" class="h-4 w-4 shrink-0" />
@@ -185,11 +195,11 @@ watch(() => [props.modelValue, props.options, props.variant], remeasure, { deep:
             <button
                 v-else
                 type="button"
-                :disabled="disabled"
+                :disabled="closed(option)"
                 :aria-pressed="multiple ? (isTaken(option.value) ? 'true' : 'false') : undefined"
                 :aria-checked="multiple ? undefined : (isTaken(option.value) ? 'true' : 'false')"
                 :role="multiple ? undefined : 'radio'"
-                :class="[skin.base, isTaken(option.value) ? skin.on : skin.off, !slides && isTaken(option.value) ? skin.surface ?? '' : '', disabled ? 'cursor-not-allowed opacity-50' : '']"
+                :class="[skin.base, isTaken(option.value) ? skin.on : skin.off, !slides && isTaken(option.value) ? skin.surface ?? '' : '', closed(option) ? 'cursor-not-allowed opacity-50' : '']"
                 @click="pick(option.value)"
             >
                 <span
