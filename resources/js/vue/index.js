@@ -36,3 +36,4 @@ export { useEcho } from './composables/useEcho.js';
 export { useModel } from './composables/useModel.js';
 export { useSortableTiles } from './composables/useSortableTiles.js';
 export { useTranslations } from './composables/useTranslations.js';
+export { useViewWidth, VIEW_BASE_WIDTH, VIEW_TOOLBAR_HEIGHT } from './composables/useViewWidth.js';

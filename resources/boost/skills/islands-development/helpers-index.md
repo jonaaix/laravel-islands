@@ -21,6 +21,7 @@ Composables the runtime provides to any island component.
 | `useModel(key, options?)` | subscribed model kept in step with Echo; options: `onUpdate`, `refetch`; exposes `data`, `isDeleted` |
 | `useEcho()` | the raw Echo connection (`privateChannel`, …) — every channel is left on unmount |
 | `useSortableTiles({ container, list, attribute?, onReorder, enabled? })` | pointer-event dragging for a strip or grid |
+| `useViewWidth()` | **the root element of every island** — `root` + `rootStyle` carry the one width the whole application shares, and publish `--table-toolbar-h`. Never write a `max-w-*` class instead |
 | `startVueIslands(registry, { setup? })` | the runtime; called once at boot with the component registry |
 
 ## `@aaix/laravel-islands/vue/helpers`
@@ -106,8 +107,7 @@ table but not the other is a bug in waiting.
 | `TreeSelect` | a hierarchy with a searchable path, cached per URL |
 | `OptionStrip` | micro switcher — `variant` = `pills` (row of switches) or `segmented` (one question, n answers) |
 | `FilterPanel` | the panel beside the table, docking with the toolbar |
-| `useViewWidth()` | `root` + `rootStyle` for the island's outermost element: the shared maximum width and `--table-toolbar-h` |
-| `useFilterPanelDock(storageKey, { baseWidth })` | the same `root` + `rootStyle`, widened while the panel is docked; keeps the panel docked when there is room, overlaid otherwise |
+| `useFilterPanelDock(storageKey, { baseWidth })` | `useViewWidth` plus a docking panel: the same `root` + `rootStyle`, widened while the panel is docked, overlaid when there is no room |
 
 ### Sorting & columns
 

@@ -20,8 +20,14 @@ app/Islands/InboundStats/
 ```
 
 ```vue
+<script setup>
+import { useViewWidth } from '@aaix/laravel-islands/vue';
+
+const { root, rootStyle } = useViewWidth();
+</script>
+
 <template>
-    <div class="island-view inbound-stats space-y-4">
+    <div ref="root" class="island-view inbound-stats mx-auto w-full space-y-4" :style="rootStyle">
         <h1>{{ t('Inbound performance') }}</h1>
 
         <div class="island-card">
@@ -36,6 +42,13 @@ app/Islands/InboundStats/
 Two classes on the root: **the shared view class** the host application styles,
 and **the view's own name** for the rare exception. Everything below is plain
 elements — no repeated font utilities.
+
+**The width comes from `useViewWidth()`, never from a `max-w-*` class.** It holds
+the one maximum every view in the application shares, so switching between two
+views does not move the content under the reader. A free view needs it exactly as
+much as a list does — a number written on the root makes this one view wider than
+every other, and nothing says by how much or why. `useFilterPanelDock` returns the
+same `root` and `rootStyle` for a view that has a filter panel.
 
 ## 2 Open with data, not with a spinner
 
