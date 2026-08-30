@@ -21,7 +21,7 @@ Composables the runtime provides to any island component.
 | `useModel(key, options?)` | subscribed model kept in step with Echo; options: `onUpdate`, `refetch`; exposes `data`, `isDeleted` |
 | `useEcho()` | the raw Echo connection (`privateChannel`, …) — every channel is left on unmount |
 | `useSortableTiles({ container, list, attribute?, onReorder, enabled? })` | pointer-event dragging for a strip or grid |
-| `useViewWidth()` | **the root element of every island** — `root` + `rootStyle` carry the one width the whole application shares, and publish `--table-toolbar-h`. Never write a `max-w-*` class instead |
+| `useViewWidth({ baseWidth? })` | **the root element of every island** — `root` + `rootStyle` carry the view's maximum width and publish `--table-toolbar-h`. Never write a `max-w-*` class instead; a view that needs more room passes `baseWidth` |
 | `startVueIslands(registry, { setup? })` | the runtime; called once at boot with the component registry |
 
 ## `@aaix/laravel-islands/vue/helpers`

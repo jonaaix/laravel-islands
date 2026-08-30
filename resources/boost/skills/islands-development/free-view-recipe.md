@@ -43,12 +43,14 @@ Two classes on the root: **the shared view class** the host application styles,
 and **the view's own name** for the rare exception. Everything below is plain
 elements — no repeated font utilities.
 
-**The width comes from `useViewWidth()`, never from a `max-w-*` class.** It holds
-the one maximum every view in the application shares, so switching between two
-views does not move the content under the reader. A free view needs it exactly as
-much as a list does — a number written on the root makes this one view wider than
-every other, and nothing says by how much or why. `useFilterPanelDock` returns the
-same `root` and `rootStyle` for a view that has a filter panel.
+**The width comes from `useViewWidth()`, never from a `max-w-*` class.** Take the
+maximum it gives; switching between two views then does not move the content under
+the reader. A free view needs it exactly as much as a list does — a number written
+on the root makes this one view wider than every other, and nothing says by how
+much or why. A view that genuinely needs more passes `baseWidth`, so the deviation
+has a name and a place instead of hiding in a utility class; today only the
+products list does. `useFilterPanelDock` returns the same `root` and `rootStyle`
+for a view that has a filter panel.
 
 ## 2 Open with data, not with a spinner
 

@@ -5,12 +5,16 @@ export const VIEW_BASE_WIDTH = 1536;
 export const VIEW_TOOLBAR_HEIGHT = '61px';
 
 /**
- * How wide a list view is allowed to grow, and how tall its toolbar is.
+ * How wide a view is allowed to grow, and how tall its toolbar is.
  *
- * Both belong to the view as a whole rather than to the table inside it, and both are read
- * back by anything that has to line up with the toolbar — the sticky header, a docked filter
- * panel, a floating bar. One owner keeps every list the same width, so switching between two
- * views does not move the columns under the reader.
+ * Both belong to the island as a whole rather than to anything inside it, and both are read
+ * back by whatever has to line up with the toolbar — the sticky header, a docked filter panel,
+ * a floating bar. One owner keeps the views the same width, so moving between two of them does
+ * not shift the content under the reader.
+ *
+ * The point is the one place, not the one number: a view that genuinely needs more room says
+ * so through `baseWidth`, where the deviation carries a name instead of hiding in a utility
+ * class on the markup.
  *
  * Bind `root` and `rootStyle` on the island's outermost element:
  *
@@ -21,7 +25,8 @@ export const VIEW_TOOLBAR_HEIGHT = '61px';
  * panel calls that one instead.
  *
  * @param {object} [options]
- * @param {number} [options.baseWidth] Widest the view may become without a docked panel.
+ * @param {number} [options.baseWidth] Widest this view may become without a docked panel.
+ *   Only where the content earns it — the products list carries more columns than the rest.
  * @param {import('vue').Ref<number>} [options.extraWidth] Room a docked panel adds on top.
  * @returns {{ root, rootStyle, availableWidth }}
  */
