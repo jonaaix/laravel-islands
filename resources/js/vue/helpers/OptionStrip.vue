@@ -19,6 +19,8 @@ const props = defineProps({
      * `segmented` puts them in one frame, which reads as one question with n answers.
      */
     variant: { type: String, default: 'pills' },
+    /** `md` stands beside 36px fields; `sm` sits in a dense toolbar beside small buttons. */
+    size: { type: String, default: 'md' },
     /** A dot marks what is taken. Off where the tint alone is enough. */
     marker: { type: Boolean, default: true },
     disabled: { type: Boolean, default: false },
@@ -60,18 +62,24 @@ function pick(value) {
 const FRAME = {
     pills: 'inline-flex items-center gap-2',
     // One pixel all round, so the surface meets the frame's own ring instead of floating inside it.
-    segmented: 'inline-flex h-8 items-center gap-0.5 rounded-full p-px ring-1 ring-inset ring-gray-200 dark:ring-white/10',
+    segmented: 'inline-flex items-center gap-0.5 rounded-full p-px ring-1 ring-inset ring-gray-200 dark:ring-white/10',
+};
+
+// The frame is one pixel taller than its options on either side, so the surface never touches the ring.
+const SIZES = {
+    md: { frame: 'h-8', option: 'h-7 px-2.5', iconOnly: 'px-2', glyph: 'h-4 w-4' },
+    sm: { frame: 'h-7', option: 'h-6 px-2', iconOnly: 'px-1.5', glyph: 'h-3.5 w-3.5' },
 };
 
 const OPTION = {
     pills: {
-        base: 'inline-flex h-7 items-center gap-1.5 rounded-full px-2.5 text-xs font-medium ring-1 ring-inset transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500',
+        base: 'inline-flex items-center gap-1.5 rounded-full text-xs font-medium ring-1 ring-inset transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500',
         on: 'bg-primary-500/10 text-primary-700 ring-primary-500/25 hover:bg-primary-500/15 dark:text-primary-300',
         off: 'bg-transparent text-gray-500 ring-gray-200 hover:bg-gray-50 hover:text-gray-700 dark:text-gray-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-gray-200',
     },
     segmented: {
         // Inset like the pills variant: drawn outward the ring lands exactly on the frame's own edge.
-        base: 'relative z-10 inline-flex h-7 items-center gap-1.5 rounded-full px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500',
+        base: 'relative z-10 inline-flex items-center gap-1.5 rounded-full text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500',
         on: 'text-gray-900 dark:text-white',
         off: 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200',
         surface: 'bg-white shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10',
@@ -79,7 +87,8 @@ const OPTION = {
 };
 
 const skin = computed(() => OPTION[props.variant] ?? OPTION.pills);
-const frame = computed(() => FRAME[props.variant] ?? FRAME.pills);
+const scale = computed(() => SIZES[props.size] ?? SIZES.md);
+const frame = computed(() => [FRAME[props.variant] ?? FRAME.pills, props.variant === 'segmented' ? scale.value.frame : '']);
 
 /*
  * One frame, one answer: rather than lighting up a different segment, the surface travels to it.
@@ -190,10 +199,10 @@ watch(() => [props.modelValue, props.options, props.variant], remeasure, { deep:
                     :aria-checked="multiple ? undefined : (isTaken(option.value) ? 'true' : 'false')"
                     :aria-label="option.label"
                     :role="multiple ? undefined : 'radio'"
-                    :class="[skin.base, isTaken(option.value) ? skin.on : skin.off, !slides && isTaken(option.value) ? skin.surface ?? '' : '', closed(option) ? 'cursor-not-allowed opacity-50' : '', option.icon ? 'px-2' : '']"
+                    :class="[skin.base, option.icon ? scale.iconOnly : scale.option, isTaken(option.value) ? skin.on : skin.off, !slides && isTaken(option.value) ? skin.surface ?? '' : '', closed(option) ? 'cursor-not-allowed opacity-50' : '']"
                     @click="pick(option.value)"
                 >
-                    <component :is="option.icon" v-if="option.icon" class="h-4 w-4 shrink-0" />
+                    <component :is="option.icon" v-if="option.icon" class="shrink-0" :class="scale.glyph" />
                     <span v-else class="sr-only">{{ option.label }}</span>
                 </button>
             </Tooltip>
@@ -205,14 +214,14 @@ watch(() => [props.modelValue, props.options, props.variant], remeasure, { deep:
                 :aria-pressed="multiple ? (isTaken(option.value) ? 'true' : 'false') : undefined"
                 :aria-checked="multiple ? undefined : (isTaken(option.value) ? 'true' : 'false')"
                 :role="multiple ? undefined : 'radio'"
-                :class="[skin.base, isTaken(option.value) ? skin.on : skin.off, !slides && isTaken(option.value) ? skin.surface ?? '' : '', closed(option) ? 'cursor-not-allowed opacity-50' : '']"
+                :class="[skin.base, scale.option, isTaken(option.value) ? skin.on : skin.off, !slides && isTaken(option.value) ? skin.surface ?? '' : '', closed(option) ? 'cursor-not-allowed opacity-50' : '']"
                 @click="pick(option.value)"
             >
                 <span
                     v-if="marker && variant === 'pills' && isTaken(option.value)"
                     class="h-1.5 w-1.5 shrink-0 rounded-full bg-primary-600 dark:bg-primary-400"
                 ></span>
-                <component :is="option.icon" v-if="option.icon" class="h-4 w-4 shrink-0" />
+                <component :is="option.icon" v-if="option.icon" class="shrink-0" :class="scale.glyph" />
                 {{ option.label }}
                 <span v-if="option.count !== undefined" class="tabular-nums opacity-70">{{ option.count }}</span>
             </button>
