@@ -1,4 +1,6 @@
 export { default as Checkbox } from './Checkbox.vue';
+export { default as ColorPicker } from './ColorPicker.vue';
+export { DEFAULT_PRESETS as COLOR_PRESETS, format as formatColour, parseHex, toHex } from './colour.js';
 export { default as Switch } from './Switch.vue';
 export { default as Radio } from './Radio.vue';
 export { default as RadioGroup } from './RadioGroup.vue';

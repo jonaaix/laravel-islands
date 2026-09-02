@@ -44,6 +44,7 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 | Import | Purpose |
 | --- | --- |
 | `TextField`, `NumberField`, `TextArea`, `SelectField`, `FileField` | standard form fields on the shared 36 px control-height frame — `NumberField` takes `prefix`/`suffix` for a unit and `stepper` for a minus/plus pair |
+| `ColorPicker` | hex field plus swatch that opens a picker — saturation/value plane, hue rail, optional `alpha` rail, `presets` palette (a curated default ships), format switch hex · rgb · hsl · hsv with a copy button; model is a hex string; wording via `labels` |
 | `Checkbox`, `Switch`, `Radio`, `RadioGroup`, `Slider` | boolean and choice controls — `Slider` takes `options` for named stops or `min`/`max`/`step` for a number, and emits `commit` when the pointer lets go |
 | `ChoiceSegment`, `EditSegment` | segmented controls for inline choice / edit rows |
 | `InlineEdit` | the in-place edit contract — Enter saves, Esc cancels, spinner in the value's place |
