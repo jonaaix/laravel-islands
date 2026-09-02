@@ -59,7 +59,8 @@ function pick(value) {
 
 const FRAME = {
     pills: 'inline-flex items-center gap-2',
-    segmented: 'inline-flex h-8 items-center gap-0.5 rounded-full p-0.5 ring-1 ring-inset ring-gray-200 dark:ring-white/10',
+    // Wider at the caps than along the edges: two concentric pills need more room where the arcs converge.
+    segmented: 'inline-flex h-8 items-center gap-0.5 rounded-full px-1 py-0.5 ring-1 ring-inset ring-gray-200 dark:ring-white/10',
 };
 
 const OPTION = {
@@ -108,18 +109,23 @@ function measure() {
 
     const index = props.options.findIndex((option) => isTaken(option.value));
     const button = index < 0 ? null : strip.querySelectorAll('button')[index];
+    // Measured, not read off `offsetLeft`: those are whole pixels, and the rounding they drop
+    // gathers across the segments until the last one sits a pixel short of the frame.
+    const box = button?.getBoundingClientRect();
 
-    if (!button || button.offsetWidth === 0) {
+    if (!button || !box.width) {
         surface.value = { ...surface.value, shown: false, still: true, moving: false };
 
         return;
     }
 
+    const x = box.left - strip.getBoundingClientRect().left;
+
     // The first placement must not travel in from the left edge.
     const still = !surface.value.shown;
-    const moves = !still && surface.value.x !== button.offsetLeft;
+    const moves = !still && surface.value.x !== x;
 
-    surface.value = { x: button.offsetLeft, width: button.offsetWidth, shown: true, still, moving: moves };
+    surface.value = { x, width: box.width, shown: true, still, moving: moves };
 
     if (still) {
         requestAnimationFrame(() => { surface.value = { ...surface.value, still: false }; });
