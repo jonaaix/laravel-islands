@@ -19,7 +19,7 @@ const emit = defineEmits(['update:modelValue']);
 </script>
 
 <template>
-    <div class="flex items-center gap-1 border-b border-gray-200 px-3 dark:border-white/10">
+    <div class="flex items-center gap-1 overflow-x-auto border-b border-gray-200 px-3 dark:border-white/10">
         <button
             v-for="item in items"
             :key="item.key"
@@ -27,7 +27,7 @@ const emit = defineEmits(['update:modelValue']);
             :disabled="item.disabled === true"
             :tabindex="item.disabled === true ? -1 : 0"
             @click.stop="emit('update:modelValue', item.key)"
-            class="flex items-center gap-1.5 border-b-2 px-4 py-2.5 text-sm font-medium transition-colors"
+            class="flex shrink-0 items-center gap-1.5 whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition-colors"
             :class="modelValue === item.key
                 ? 'border-primary-500 text-primary-600 dark:text-primary-400'
                 : item.disabled === true
