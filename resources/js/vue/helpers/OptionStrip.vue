@@ -59,8 +59,8 @@ function pick(value) {
 
 const FRAME = {
     pills: 'inline-flex items-center gap-2',
-    // Wider at the caps than along the edges: two concentric pills need more room where the arcs converge.
-    segmented: 'inline-flex h-8 items-center gap-0.5 rounded-full px-1 py-0.5 ring-1 ring-inset ring-gray-200 dark:ring-white/10',
+    // One pixel all round, so the surface meets the frame's own ring instead of floating inside it.
+    segmented: 'inline-flex h-8 items-center gap-0.5 rounded-full p-px ring-1 ring-inset ring-gray-200 dark:ring-white/10',
 };
 
 const OPTION = {
@@ -169,7 +169,7 @@ watch(() => [props.modelValue, props.options, props.variant], remeasure, { deep:
         <span
             v-if="slides && surface.shown"
             aria-hidden="true"
-            class="absolute inset-y-0.5 origin-center rounded-full motion-reduce:transition-none motion-reduce:scale-100"
+            class="absolute inset-y-px origin-center rounded-full motion-reduce:transition-none motion-reduce:scale-100"
             :class="[
                 skin.surface,
                 surface.still ? '' : 'transition-[transform,width] duration-[260ms] [transition-timing-function:cubic-bezier(0.34,1.32,0.64,1)]',
