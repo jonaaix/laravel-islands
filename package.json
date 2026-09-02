@@ -1,6 +1,6 @@
 {
     "name": "@aaix/laravel-islands",
-    "version": "1.0.39",
+    "version": "1.0.40",
     "description": "Elegant frontend islands for Laravel: framework-agnostic core with a Vue adapter (React planned).",
     "type": "module",
     "license": "MIT",
