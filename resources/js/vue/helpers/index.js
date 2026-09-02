@@ -21,6 +21,7 @@ export { default as Popover } from './Popover.vue';
 export { default as Menu } from './Menu.vue';
 export { default as MenuItem } from './MenuItem.vue';
 export { default as Button } from './Button.vue';
+export { default as ButtonGroup } from './ButtonGroup.vue';
 export { provideButtonDefaults, useButtonDefaults, BUTTON_DEFAULTS_KEY } from './buttonDefaults.js';
 export { provideCardDefaults, useCardDefaults, CARD_DEFAULTS_KEY } from './cardDefaults.js';
 export { default as EditButton } from './EditButton.vue';
