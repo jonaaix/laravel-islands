@@ -158,15 +158,16 @@ const isPreset = (value) => parseHex(value) && toHex(parseHex(value)) === toHex(
 
 <template>
     <div class="color-picker flex items-center gap-2">
-        <TextField
-            :model-value="text"
-            mono
-            :placeholder="placeholder"
-            :disabled="disabled"
-            class="w-40"
-            @update:model-value="onTyped"
-            @blur="onBlur"
-        />
+        <div class="w-40">
+            <TextField
+                :model-value="text"
+                mono
+                :placeholder="placeholder"
+                :disabled="disabled"
+                @update:model-value="onTyped"
+                @blur="onBlur"
+            />
+        </div>
 
         <span ref="anchor" class="inline-flex">
             <button
