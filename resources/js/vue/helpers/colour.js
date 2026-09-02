@@ -4,11 +4,10 @@
 
 export const FORMATS = ['hex', 'rgb', 'hsl', 'hsv'];
 
-/** Twelve hues at one weight plus a neutral, so any two of them sit well side by side. */
+/** Twelve hues at one weight, a brown and a neutral — any two of them sit well side by side. */
 export const DEFAULT_PRESETS = [
-    '#e05252', '#e8743a', '#e0a63a', '#9ab53a', '#4fb35f', '#38a996',
-    '#3bb6c8', '#3a8fe0', '#5b6fe0', '#8a5be0', '#c65bd0', '#e05a9a',
-    '#5c6470',
+    '#e05252', '#e8743a', '#e0a63a', '#9ab53a', '#4fb35f', '#38a996', '#3bb6c8',
+    '#3a8fe0', '#5b6fe0', '#8a5be0', '#c65bd0', '#e05a9a', '#a8724f', '#5c6470',
 ];
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
