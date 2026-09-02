@@ -1,52 +1,96 @@
 <script setup>
 import { computed, ref } from 'vue';
 
+/**
+ * Two ways to use it: a list of `options` picks one of a few named stops; `min`/`max`/`step`
+ * without options runs a plain number. `update:modelValue` follows the pointer, `commit` fires
+ * once it lets go — the place to save from.
+ */
 const props = defineProps({
     modelValue: { type: [Number, String], default: null },
-    options: { type: Array, required: true },
+    /** `{ value, label }[]`; leave out for a numeric range. */
+    options: { type: Array, default: null },
+    min: { type: Number, default: 0 },
+    max: { type: Number, default: 100 },
+    step: { type: Number, default: 1 },
+    /** The words at either end of a numeric range — the application owns them. */
+    minLabel: { type: String, default: '' },
+    maxLabel: { type: String, default: '' },
     disabled: { type: Boolean, default: false },
     ariaLabel: { type: String, default: '' },
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'commit']);
 
 const trackRef = ref(null);
 let dragging = false;
 
+const stepped = computed(() => Array.isArray(props.options));
+
 const currentIndex = computed(() => {
+    if (!stepped.value) {
+        return 0;
+    }
+
     const idx = props.options.findIndex((o) => String(o.value) === String(props.modelValue));
 
     return idx === -1 ? 0 : idx;
 });
 
-const lastIndex = computed(() => Math.max(0, props.options.length - 1));
+const lastIndex = computed(() => (stepped.value ? Math.max(0, props.options.length - 1) : 0));
 
-const positionPct = computed(() => (lastIndex.value === 0 ? 0 : (currentIndex.value / lastIndex.value) * 100));
+const numeric = computed(() => {
+    const value = Number(props.modelValue);
 
-const marked = computed(() => currentIndex.value > 0);
+    return Number.isFinite(value) ? Math.min(props.max, Math.max(props.min, value)) : props.min;
+});
 
-function pick(index) {
-    if (props.disabled) {
+const ratio = computed(() => {
+    if (stepped.value) {
+        return lastIndex.value === 0 ? 0 : currentIndex.value / lastIndex.value;
+    }
+
+    return props.max === props.min ? 0 : (numeric.value - props.min) / (props.max - props.min);
+});
+
+const positionPct = computed(() => ratio.value * 100);
+
+const marked = computed(() => (stepped.value ? currentIndex.value > 0 : numeric.value > props.min));
+
+function valueAtRatio(r) {
+    const clamped = Math.max(0, Math.min(1, r));
+
+    if (stepped.value) {
+        return props.options[Math.round(clamped * lastIndex.value)]?.value;
+    }
+
+    const raw = props.min + clamped * (props.max - props.min);
+
+    return Math.min(props.max, Math.max(props.min, props.min + Math.round((raw - props.min) / props.step) * props.step));
+}
+
+function pick(value) {
+    if (props.disabled || value === undefined) {
         return;
     }
 
-    const opt = props.options[index];
-
-    if (opt && String(opt.value) !== String(props.modelValue)) {
-        emit('update:modelValue', opt.value);
+    if (String(value) !== String(props.modelValue)) {
+        emit('update:modelValue', value);
     }
 }
 
-function indexAtClientX(clientX) {
+function commit() {
+    emit('commit', stepped.value ? props.options[currentIndex.value]?.value : numeric.value);
+}
+
+function ratioAtClientX(clientX) {
     const rect = trackRef.value?.getBoundingClientRect();
 
     if (!rect || rect.width === 0) {
-        return currentIndex.value;
+        return ratio.value;
     }
 
-    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-
-    return Math.round(ratio * lastIndex.value);
+    return (clientX - rect.left) / rect.width;
 }
 
 function onPointerDown(event) {
@@ -56,7 +100,7 @@ function onPointerDown(event) {
 
     dragging = true;
     event.target?.setPointerCapture?.(event.pointerId);
-    pick(indexAtClientX(event.clientX));
+    pick(valueAtRatio(ratioAtClientX(event.clientX)));
 }
 
 function onPointerMove(event) {
@@ -64,7 +108,7 @@ function onPointerMove(event) {
         return;
     }
 
-    pick(indexAtClientX(event.clientX));
+    pick(valueAtRatio(ratioAtClientX(event.clientX)));
 }
 
 function onPointerUp(event) {
@@ -74,6 +118,17 @@ function onPointerUp(event) {
 
     dragging = false;
     event.target?.releasePointerCapture?.(event.pointerId);
+    commit();
+}
+
+function stepBy(direction) {
+    if (stepped.value) {
+        pick(props.options[Math.max(0, Math.min(lastIndex.value, currentIndex.value + direction))]?.value);
+
+        return;
+    }
+
+    pick(Math.min(props.max, Math.max(props.min, numeric.value + direction * props.step)));
 }
 
 function onKeydown(event) {
@@ -81,20 +136,27 @@ function onKeydown(event) {
         return;
     }
 
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
-        event.preventDefault();
-        pick(Math.max(0, currentIndex.value - 1));
-    } else if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
-        event.preventDefault();
-        pick(Math.min(lastIndex.value, currentIndex.value + 1));
-    } else if (event.key === 'Home') {
-        event.preventDefault();
-        pick(0);
-    } else if (event.key === 'End') {
-        event.preventDefault();
-        pick(lastIndex.value);
+    const keys = {
+        ArrowLeft: () => stepBy(-1),
+        ArrowDown: () => stepBy(-1),
+        ArrowRight: () => stepBy(1),
+        ArrowUp: () => stepBy(1),
+        Home: () => pick(stepped.value ? props.options[0]?.value : props.min),
+        End: () => pick(stepped.value ? props.options[lastIndex.value]?.value : props.max),
+    };
+
+    if (!keys[event.key]) {
+        return;
     }
+
+    event.preventDefault();
+    keys[event.key]();
+    commit();
 }
+
+const ariaValue = computed(() => (stepped.value
+    ? { min: 0, max: lastIndex.value, now: currentIndex.value, text: props.options[currentIndex.value]?.label }
+    : { min: props.min, max: props.max, now: numeric.value, text: String(numeric.value) }));
 </script>
 
 <template>
@@ -120,16 +182,18 @@ function onKeydown(event) {
                     :style="{ width: positionPct + '%' }"
                 ></span>
 
-                <span
-                    v-for="(opt, i) in options"
-                    :key="'tick-' + opt.value"
-                    aria-hidden="true"
-                    class="pointer-events-none absolute top-1/2 h-[6px] w-[6px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-150"
-                    :class="i <= currentIndex && marked
-                        ? 'bg-primary-600 dark:bg-primary-500'
-                        : 'bg-gray-400 dark:bg-gray-500'"
-                    :style="{ left: (lastIndex === 0 ? 0 : (i / lastIndex) * 100) + '%' }"
-                ></span>
+                <template v-if="stepped">
+                    <span
+                        v-for="(opt, i) in options"
+                        :key="'tick-' + opt.value"
+                        aria-hidden="true"
+                        class="pointer-events-none absolute top-1/2 h-[6px] w-[6px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-150"
+                        :class="i <= currentIndex && marked
+                            ? 'bg-primary-600 dark:bg-primary-500'
+                            : 'bg-gray-400 dark:bg-gray-500'"
+                        :style="{ left: (lastIndex === 0 ? 0 : (i / lastIndex) * 100) + '%' }"
+                    ></span>
+                </template>
 
                 <div
                     class="pointer-events-none absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
@@ -145,10 +209,10 @@ function onKeydown(event) {
                         role="slider"
                         tabindex="0"
                         :aria-label="ariaLabel || undefined"
-                        :aria-valuemin="0"
-                        :aria-valuemax="lastIndex"
-                        :aria-valuenow="currentIndex"
-                        :aria-valuetext="options[currentIndex]?.label"
+                        :aria-valuemin="ariaValue.min"
+                        :aria-valuemax="ariaValue.max"
+                        :aria-valuenow="ariaValue.now"
+                        :aria-valuetext="ariaValue.text"
                         :aria-disabled="disabled ? 'true' : undefined"
                         :disabled="disabled"
                         @keydown="onKeydown"
@@ -163,7 +227,7 @@ function onKeydown(event) {
             </div>
         </div>
 
-        <div class="relative mt-1.5 h-4 px-[9px] text-xs tabular-nums">
+        <div v-if="stepped" class="relative mt-1.5 h-4 px-[9px] text-xs tabular-nums">
             <div class="relative h-full w-full">
                 <span
                     v-for="(opt, i) in options"
@@ -175,6 +239,11 @@ function onKeydown(event) {
                     :style="{ left: (lastIndex === 0 ? 0 : (i / lastIndex) * 100) + '%' }"
                 >{{ opt.label }}</span>
             </div>
+        </div>
+
+        <div v-else-if="minLabel || maxLabel" class="mt-1.5 flex justify-between px-[9px] text-xs text-gray-500 dark:text-gray-400">
+            <span>{{ minLabel }}</span>
+            <span>{{ maxLabel }}</span>
         </div>
     </div>
 </template>
