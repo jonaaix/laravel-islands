@@ -44,16 +44,16 @@ class MakeIslandCmd extends Command
 
         $slug = Str::kebab($class);
         $root = base_path((string) config('laravel-islands.path', 'app/Islands'));
-        $core = $root . '/@Core';
-        $directory = $root . '/' . $class;
+        $core = $root.'/@Core';
+        $directory = $root.'/'.$class;
 
-        if (!is_dir($core) && !mkdir($core, 0755, true) && !is_dir($core)) {
+        if (! is_dir($core) && ! mkdir($core, 0755, true) && ! is_dir($core)) {
             $this->components->error("Could not create {$core}.");
 
             return self::FAILURE;
         }
-        if (!file_exists($core . '/.gitkeep')) {
-            touch($core . '/.gitkeep');
+        if (! file_exists($core.'/.gitkeep')) {
+            touch($core.'/.gitkeep');
         }
 
         $replacements = [
@@ -61,26 +61,26 @@ class MakeIslandCmd extends Command
             '{{ island }}' => $class,
             '{{ slug }}' => $slug,
             '{{ title }}' => Str::headline($class),
-            '{{ namespace }}' => (string) config('laravel-islands.namespace', 'App\\Islands') . '\\' . $class,
-            '{{ routeName }}' => (string) config('laravel-islands.routes.name', 'islands.') . $slug . '.',
-            '{{ routePrefix }}' => trim((string) config('laravel-islands.routes.prefix', 'islands'), '/') . '/' . $slug,
+            '{{ namespace }}' => (string) config('laravel-islands.namespace', 'App\\Islands').'\\'.$class,
+            '{{ routeName }}' => (string) config('laravel-islands.routes.name', 'islands.').$slug.'.',
+            '{{ routePrefix }}' => trim((string) config('laravel-islands.routes.prefix', 'islands'), '/').'/'.$slug,
         ];
 
-        if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) {
+        if (! is_dir($directory) && ! mkdir($directory, 0755, true) && ! is_dir($directory)) {
             $this->components->error("Could not create {$directory}.");
 
             return self::FAILURE;
         }
 
         foreach (self::DIRECTORIES as $role) {
-            $path = $directory . '/' . $role;
+            $path = $directory.'/'.$role;
 
-            if (!is_dir($path)) {
+            if (! is_dir($path)) {
                 mkdir($path, 0755, true);
             }
 
-            if (!file_exists($path . '/.gitkeep')) {
-                touch($path . '/.gitkeep');
+            if (! file_exists($path.'/.gitkeep')) {
+                touch($path.'/.gitkeep');
             }
         }
 
@@ -88,9 +88,9 @@ class MakeIslandCmd extends Command
 
         foreach (self::FILES as $stub => $target) {
             $name = strtr($target, $replacements);
-            $path = $directory . '/' . $name;
+            $path = $directory.'/'.$name;
 
-            if (file_exists($path) && !$this->option('force')) {
+            if (file_exists($path) && ! $this->option('force')) {
                 $this->components->warn("Kept existing {$name}");
 
                 continue;
@@ -128,7 +128,7 @@ class MakeIslandCmd extends Command
      */
     private function stub(string $name): ?string
     {
-        foreach ([base_path('stubs/islands/' . $name), __DIR__ . '/../../stubs/' . $name] as $candidate) {
+        foreach ([base_path('stubs/islands/'.$name), __DIR__.'/../../stubs/'.$name] as $candidate) {
             if (is_file($candidate)) {
                 return (string) file_get_contents($candidate);
             }

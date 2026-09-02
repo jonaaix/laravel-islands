@@ -30,7 +30,7 @@ trait InteractsWithIslands
 
     public function islandChannel(): string
     {
-        return str_replace('\\', '.', static::class) . '.' . $this->getKey();
+        return str_replace('\\', '.', static::class).'.'.$this->getKey();
     }
 
     protected function broadcastIfBroadcastChannelsExistForEvent($instance, $event, $channels = null)
@@ -38,7 +38,7 @@ trait InteractsWithIslands
         try {
             return $this->broadcastThroughLaravel($instance, $event, $channels);
         } catch (Throwable $e) {
-            Log::warning('Island broadcast skipped: ' . $e->getMessage(), [
+            Log::warning('Island broadcast skipped: '.$e->getMessage(), [
                 'model' => static::class,
                 'event' => $event,
             ]);

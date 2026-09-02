@@ -14,23 +14,23 @@ class IslandsServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/laravel-islands.php', 'laravel-islands');
+        $this->mergeConfigFrom(__DIR__.'/../config/laravel-islands.php', 'laravel-islands');
 
         $this->app->singleton(ChannelResolver::class);
     }
 
     public function boot(): void
     {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'laravel-islands');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'laravel-islands');
 
         Blade::component('island', Island::class);
 
         $this->publishes([
-            __DIR__ . '/../config/laravel-islands.php' => config_path('laravel-islands.php'),
+            __DIR__.'/../config/laravel-islands.php' => config_path('laravel-islands.php'),
         ], 'laravel-islands-config');
 
         $this->publishes([
-            __DIR__ . '/../stubs' => base_path('stubs/islands'),
+            __DIR__.'/../stubs' => base_path('stubs/islands'),
         ], 'laravel-islands-stubs');
 
         if ($this->app->runningInConsole()) {
@@ -49,13 +49,13 @@ class IslandsServiceProvider extends ServiceProvider
     {
         $config = (array) config('laravel-islands.routes', []);
 
-        if (!($config['enabled'] ?? false)) {
+        if (! ($config['enabled'] ?? false)) {
             return;
         }
 
         $root = base_path((string) config('laravel-islands.path', 'app/Islands'));
 
-        if (!is_dir($root)) {
+        if (! is_dir($root)) {
             return;
         }
 
@@ -63,8 +63,8 @@ class IslandsServiceProvider extends ServiceProvider
 
         foreach ($this->islandRouteFiles($root, $file) as $island => $routes) {
             Route::middleware((array) ($config['middleware'] ?? ['web']))
-                ->prefix(trim((string) ($config['prefix'] ?? 'islands'), '/') . '/' . $island)
-                ->name((string) ($config['name'] ?? 'islands.') . $island . '.')
+                ->prefix(trim((string) ($config['prefix'] ?? 'islands'), '/').'/'.$island)
+                ->name((string) ($config['name'] ?? 'islands.').$island.'.')
                 ->group($routes);
         }
     }
@@ -76,8 +76,8 @@ class IslandsServiceProvider extends ServiceProvider
     {
         $found = [];
 
-        foreach ((array) glob($root . '/*', GLOB_ONLYDIR) as $directory) {
-            $routes = $directory . '/' . $file;
+        foreach ((array) glob($root.'/*', GLOB_ONLYDIR) as $directory) {
+            $routes = $directory.'/'.$file;
 
             if (is_file($routes)) {
                 $found[Str::kebab(basename($directory))] = $routes;

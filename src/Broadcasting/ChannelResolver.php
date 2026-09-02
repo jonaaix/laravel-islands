@@ -32,7 +32,7 @@ class ChannelResolver
             return $model->islandChannel();
         }
 
-        return str_replace('\\', '.', $model::class) . '.' . $model->getKey();
+        return str_replace('\\', '.', $model::class).'.'.$model->getKey();
     }
 
     /**
@@ -43,9 +43,9 @@ class ChannelResolver
         $base = class_basename($model);
 
         return [
-            'created' => '.' . $base . 'Created',
-            'updated' => '.' . $base . 'Updated',
-            'deleted' => '.' . $base . 'Deleted',
+            'created' => '.'.$base.'Created',
+            'updated' => '.'.$base.'Updated',
+            'deleted' => '.'.$base.'Deleted',
         ];
     }
 }
