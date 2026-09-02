@@ -6,6 +6,7 @@ import { useTranslations } from '../composables/useTranslations.js';
 
 const props = defineProps({
     modelValue: { type: [String, Number], default: 0 },
+    /** `{ value, label, depth?, disabled? }` — a `disabled` entry is a heading: shown, searched past, never picked. */
     options: { type: [Object, Array], default: () => ({}) },
     placeholder: { type: String, default: 'Select…' },
     searchPlaceholder: { type: String, default: 'Search…' },
@@ -266,22 +267,31 @@ function releaseOverlay() {
 }
 function select(key) {
     const option = filtered.value.find((o) => String(o.value) === String(key));
+    if (option?.disabled) return;
     picked.value = option ? { value: option.value, label: option.label } : null;
     emit('update:modelValue', key);
     close();
 }
 function clear() { picked.value = null; emit('update:modelValue', props.emptyValue); close(); }
+// A heading row (`disabled`) is read past, never landed on.
+function nextPickable(from, step) {
+    let i = from;
+    do {
+        i += step;
+    } while (i >= 0 && i < filtered.value.length && filtered.value[i].disabled);
+    return i < 0 || i >= filtered.value.length ? from : i;
+}
 function onKeydown(e) {
     if (e.key === 'ArrowDown') {
         e.preventDefault();
-        highlighted.value = Math.min(highlighted.value + 1, filtered.value.length - 1);
+        highlighted.value = nextPickable(highlighted.value, 1);
     } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        highlighted.value = Math.max(highlighted.value - 1, 0);
+        highlighted.value = nextPickable(highlighted.value, -1);
     } else if (e.key === 'Enter') {
         e.preventDefault();
         const hit = filtered.value[highlighted.value];
-        if (hit) {
+        if (hit && !hit.disabled) {
             select(hit.value);
         }
     } else if (e.key === 'Escape') {
@@ -370,12 +380,14 @@ function onKeydown(e) {
                 <li v-for="(option, i) in filtered" :key="option.value" role="option" :aria-selected="String(option.value) === String(modelValue)">
                     <button
                         type="button"
+                        :disabled="option.disabled"
                         @click="select(option.value)"
-                        @mouseenter="highlighted = i"
+                        @mouseenter="option.disabled ? null : (highlighted = i)"
                         class="flex w-full items-center justify-between gap-2 px-3 py-1.5 text-left text-sm"
                         :class="[
-                            i === highlighted ? 'bg-gray-50 dark:bg-white/5' : '',
-                            String(option.value) === String(modelValue) ? 'font-semibold text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-200',
+                            i === highlighted && !option.disabled ? 'bg-gray-50 dark:bg-white/5' : '',
+                            option.disabled ? 'cursor-default text-gray-500 dark:text-gray-400' : '',
+                            String(option.value) === String(modelValue) ? 'font-semibold text-primary-700 dark:text-primary-300' : (option.disabled ? '' : 'text-gray-700 dark:text-gray-200'),
                         ]"
                     >
                         <slot name="option" :key-value="option.value" :label="option.label" :option="option">
