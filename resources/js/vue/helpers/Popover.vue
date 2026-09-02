@@ -25,6 +25,12 @@ const panel = ref(null);
 const placed = ref(false);
 
 /**
+ * Hidden by opacity rather than `visibility`, because a panel that is not visible cannot take
+ * focus — a picker focusing its search field on the tick it opens would silently lose it.
+ */
+const unplacedStyle = { opacity: '0', pointerEvents: 'none' };
+
+/**
  * Which third of the window the anchor sits in decides where the panel grows from: on the
  * left it opens to the right, in the middle it stays centred under the anchor, on the right
  * it opens to the left. Then it is pulled back far enough to stay on screen.
@@ -116,7 +122,7 @@ defineExpose({ position });
             v-if="open"
             ref="panel"
             class="fixed overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10"
-            :style="{ ...style, zIndex: zIndex + 1, visibility: placed ? undefined : 'hidden' }"
+            :style="{ ...style, zIndex: zIndex + 1, ...(placed ? {} : unplacedStyle) }"
             @keydown.esc.stop="emit('close')"
             @click.stop
         >
