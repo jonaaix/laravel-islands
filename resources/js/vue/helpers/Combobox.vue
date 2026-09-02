@@ -141,11 +141,41 @@ const filtered = computed(() => {
     }
 
     if (!props.keepAncestors) {
-        return normalizedOptions.value.filter(hit).slice(0, cap);
+        // Ranked before the cap, or an exact match past the last shown entry is cut off.
+        return normalizedOptions.value
+            .filter(hit)
+            .sort((a, b) => rank(a, q) - rank(b, q))
+            .slice(0, cap);
     }
 
     return withAncestors(normalizedOptions.value, hit).slice(0, cap);
 });
+
+/**
+ * How well an entry answers what was typed: its exact value first, then its exact label,
+ * then either of them beginning with it. A substring hit alone comes last — otherwise
+ * typing a country code finds the country somewhere below every name that contains it.
+ *
+ * A tree keeps its own order instead: ranking would tear the branches apart.
+ */
+function rank(option, q) {
+    const value = String(option.value).toLowerCase();
+    const label = String(option.label).toLowerCase();
+
+    if (value === q) {
+        return 0;
+    }
+
+    if (label === q) {
+        return 1;
+    }
+
+    if (label.startsWith(q)) {
+        return 2;
+    }
+
+    return value.startsWith(q) ? 3 : 4;
+}
 
 /**
  * Every match, plus the entry each one sits under — found by walking back to the nearest
