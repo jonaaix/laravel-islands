@@ -69,7 +69,8 @@ const OPTION = {
         off: 'bg-transparent text-gray-500 ring-gray-200 hover:bg-gray-50 hover:text-gray-700 dark:text-gray-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-gray-200',
     },
     segmented: {
-        base: 'relative z-10 inline-flex h-7 items-center gap-1.5 rounded-full px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500',
+        // Inset like the pills variant: drawn outward the ring lands exactly on the frame's own edge.
+        base: 'relative z-10 inline-flex h-7 items-center gap-1.5 rounded-full px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500',
         on: 'text-gray-900 dark:text-white',
         off: 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200',
         surface: 'bg-white shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10',
