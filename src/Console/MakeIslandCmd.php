@@ -44,7 +44,7 @@ class MakeIslandCmd extends Command
 
         $slug = Str::kebab($class);
         $root = base_path((string) config('laravel-islands.path', 'app/Islands'));
-        $core = $root.'/@Core';
+        $core = $root.'/@Shared';
         $directory = $root.'/'.$class;
 
         if (! is_dir($core) && ! mkdir($core, 0755, true) && ! is_dir($core)) {
