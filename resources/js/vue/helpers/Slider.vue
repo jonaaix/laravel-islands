@@ -137,7 +137,7 @@ function onKeydown(event) {
                 >
                     <button
                         type="button"
-                        class="handle focus-visible:ring-primary-500 peer relative z-10 flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full border-2 bg-white transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 dark:bg-gray-900"
+                        class="handle focus-visible:ring-primary-500 peer relative z-10 flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full border-2 bg-white transition-colors duration-150 before:absolute before:-inset-[11px] before:rounded-full before:content-[''] focus-visible:outline-none focus-visible:ring-2 dark:bg-gray-900"
                         :class="marked
                             ? 'border-primary-600 bg-primary-600 dark:border-primary-500 dark:bg-primary-500'
                             : 'border-gray-400 dark:border-gray-500'"
