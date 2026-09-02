@@ -151,13 +151,7 @@ const filtered = computed(() => {
     return withAncestors(normalizedOptions.value, hit).slice(0, cap);
 });
 
-/**
- * How well an entry answers what was typed: its exact value first, then its exact label,
- * then either of them beginning with it. A substring hit alone comes last — otherwise
- * typing a country code finds the country somewhere below every name that contains it.
- *
- * A tree keeps its own order instead: ranking would tear the branches apart.
- */
+// A bare substring hit ranks last, or a typed-out code sits below every name containing it.
 function rank(option, q) {
     const value = String(option.value).toLowerCase();
     const label = String(option.label).toLowerCase();
