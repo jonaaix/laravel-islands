@@ -34,6 +34,7 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 | Import | Purpose |
 | --- | --- |
 | `Button` | tone/size/shape/loading + `icon`/default/`iconRight`/`menu` slots — the split-button lives here |
+| `ButtonGroup` | joins the outlined Buttons placed directly inside it into one strip with shared seams; keep hidden inputs and wrappers outside |
 | `provideButtonDefaults({ shape?, size?, tone? })` / `BUTTON_DEFAULTS_KEY` | app-wide button defaults (see the SKILL) |
 | `IconButton` | icon-only, `label` doubles as aria-label and tooltip; `href` makes it a link |
 | `EditButton` | the quiet pencil beside an editable value |
@@ -43,7 +44,7 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 | Import | Purpose |
 | --- | --- |
 | `TextField`, `NumberField`, `TextArea`, `SelectField`, `FileField` | standard form fields on the shared 36 px control-height frame — `NumberField` takes `prefix`/`suffix` for a unit and `stepper` for a minus/plus pair |
-| `Checkbox`, `Switch`, `Radio`, `RadioGroup`, `Slider` | boolean and choice controls |
+| `Checkbox`, `Switch`, `Radio`, `RadioGroup`, `Slider` | boolean and choice controls — `Slider` takes `options` for named stops or `min`/`max`/`step` for a number, and emits `commit` when the pointer lets go |
 | `ChoiceSegment`, `EditSegment` | segmented controls for inline choice / edit rows |
 | `InlineEdit` | the in-place edit contract — Enter saves, Esc cancels, spinner in the value's place |
 | `FieldGroup`, `FieldSegment`, `FieldCaption` | dividers, segments and the 10 px uppercase caption |
@@ -105,7 +106,7 @@ table but not the other is a bug in waiting.
 | `Combobox` | single-value select with search; `variant` = `field` · `filter` · `filter-card`; supports async `fetchOptions` |
 | `MultiSelect` | several values from one list |
 | `TreeSelect` | a hierarchy with a searchable path, cached per URL |
-| `OptionStrip` | micro switcher — `variant` = `pills` (row of switches) or `segmented` (one question, n answers) |
+| `OptionStrip` | micro switcher — `variant` = `pills` (row of switches) or `segmented` (one question, n answers); `size` = `md` beside fields, `sm` in a dense toolbar beside `Button size="sm"` |
 | `FilterPanel` | the panel beside the table, docking with the toolbar |
 | `useFilterPanelDock(storageKey, { baseWidth })` | `useViewWidth` plus a docking panel: the same `root` + `rootStyle`, widened while the panel is docked, overlaid when there is no room |
 
