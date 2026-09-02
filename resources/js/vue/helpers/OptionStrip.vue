@@ -109,8 +109,7 @@ function measure() {
 
     const index = props.options.findIndex((option) => isTaken(option.value));
     const button = index < 0 ? null : strip.querySelectorAll('button')[index];
-    // Measured, not read off `offsetLeft`: those are whole pixels, and the rounding they drop
-    // gathers across the segments until the last one sits a pixel short of the frame.
+    // Measured, not read off `offsetLeft`: whole pixels there leave the last segment short.
     const box = button?.getBoundingClientRect();
 
     if (!button || !box.width) {
