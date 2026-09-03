@@ -82,7 +82,7 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 ### Icons
 
 `Icon` + `provideIcons(ICONS)`. The package ships **no** icon set — hand it your own,
-so the bundle only carries the glyphs you use. See `docs/helpers/icons.md` for the
+so the bundle only carries the glyphs you use. See `docs/helpers.md` for the
 icon-set shape and naming conventions.
 
 ## `@aaix/laravel-islands-datagrid/vue`
