@@ -1,4 +1,7 @@
-# Mounting
+# Mounting Islands
+
+`<x-island>` is the only thing a page needs to know about an island. It renders the mount
+element the runtime looks for, and carries everything the island starts with.
 
 ```blade
 <x-island
@@ -8,23 +11,61 @@
 />
 ```
 
-| Attribute | Default | Purpose |
-| --- | --- | --- |
-| `name` | required | The registry key: a feature island's basename (`Products`), or the path of a lone component without the suffix (`product-view/ProductView`). |
-| `:props` | `[]` | JSON-serialisable data. Arrives as component props and under `useIsland().props`. |
-| `:subscribe` | `null` | A model, or `['key' => $model]`, to keep in sync — see [Real-Time Models](/realtime). |
-| `adapter` | `vue` | The frontend adapter that mounts the element. |
+## Attributes
 
-The tag renders a `<div data-island="…" data-island-adapter="vue" data-island-payload="…">`.
-The payload holds `props` and an `_island` block with subscriptions, translations and the
-locale. An unknown `name` logs a console warning and leaves the element empty; the rest
-of the page keeps working.
+| Attribute | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `name` | string | required | The registry key of the component — see [Resolving the Component](#resolving-the-component). |
+| `:props` | array | `[]` | Serialised into the payload. Arrives both as component props and under `useIsland().props`. |
+| `:subscribe` | Model, `array<string, Model>` or `null` | `null` | Models the island should keep in sync — see [Real-Time Models](/realtime). |
+| `adapter` | string | `vue` | The frontend adapter that mounts this element — see [Custom Adapters](/mounting#other-frameworks). |
 
-## In Filament
+Every prop must be JSON-serialisable. Pass arrays and scalars; turn a model into an array
+first, ideally through a presenter so only the fields the island draws cross the wire.
 
-A custom page returns an empty heading and lets the island draw its own:
+## The Rendered Element
+
+```html
+<div data-island="ShopOrders" data-island-adapter="vue" data-island-payload="{…}"></div>
+```
+
+The payload is one JSON object: `props` is yours; `_island` carries the subscriptions
+(channel and event names per model), the translation lines and the locale, and is read by
+`useModel()` and `useTranslations()`. Once mounted, the runtime adds `data-island-mounted`.
+
+## Resolving the Component
+
+`startVueIslands(registry)` receives the object `import.meta.glob()` produces — a map of
+file paths to modules. For a `name`, it tries two keys in order:
+
+1. `./islands/<name>.island.vue`
+2. `./<name>.island.vue`
+
+With the glob from the [installation](/installation#the-app-entry), a lone component under
+`resources/js/islands/product-view/ProductView.island.vue` is therefore mounted as
+`name="product-view/ProductView"`, and a feature island whose keys were normalised to the
+basename is mounted as `name="Products"`.
+
+When no key matches, the runtime logs `[islands] vue component not found: "…"` and leaves
+the element empty. When the element names an adapter nobody registered, it logs
+`[islands] no adapter registered for "…"`. Both are warnings, not errors — the rest of the
+page keeps working.
+
+## Islands in Filament
+
+A Filament custom page is a natural host. Return an empty heading, and let the island draw
+its own:
 
 ```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Pages;
+
+use App\Islands\Products\ProductsProps;
+use Filament\Pages\Page;
+
 class ProductsPage extends Page
 {
     protected string $view = 'islands.products';
@@ -42,28 +83,48 @@ class ProductsPage extends Page
 ```
 
 ```blade
+{{-- resources/views/islands/products.blade.php --}}
 <x-filament-panels::page>
     <x-island name="Products" :props="$islandProps" />
 </x-filament-panels::page>
 ```
 
-The runtime mounts again after `livewire:navigated`, so nothing else is needed.
+The runtime listens for `livewire:navigated` and mounts again after every Filament
+navigation, so an island placed inside a panel needs nothing more. Livewire morphs around
+the mount element rather than through it; keep the `<x-island>` tag inside a plain `<div>`
+so Livewire has a stable node to diff.
+
+::: tip Multiple islands per page
+A page may carry any number of islands. Each is its own Vue application — a dashboard
+built from four widgets is four islands, and one of them failing to resolve does not affect
+the other three.
+:::
 
 ## The Setup Hook
 
-Every island is its own Vue application. Plugins, global provides and error handlers are
-registered per app through `setup`:
+Because every island is a separate Vue application, plugins, global components and
+application-wide provides must be registered per app. `startVueIslands()` accepts a
+`setup` callback that runs for each island before it mounts:
 
 ```js
+// resources/js/app.js
+import { startVueIslands } from '@aaix/laravel-islands/vue';
+import { BUTTON_DEFAULTS_KEY } from '@aaix/laravel-islands/vue/helpers';
+
 startVueIslands(registry, {
     setup(app, payload) {
         app.provide(BUTTON_DEFAULTS_KEY, { shape: 'pill' });
+        app.config.errorHandler = (error) => reportToSentry(error, payload);
     },
 });
 ```
 
+`app` is the Vue application instance, `payload` the parsed island payload. Whatever a
+Vue plugin would normally do in `main.js` belongs here.
+
 ## Other Frameworks
 
 The core is framework-agnostic. `registerAdapter(name, (element, payload) => …)` from
-`@aaix/laravel-islands` registers a mount function under a name, and
-`<x-island adapter="react">` selects it. `startIslands()` then scans the page.
+`@aaix/laravel-islands` registers a mount function under a name, `<x-island adapter="react">`
+selects it, and `startIslands()` scans the page. The payload shape is the one shown above;
+`createEchoController()` gives an adapter the same channel handling the Vue composables use.

@@ -14,7 +14,7 @@ export default defineConfig({
 
       nav: [
          { text: 'Guide', link: '/introduction' },
-         { text: 'Helpers', link: '/helpers' },
+         { text: 'UI Helpers', link: '/helpers/' },
          { text: 'Datagrid', link: 'https://jonaaix.github.io/laravel-islands-datagrid/' },
       ],
 
@@ -28,21 +28,31 @@ export default defineConfig({
             ],
          },
          {
-            text: 'Guide',
+            text: 'The Basics',
             items: [
-               { text: 'Island Structure', link: '/structure' },
-               { text: 'Mounting', link: '/mounting' },
-               { text: 'Endpoints & Props', link: '/endpoints' },
+               { text: 'Directory Structure', link: '/directory-structure' },
+               { text: 'Mounting Islands', link: '/mounting' },
+               { text: 'Props', link: '/props' },
+               { text: 'Routes & Controllers', link: '/routes-and-controllers' },
                { text: 'Real-Time Models', link: '/realtime' },
                { text: 'Translations', link: '/translations' },
                { text: 'Configuration', link: '/configuration' },
             ],
          },
          {
-            text: 'Reference',
+            text: 'Frontend',
             items: [
                { text: 'Composables', link: '/composables' },
-               { text: 'UI Helpers', link: '/helpers' },
+               { text: 'Layout & Styling', link: '/styling' },
+            ],
+         },
+         {
+            text: 'UI Helpers',
+            items: [
+               { text: 'Overview & Icons', link: '/helpers/' },
+               { text: 'Buttons & Fields', link: '/helpers/buttons-and-fields' },
+               { text: 'Selects & Inline Editing', link: '/helpers/selects-and-editing' },
+               { text: 'Overlays & Display', link: '/helpers/overlays-and-display' },
             ],
          },
       ],
