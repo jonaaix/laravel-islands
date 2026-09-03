@@ -30,12 +30,10 @@ island is picked up on the next request; if you cache routes, run `route:cache` 
 
 ## `Routes.php`
 
-Inside the file, routes are relative to the group. The scaffolded version:
+Inside the file, routes are relative to the group. `make:island` starts it with one route:
 
 ```php
 <?php
-
-declare(strict_types=1);
 
 use App\Islands\ShopOrders\ShopOrdersIslandController;
 use Illuminate\Support\Facades\Route;
