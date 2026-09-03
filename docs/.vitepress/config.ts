@@ -13,24 +13,51 @@ export default defineConfig({
       logo: '/logo.svg',
 
       nav: [
-         { text: 'Guide', link: '/installation-and-usage' },
-         { text: 'Reference', link: '/helpers' },
+         { text: 'Guide', link: '/introduction' },
+         { text: 'UI Helpers', link: '/helpers/' },
+         { text: 'Datagrid', link: 'https://jonaaix.github.io/laravel-islands-datagrid/' },
       ],
 
       sidebar: [
          {
-            text: 'Guide',
+            text: 'Getting Started',
             items: [
-               { text: 'Installation & Usage', link: '/installation-and-usage' },
-               { text: 'Island Structure', link: '/island-structure' },
+               { text: 'Introduction', link: '/introduction' },
+               { text: 'Installation', link: '/installation' },
+               { text: 'Quickstart', link: '/quickstart' },
+               { text: 'Directory Structure', link: '/directory-structure' },
             ],
          },
          {
-            text: 'Reference',
+            text: 'The Basics',
+            items: [
+               { text: 'Mounting Islands', link: '/mounting' },
+               { text: 'Props', link: '/props' },
+               { text: 'Routes & Controllers', link: '/routes-and-controllers' },
+               { text: 'Real-Time Models', link: '/realtime' },
+               { text: 'Translations', link: '/translations' },
+               { text: 'Configuration', link: '/configuration' },
+            ],
+         },
+         {
+            text: 'Frontend',
             items: [
                { text: 'Composables', link: '/composables' },
-               { text: 'Helpers', link: '/helpers' },
-               { text: 'Translations', link: '/translations' },
+               { text: 'Layout & Styling', link: '/styling' },
+               { text: 'Custom Adapters', link: '/adapters' },
+            ],
+         },
+         {
+            text: 'UI Helpers',
+            items: [
+               { text: 'Overview', link: '/helpers/' },
+               { text: 'Icons', link: '/helpers/icons' },
+               { text: 'Buttons', link: '/helpers/buttons' },
+               { text: 'Form Fields', link: '/helpers/fields' },
+               { text: 'Selects', link: '/helpers/selects' },
+               { text: 'Inline Editing', link: '/helpers/inline-editing' },
+               { text: 'Overlays & Feedback', link: '/helpers/overlays' },
+               { text: 'Display', link: '/helpers/display' },
             ],
          },
       ],
@@ -47,5 +74,7 @@ export default defineConfig({
       search: {
          provider: 'local',
       },
+
+      outline: [2, 3],
    },
 })
