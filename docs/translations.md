@@ -41,6 +41,39 @@ Only JSON lines are shipped; PHP translation files under `lang/{locale}/` are no
 English-only application needs no translation file at all: every key falls through
 unchanged.
 
+## Extracting Keys
+
+Collecting every `t()` key by hand does not scale past the first island. The package
+ships a command that scans the islands and adds what is missing to the JSON file:
+
+```bash
+php artisan islands:translations
+```
+
+It reads every `.vue` and `.js` file under the islands directory (the configured `path`)
+and under `resources/js/islands`, collects the first argument of each `t('…')` call, and
+appends the keys the file does not have yet — with the key as its own value, so the
+interface stays readable until someone translates the line:
+
+```json
+{
+    "Positions": "Positionen",
+    "Shipped :count of :total": "Shipped :count of :total"
+}
+```
+
+Existing lines and their order are left alone. The file is created when it does not
+exist. Keys that the file has but no island uses any more are listed, never removed.
+
+| Option | Effect |
+| --- | --- |
+| `--locale=de` | Write `lang/de.json` instead of the file for `app.locale`. |
+| `--locale=all` | Update every `lang/*.json` that already exists. |
+| `--dry-run` | List the missing and unused keys without writing. |
+
+Only string literals are collected. A key assembled at runtime from a template string
+cannot be translated anyway; give each case its own literal.
+
 ## How It Works
 
 On render, `<x-island>` loads the JSON lines for `app()->getLocale()` and adds them to the

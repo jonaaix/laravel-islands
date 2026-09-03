@@ -55,6 +55,8 @@ including inside Filament panels, where a custom page is often just one island.
   registers it under a prefix and name of its own.
 - **`make:island`** — the scaffolder that writes the component, controller, props class,
   routes and role folders in one go.
+- **`islands:translations`** — the extractor that collects every `t()` key and adds the
+  missing ones to the JSON translation file.
 - **`InteractsWithIslands`** — a model trait that broadcasts lifecycle events on a channel
   the runtime can find.
 - **The runtime** — `startVueIslands()` and the composables `useIsland`, `useModel`,

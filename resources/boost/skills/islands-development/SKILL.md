@@ -126,7 +126,10 @@ const { t } = useTranslations();  // English source strings are the keys
 
 `t()` reads the application's JSON translation lines for the current locale,
 shipped with the payload — a string that never passes through `t()` can never
-be translated.
+be translated. `php artisan islands:translations` collects every `t('…')` key
+from the islands and appends the missing ones to `lang/{locale}.json` (key as
+value, `--locale=`, `--dry-run`); run it after adding strings instead of editing
+the file by hand.
 
 Every composable, helper component and host shipped by the package (plus the
 datagrid additions) is listed in [`helpers-index.md`](./helpers-index.md).

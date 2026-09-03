@@ -3,6 +3,7 @@
 namespace Aaix\LaravelIslands;
 
 use Aaix\LaravelIslands\Broadcasting\ChannelResolver;
+use Aaix\LaravelIslands\Console\ExtractTranslationsCmd;
 use Aaix\LaravelIslands\Console\MakeIslandCmd;
 use Aaix\LaravelIslands\View\Components\Island;
 use Illuminate\Support\Facades\Blade;
@@ -34,7 +35,7 @@ class IslandsServiceProvider extends ServiceProvider
         ], 'laravel-islands-stubs');
 
         if ($this->app->runningInConsole()) {
-            $this->commands([MakeIslandCmd::class]);
+            $this->commands([MakeIslandCmd::class, ExtractTranslationsCmd::class]);
         }
 
         $this->registerIslandRoutes();
