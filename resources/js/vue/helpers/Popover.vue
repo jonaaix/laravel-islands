@@ -1,5 +1,6 @@
 <script setup>
-import { nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
 
 const props = defineProps({
     /** The element the panel hangs under. Pass the ref, not its value. */
@@ -11,13 +12,27 @@ const props = defineProps({
     offset: { type: Number, default: 4 },
     /** Room kept between the panel and the window, so it never touches the edge. */
     margin: { type: Number, default: 16 },
-    /** Layer to render above (default 60 sits under modals 70; pass 80+ to overlay a modal). */
+    /**
+     * The lowest layer to render on. While open the panel also joins the overlay stack, so a
+     * popover inside a modal lands above that modal without the caller knowing the modal's layer.
+     */
     zIndex: { type: Number, default: 60 },
 });
 
 const emit = defineEmits(['close']);
 
 const style = ref({});
+
+const overlayId = ref(null);
+
+const layer = computed(() => overlayId.value === null ? props.zIndex : Math.max(props.zIndex, overlayZIndex(overlayId.value)));
+
+function releaseOverlay() {
+    if (overlayId.value !== null) {
+        unregisterOverlay(overlayId.value);
+        overlayId.value = null;
+    }
+}
 
 const panel = ref(null);
 
@@ -91,12 +106,14 @@ watch(
     (isOpen) => {
         if (!isOpen) {
             placed.value = false;
+            releaseOverlay();
             window.removeEventListener('resize', position);
             window.removeEventListener('scroll', position, true);
 
             return;
         }
 
+        overlayId.value = registerOverlay();
         position();
         nextTick(position);
         window.addEventListener('resize', position);
@@ -106,6 +123,7 @@ watch(
 );
 
 onBeforeUnmount(() => {
+    releaseOverlay();
     window.removeEventListener('resize', position);
     window.removeEventListener('scroll', position, true);
 });
@@ -116,13 +134,13 @@ defineExpose({ position });
 <template>
     <Teleport to="body">
         <!-- A click beside the panel means no, the same as Escape. -->
-        <div v-if="open" class="fixed inset-0" :style="{ zIndex }" @click="emit('close')"></div>
+        <div v-if="open" class="fixed inset-0" :style="{ zIndex: layer }" @click="emit('close')"></div>
 
         <div
             v-if="open"
             ref="panel"
             class="fixed overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10"
-            :style="{ ...style, zIndex: zIndex + 1, ...(placed ? {} : unplacedStyle) }"
+            :style="{ ...style, zIndex: layer + 1, ...(placed ? {} : unplacedStyle) }"
             @keydown.esc.stop="emit('close')"
             @click.stop
         >
