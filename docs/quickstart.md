@@ -1,16 +1,12 @@
 # Quickstart
 
-This page builds one island from scratch: a list of recent orders with a refresh button.
-It assumes the [installation](/installation) is done, including the feature-folder glob in
-your app entry.
+One island from scratch: a list of recent orders with a refresh button.
 
-## 1. Scaffold the Island
+## 1. Scaffold
 
 ```bash
 php artisan make:island RecentOrders
 ```
-
-The command writes a feature folder under `app/Islands/`:
 
 ```text
 app/Islands/RecentOrders/
@@ -22,61 +18,30 @@ app/Islands/RecentOrders/
 └── Queries/RecentOrdersQuery.php
 ```
 
-plus the empty role folders `Writers/`, `Presenters/`, `State/`, `Support/` and
-`Components/`. Every file is explained under [Directory Structure](/directory-structure).
+## 2. Query and Endpoint
 
-## 2. Write the Query
-
-The query returns exactly what the component will draw — no Eloquent models cross the wire:
+The query returns what the component draws; the controller authorizes and delegates.
+`Routes.php` already maps `GET data` to it, registered as `islands/recent-orders/data`
+with the name `islands.recent-orders.data`.
 
 ```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Islands\RecentOrders\Queries;
-
-use App\Models\ShopOrder;
-use Illuminate\Http\Request;
-
 class RecentOrdersQuery
 {
     public function data(Request $request): array
     {
-        $rows = ShopOrder::query()
-            ->latest()
-            ->limit(10)
-            ->get()
+        $rows = ShopOrder::query()->latest()->limit(10)->get()
             ->map(fn (ShopOrder $order) => [
                 'id' => $order->id,
                 'number' => $order->number,
                 'customer' => $order->customer_name,
-                'total' => $order->total_net,
             ]);
 
-        return ['rows' => $rows->all(), 'meta' => ['count' => $rows->count()]];
+        return ['rows' => $rows->all(), 'meta' => []];
     }
 }
 ```
 
-## 3. Guard the Endpoint
-
-The generated controller already calls the query. Fill in the authorization — the package
-leaves that decision to you, and the endpoint is public until you do:
-
 ```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Islands\RecentOrders;
-
-use App\Islands\RecentOrders\Queries\RecentOrdersQuery;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-
 class RecentOrdersIslandController extends Controller
 {
     public function __construct(private readonly RecentOrdersQuery $query) {}
@@ -97,55 +62,37 @@ class RecentOrdersIslandController extends Controller
 }
 ```
 
-`Routes.php` already maps `GET data` to this method. Because the island's folder is
-`RecentOrders`, the route is registered as `islands/recent-orders/data` with the name
-`islands.recent-orders.data` — see [Routes & Controllers](/routes-and-controllers).
+::: warning
+The scaffolded `authorizeAccess()` is empty. The endpoint is reachable by anyone until you
+fill it in.
+:::
 
-## 4. Hand Over the Props
-
-The props class builds what the island starts with. Keep URLs here rather than in the
-component, so a route can be renamed without touching JavaScript:
+## 3. Props
 
 ```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Islands\RecentOrders;
-
-use Illuminate\Http\Request;
-
 class RecentOrdersProps
 {
     public function build(Request $request): array
     {
-        return [
-            'dataUrl' => route('islands.recent-orders.data'),
-            'initial' => [],
-        ];
+        return ['dataUrl' => route('islands.recent-orders.data'), 'initial' => []];
     }
 }
 ```
 
-## 5. Write the Component
+## 4. Component
 
 ```vue
-<!-- app/Islands/RecentOrders/RecentOrders.island.vue -->
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useIsland, useTranslations } from '@aaix/laravel-islands/vue';
 
 const { props } = useIsland();
 const { t } = useTranslations();
-
 const rows = ref([]);
-const loading = ref(false);
 
 async function load() {
-    loading.value = true;
     const response = await fetch(props.dataUrl, { headers: { Accept: 'application/json' } });
     rows.value = (await response.json()).data.rows;
-    loading.value = false;
 }
 
 onMounted(load);
@@ -153,8 +100,7 @@ onMounted(load);
 
 <template>
     <div>
-        <button type="button" :disabled="loading" @click="load">{{ t('Refresh') }}</button>
-
+        <button type="button" @click="load">{{ t('Refresh') }}</button>
         <ul>
             <li v-for="row in rows" :key="row.id">{{ row.number }} — {{ row.customer }}</li>
         </ul>
@@ -162,19 +108,13 @@ onMounted(load);
 </template>
 ```
 
-## 6. Mount It
-
-Render the page view from a route or a Filament page and pass the props:
+## 5. Mount
 
 ```php
-Route::get('/orders/recent', function () {
-    return view('islands.recent-orders', [
-        'islandProps' => app(\App\Islands\RecentOrders\RecentOrdersProps::class)->build(request()),
-    ]);
-})->middleware('auth');
+Route::get('/orders/recent', fn () => view('islands.recent-orders', [
+    'islandProps' => app(RecentOrdersProps::class)->build(request()),
+]))->middleware('auth');
 ```
-
-The generated `Page.blade.php` is the mount point:
 
 ```blade
 <div>
@@ -182,14 +122,6 @@ The generated `Page.blade.php` is the mount point:
 </div>
 ```
 
-Open the page. The island mounts, calls its endpoint and draws the rows.
-
-## Where to Go From Here
-
-- [Mounting Islands](/mounting) — every attribute of `<x-island>`, and how it behaves in
-  Filament.
-- [Real-Time Models](/realtime) — make the list update when an order changes.
-- [UI Helpers](/helpers/) — replace the bare `<button>` with one that has a tone, a size and
-  a loading state.
-- [Laravel Islands Datagrid](https://jonaaix.github.io/laravel-islands-datagrid/) — for a
-  list with search, filters, sorting and pagination, the sibling package owns the table.
+Open the page: the island mounts, calls its endpoint and draws the rows. For a list with
+search, filters and pagination, see
+[Laravel Islands Datagrid](https://jonaaix.github.io/laravel-islands-datagrid/).

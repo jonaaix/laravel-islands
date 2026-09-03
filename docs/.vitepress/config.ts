@@ -14,7 +14,7 @@ export default defineConfig({
 
       nav: [
          { text: 'Guide', link: '/introduction' },
-         { text: 'UI Helpers', link: '/helpers/' },
+         { text: 'Helpers', link: '/helpers' },
          { text: 'Datagrid', link: 'https://jonaaix.github.io/laravel-islands-datagrid/' },
       ],
 
@@ -25,39 +25,24 @@ export default defineConfig({
                { text: 'Introduction', link: '/introduction' },
                { text: 'Installation', link: '/installation' },
                { text: 'Quickstart', link: '/quickstart' },
-               { text: 'Directory Structure', link: '/directory-structure' },
             ],
          },
          {
-            text: 'The Basics',
+            text: 'Guide',
             items: [
-               { text: 'Mounting Islands', link: '/mounting' },
-               { text: 'Props', link: '/props' },
-               { text: 'Routes & Controllers', link: '/routes-and-controllers' },
+               { text: 'Island Structure', link: '/structure' },
+               { text: 'Mounting', link: '/mounting' },
+               { text: 'Endpoints & Props', link: '/endpoints' },
                { text: 'Real-Time Models', link: '/realtime' },
                { text: 'Translations', link: '/translations' },
                { text: 'Configuration', link: '/configuration' },
             ],
          },
          {
-            text: 'Frontend',
+            text: 'Reference',
             items: [
                { text: 'Composables', link: '/composables' },
-               { text: 'Layout & Styling', link: '/styling' },
-               { text: 'Custom Adapters', link: '/adapters' },
-            ],
-         },
-         {
-            text: 'UI Helpers',
-            items: [
-               { text: 'Overview', link: '/helpers/' },
-               { text: 'Icons', link: '/helpers/icons' },
-               { text: 'Buttons', link: '/helpers/buttons' },
-               { text: 'Form Fields', link: '/helpers/fields' },
-               { text: 'Selects', link: '/helpers/selects' },
-               { text: 'Inline Editing', link: '/helpers/inline-editing' },
-               { text: 'Overlays & Feedback', link: '/helpers/overlays' },
-               { text: 'Display', link: '/helpers/display' },
+               { text: 'UI Helpers', link: '/helpers' },
             ],
          },
       ],
@@ -74,7 +59,5 @@ export default defineConfig({
       search: {
          provider: 'local',
       },
-
-      outline: [2, 3],
    },
 })
