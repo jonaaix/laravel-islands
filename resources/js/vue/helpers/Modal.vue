@@ -98,7 +98,7 @@ watch(() => props.open, async (open) => {
     returnFocusTo = document.activeElement;
     await nextTick();
     (focusables()[0] ?? panel.value)?.focus?.();
-});
+}, { immediate: true });
 
 function releaseOverlay() {
     if (overlayId.value === null) {
