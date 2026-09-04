@@ -58,7 +58,7 @@ An icon-only button. `label` is the accessible name **and** the tooltip.
 | --- | --- | --- |
 | `label` | required | Accessible name and tooltip text. |
 | `size` | `'md'` | `sm` · `md` · `lg`. |
-| `tone` | `'quiet'` | Grey, stepping up on hover; other tones follow `Button`. |
+| `tone` | `'quiet'` | `quiet` (no surface, tint on hover) · `secondary` · `primary` · `outlined` (the `Button` surfaces) · `active` (tinted, for a toggle that is on) · `danger` · `plain` (no colour of its own). |
 | `tooltip` | `true` | `false` keeps the accessible name without the tooltip. |
 | `disabled`, `ripple` | `false`, `true` | |
 | `href`, `target` | `''`, `'_blank'` | Renders an anchor. |

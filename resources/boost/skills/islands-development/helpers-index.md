@@ -36,7 +36,7 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 | `Button` | tone/size/shape/loading + `icon`/default/`iconRight`/`menu` slots — the split-button lives here |
 | `ButtonGroup` | joins the outlined Buttons placed directly inside it into one strip with shared seams; keep hidden inputs and wrappers outside |
 | `provideButtonDefaults({ shape?, size?, tone? })` / `BUTTON_DEFAULTS_KEY` | app-wide button defaults (see the SKILL) |
-| `IconButton` | icon-only, `label` doubles as aria-label and tooltip; `href` makes it a link |
+| `IconButton` | icon-only, `label` doubles as aria-label and tooltip; `tone` shares `Button`'s `secondary`/`primary`/`outlined` surfaces so it can sit in a row of them; `href` makes it a link |
 | `EditButton` | the quiet pencil beside an editable value |
 
 ### Fields & inline editing

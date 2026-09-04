@@ -44,6 +44,9 @@ const GLYPHS = { xs: 'h-4 w-4', sm: 'h-4 w-4', md: 'h-4 w-4', lg: 'h-5 w-5', xl:
 
 const TONES = {
     quiet: 'text-gray-500 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200 dark:active:bg-white/15',
+    secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-200 active:bg-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 dark:active:bg-gray-600',
+    primary: 'bg-primary-100 text-primary-800 hover:bg-primary-200 active:bg-primary-300 dark:bg-primary-500/15 dark:text-primary-200 dark:hover:bg-primary-500/25 dark:active:bg-primary-500/35',
+    outlined: 'bg-transparent text-gray-700 ring-1 ring-gray-200 hover:bg-gray-100 active:bg-gray-200 dark:text-gray-200 dark:ring-white/10 dark:hover:bg-white/5 dark:active:bg-white/15',
     danger: 'text-gray-400 hover:bg-red-50 hover:text-red-600 active:bg-red-100 dark:hover:bg-red-500/15 dark:hover:text-red-400 dark:active:bg-red-500/25',
     active: 'bg-primary-500/10 text-primary-600 hover:bg-primary-500/15 active:bg-primary-500/25 dark:bg-primary-500/15 dark:text-primary-400 dark:hover:bg-primary-500/25 dark:active:bg-primary-500/35',
     /** No colour of its own — for a button whose hover tint is tied to whatever it sits in. */
