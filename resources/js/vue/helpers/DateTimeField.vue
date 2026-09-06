@@ -1,9 +1,9 @@
 <script setup>
-import { computed, nextTick, ref, watch } from 'vue';
+import { computed, nextTick, ref, useAttrs, watch } from 'vue';
 import Button from './Button.vue';
 import IconButton from './IconButton.vue';
 import Popover from './Popover.vue';
-import { fieldClasses } from './fieldStyles.js';
+import { FIELD_SHAPES, FIELD_SIZES } from './fieldStyles.js';
 import {
     formatDisplay,
     fromModel,
@@ -17,6 +17,8 @@ import {
     weekdayNames,
     withinBounds,
 } from './dateTime.js';
+
+defineOptions({ inheritAttrs: false });
 
 /**
  * A field for a moment, a day or a time of day. Typed input is understood in the common
@@ -49,6 +51,8 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
+const attrs = useAttrs();
+
 const WORDS = computed(() => ({
     open: 'Pick a date and time',
     previousMonth: 'Previous month',
@@ -65,7 +69,6 @@ const hasCalendar = computed(() => props.mode !== 'time');
 const hasClock = computed(() => props.mode !== 'date');
 
 const anchor = ref(null);
-const input = ref(null);
 const open = ref(false);
 const text = ref('');
 const invalid = ref(false);
@@ -85,6 +88,26 @@ function publish(date) {
     emit('update:modelValue', toModel(clamped, props.mode));
     text.value = formatDisplay(clamped, props.mode, props.locale);
 }
+
+/* ----- The frame, as NumberField draws it around its stepper ----- */
+
+const frame = computed(() => [
+    'inline-flex items-center overflow-hidden border bg-white dark:bg-gray-800 focus-within:ring-1',
+    invalid.value
+        ? 'border-red-400 focus-within:border-red-500 focus-within:ring-red-500 dark:border-red-500/60'
+        : 'border-gray-200 focus-within:border-primary-500 focus-within:ring-primary-500 dark:border-white/10',
+    FIELD_SHAPES[props.shape] ?? FIELD_SHAPES.rounded,
+    FIELD_SIZES[props.size] ?? FIELD_SIZES.md,
+    props.disabled ? 'cursor-not-allowed opacity-60' : '',
+    attrs.class ?? '',
+]);
+
+const FRAME_INPUT = 'h-full w-full min-w-0 border-0 bg-transparent px-2.5 tabular-nums focus:outline-none dark:text-gray-100';
+
+const FRAME_BUTTON =
+    'flex h-full shrink-0 items-center justify-center px-2 text-gray-500 transition-colors ' +
+    'hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 ' +
+    'disabled:hover:bg-transparent dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200 dark:active:bg-white/15';
 
 /* ----- Typing ----- */
 
@@ -219,16 +242,12 @@ function onGridKey(event) {
 const uid = `dtf-${Math.random().toString(36).slice(2, 8)}`;
 const dayId = (date) => `${uid}-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
 
-function dayClass(cell) {
-    const selected = sameDay(cell.date, draft.value);
-    const isToday = sameDay(cell.date, today);
+// Every cell is a Button: the chosen day speaks with the CTA tone, today with the primary tint, the rest stay ghosts.
+function dayTone(cell) {
+    if (sameDay(cell.date, draft.value)) return 'cta';
+    if (sameDay(cell.date, today)) return 'primary';
 
-    if (selected) return 'bg-primary-500 font-semibold text-white';
-    if (!dayAllowed(cell.date)) return 'text-gray-300 line-through dark:text-gray-600';
-    if (!cell.inMonth) return 'text-gray-400 hover:bg-gray-100 dark:text-gray-500 dark:hover:bg-white/10';
-    if (isToday) return 'font-semibold text-primary-600 ring-1 ring-inset ring-primary-300 hover:bg-primary-50 dark:text-primary-300 dark:ring-primary-500/50 dark:hover:bg-primary-500/10';
-
-    return 'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-white/10';
+    return 'ghost';
 }
 
 /* ----- Clock ----- */
@@ -296,40 +315,33 @@ const popoverWidth = computed(() => {
 
     return Math.min(desired, (typeof window === 'undefined' ? desired : window.innerWidth) - 32);
 });
-
-const inputClasses = computed(() => fieldClasses({
-    shape: props.shape,
-    size: props.size,
-    tabular: true,
-    extra: `pr-10 ${invalid.value ? 'border-red-400 focus:border-red-500 focus:ring-red-500 dark:border-red-500/60' : ''}`,
-}));
 </script>
 
 <template>
-    <div ref="anchor" class="date-time-field relative">
+    <span ref="anchor" :class="frame">
         <input
-            ref="input"
             type="text"
             :value="text"
-            :class="inputClasses"
+            :class="FRAME_INPUT"
             :disabled="disabled"
             :placeholder="placeholder"
             :aria-invalid="invalid ? 'true' : 'false'"
             autocomplete="off"
+            v-bind="{ ...attrs, class: undefined }"
             @input="text = $event.target.value"
             @blur="commitTyped"
             @keydown="onKeydown"
         />
         <button
             type="button"
-            class="absolute inset-y-0 right-0 flex w-10 items-center justify-center rounded-r-md text-gray-500 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-60 dark:text-gray-400 dark:hover:text-white"
+            :class="FRAME_BUTTON"
             :disabled="disabled"
             :aria-label="WORDS.open"
             :aria-expanded="open ? 'true' : 'false'"
             @click="open ? close() : show()"
         >
-            <svg v-if="hasCalendar" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/></svg>
-            <svg v-else class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+            <svg v-if="hasCalendar" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75Z" clip-rule="evenodd"/></svg>
+            <svg v-else class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clip-rule="evenodd"/></svg>
         </button>
 
         <Popover :anchor="anchor" :open="open" :width="popoverWidth" @close="close">
@@ -340,12 +352,12 @@ const inputClasses = computed(() => fieldClasses({
             <div class="flex flex-wrap">
                 <div v-if="hasCalendar" class="w-72 p-3">
                     <div class="flex items-center justify-between">
-                        <IconButton size="sm" :label="WORDS.previousMonth" :tooltip="false" @click="shiftMonth(-1)">
-                            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd"/></svg>
+                        <IconButton size="md" :label="WORDS.previousMonth" :tooltip="false" @click="shiftMonth(-1)">
+                            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd"/></svg>
                         </IconButton>
                         <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ heading }}</span>
-                        <IconButton size="sm" :label="WORDS.nextMonth" :tooltip="false" @click="shiftMonth(1)">
-                            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></svg>
+                        <IconButton size="md" :label="WORDS.nextMonth" :tooltip="false" @click="shiftMonth(1)">
+                            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></svg>
                         </IconButton>
                     </div>
 
@@ -354,20 +366,22 @@ const inputClasses = computed(() => fieldClasses({
                     </div>
 
                     <div role="grid" class="grid grid-cols-7 gap-y-0.5" @keydown="onGridKey">
-                        <button
+                        <Button
                             v-for="cell in grid"
                             :id="dayId(cell.date)"
                             :key="cell.date.getTime()"
-                            type="button"
                             role="gridcell"
+                            shape="pill"
+                            size="md"
+                            :tone="dayTone(cell)"
                             :tabindex="sameDay(cell.date, focusedDay) ? 0 : -1"
                             :aria-selected="sameDay(cell.date, draft) ? 'true' : 'false'"
                             :aria-label="formatDisplay(cell.date, 'date', locale)"
                             :disabled="!dayAllowed(cell.date)"
-                            class="mx-auto flex h-9 w-9 items-center justify-center rounded-md text-sm tabular-nums transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
-                            :class="dayClass(cell)"
+                            class="mx-auto w-9 px-0 tabular-nums"
+                            :class="cell.inMonth || sameDay(cell.date, draft) ? '' : 'opacity-50'"
                             @click="pickDay(cell.date)"
-                        >{{ cell.date.getDate() }}</button>
+                        >{{ cell.date.getDate() }}</Button>
                     </div>
 
                     <div class="mt-2 flex justify-end">
@@ -381,51 +395,53 @@ const inputClasses = computed(() => fieldClasses({
                         role="listbox"
                         tabindex="0"
                         :aria-label="WORDS.hours"
-                        class="h-72 flex-1 overflow-y-auto py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500"
+                        class="h-72 flex-1 overflow-y-auto px-2 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500"
                         @keydown="onClockKey($event, hours, draftHour, setHour)"
                     >
-                        <button
+                        <Button
                             v-for="hour in hours"
                             :key="hour"
-                            type="button"
                             role="option"
+                            size="sm"
                             tabindex="-1"
+                            full-width
+                            :tone="draftHour === hour ? 'cta' : 'ghost'"
                             :aria-selected="draftHour === hour ? 'true' : 'false'"
-                            class="mx-auto my-0.5 flex h-8 w-12 items-center justify-center rounded-md text-sm tabular-nums transition-colors"
-                            :class="draftHour === hour ? 'bg-primary-500 font-semibold text-white' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-white/10'"
+                            class="my-0.5 px-0 tabular-nums"
                             @click="setHour(hour)"
-                        >{{ pad(hour) }}</button>
+                        >{{ pad(hour) }}</Button>
                     </div>
                     <div
                         ref="minuteList"
                         role="listbox"
                         tabindex="0"
                         :aria-label="WORDS.minutes"
-                        class="h-72 flex-1 overflow-y-auto border-l border-gray-200 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500 dark:border-white/10"
+                        class="h-72 flex-1 overflow-y-auto border-l border-gray-200 px-2 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500 dark:border-white/10"
                         @keydown="onClockKey($event, minutes, draftMinute, setMinute)"
                     >
-                        <button
+                        <Button
                             v-for="minute in minutes"
                             :key="minute"
-                            type="button"
                             role="option"
+                            size="sm"
                             tabindex="-1"
+                            full-width
+                            :tone="draftMinute === minute ? 'cta' : 'ghost'"
                             :aria-selected="draftMinute === minute ? 'true' : 'false'"
-                            class="mx-auto my-0.5 flex h-8 w-12 items-center justify-center rounded-md text-sm tabular-nums transition-colors"
-                            :class="draftMinute === minute ? 'bg-primary-500 font-semibold text-white' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-white/10'"
+                            class="my-0.5 px-0 tabular-nums"
                             @click="setMinute(minute)"
-                        >{{ pad(minute) }}</button>
+                        >{{ pad(minute) }}</Button>
                     </div>
                 </div>
             </div>
 
             <div class="flex items-center justify-between gap-2 border-t border-gray-200 p-2 dark:border-white/10">
-                <Button size="sm" tone="secondary" @click="clear">{{ WORDS.clear }}</Button>
+                <Button size="sm" tone="ghost" @click="clear">{{ WORDS.clear }}</Button>
                 <div class="flex items-center gap-2">
                     <span class="text-xs tabular-nums text-gray-500 dark:text-gray-400">{{ formatDisplay(draft, mode, locale) }}</span>
                     <Button v-if="hasClock" size="sm" tone="cta" @click="apply">{{ WORDS.apply }}</Button>
                 </div>
             </div>
         </Popover>
-    </div>
+    </span>
 </template>
