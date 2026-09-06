@@ -225,6 +225,15 @@ function shiftView(by) {
     if (view.value === 'years') yearPage.value = (yearPage.value ?? decade(viewYear.value)) + by * 10;
 }
 
+// Brings the calendar back to this month first, otherwise picking today from another month or the year page shows nothing.
+function goToday() {
+    const now = new Date();
+    view.value = 'days';
+    viewYear.value = now.getFullYear();
+    viewMonth.value = now.getMonth();
+    pickDay(now);
+}
+
 function pickMonth(month) {
     viewMonth.value = month;
     view.value = 'days';
@@ -454,7 +463,7 @@ const popoverWidth = computed(() => {
                     </div>
 
                     <div class="mt-2 flex justify-end">
-                        <Button size="sm" tone="secondary" @click="pickDay(new Date())">{{ WORDS.today }}</Button>
+                        <Button size="sm" tone="secondary" @click="goToday">{{ WORDS.today }}</Button>
                     </div>
                 </div>
 
