@@ -161,6 +161,8 @@ the browser's local time and shows a 24-hour clock.
 | Prop | Default | Purpose |
 | --- | --- | --- |
 | `mode` | `'datetime'` | `datetime` · `date` · `time`. The model is an ISO string, `YYYY-MM-DD` or `HH:MM`; `null` while empty. |
+| `variant` | `'field'` | `field` shows the value in an input; `button` is only the trigger as an `IconButton`, for a view that writes the value out itself. |
+| `tone` | `'quiet'` | The `IconButton` tone of the `button` variant. |
 | `minuteStep` | `5` | Entries of the minute column; `1` lists every minute. |
 | `min`, `max` | `null` | Bounds in the model's format; days outside are struck through. |
 | `shortcuts` | `[]` | `{ label, value }` rows above the calendar; `value` is a Date, a model string or a function returning either. |
