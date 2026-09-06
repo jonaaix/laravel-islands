@@ -205,22 +205,24 @@ function shiftMonth(by) {
 
 const view = ref('days');
 const monthNames = computed(() => Array.from({ length: 12 }, (_, m) => new Intl.DateTimeFormat(props.locale, { month: 'short' }).format(new Date(2000, m, 1))));
+// Whole decades, so the page a year sits on is always the same one: 2020 – 2029, 2030 – 2039.
+const decade = (year) => Math.floor(year / 10) * 10;
 const yearPage = ref(null);
 const years = computed(() => {
-    const first = yearPage.value ?? viewYear.value - 5;
+    const first = yearPage.value ?? decade(viewYear.value);
 
-    return Array.from({ length: 12 }, (_, i) => first + i);
+    return Array.from({ length: 10 }, (_, i) => first + i);
 });
 
 function toggleHeading() {
     view.value = view.value === 'days' ? 'months' : view.value === 'months' ? 'years' : 'days';
-    if (view.value === 'years') yearPage.value = viewYear.value - 5;
+    if (view.value === 'years') yearPage.value = decade(viewYear.value);
 }
 
 function shiftView(by) {
     if (view.value === 'days') shiftMonth(by);
     if (view.value === 'months') viewYear.value += by;
-    if (view.value === 'years') yearPage.value = (yearPage.value ?? viewYear.value - 5) + by * 12;
+    if (view.value === 'years') yearPage.value = (yearPage.value ?? decade(viewYear.value)) + by * 10;
 }
 
 function pickMonth(month) {
@@ -349,9 +351,8 @@ function pickShortcut(shortcut) {
 
 const pad = (n) => String(n).padStart(2, '0');
 
-// Stretched to the calendar's height, scrolled by wheel, keys and the entries themselves — no scrollbar drawn.
 const CLOCK_LIST =
-    'h-full flex-1 overflow-y-auto px-2 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ' +
+    'slim-scrollbar absolute inset-y-0 w-1/2 overflow-y-auto px-2 py-2 ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500';
 
 const popoverWidth = computed(() => {
@@ -418,13 +419,13 @@ const popoverWidth = computed(() => {
                         >{{ name }}</Button>
                     </div>
 
-                    <div v-else-if="view === 'years'" class="mt-2 grid h-[15.5rem] grid-cols-3 content-start gap-1">
+                    <div v-else-if="view === 'years'" class="mt-2 grid h-[15.5rem] grid-cols-5 content-start gap-1">
                         <Button
                             v-for="year in years"
                             :key="year"
                             size="md"
                             :tone="year === viewYear ? 'cta' : 'ghost'"
-                            class="tabular-nums"
+                            class="w-full px-0 tabular-nums"
                             @click="pickYear(year)"
                         >{{ year }}</Button>
                     </div>
@@ -459,13 +460,12 @@ const popoverWidth = computed(() => {
 
                 <!-- Absolutely placed inside a stretched box, so the columns take the calendar's height instead of dictating it. -->
                 <div v-if="hasClock" class="relative self-stretch border-gray-200 dark:border-white/10" :class="hasCalendar ? 'w-[136px] border-l' : 'h-72 w-full'">
-                  <div class="absolute inset-0 flex">
                     <div
                         ref="hourList"
                         role="listbox"
                         tabindex="0"
                         :aria-label="WORDS.hours"
-                        :class="CLOCK_LIST"
+                        :class="[CLOCK_LIST, 'left-0']"
                         @keydown="onClockKey($event, hours, draftHour, setHour)"
                     >
                         <Button
@@ -486,7 +486,7 @@ const popoverWidth = computed(() => {
                         role="listbox"
                         tabindex="0"
                         :aria-label="WORDS.minutes"
-                        :class="[CLOCK_LIST, 'border-l border-gray-200 dark:border-white/10']"
+                        :class="[CLOCK_LIST, 'right-0 border-l border-gray-200 dark:border-white/10']"
                         @keydown="onClockKey($event, minutes, draftMinute, setMinute)"
                     >
                         <Button
@@ -502,7 +502,6 @@ const popoverWidth = computed(() => {
                             @click="setMinute(minute)"
                         >{{ pad(minute) }}</Button>
                     </div>
-                  </div>
                 </div>
             </div>
 
