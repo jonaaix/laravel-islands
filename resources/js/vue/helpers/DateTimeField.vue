@@ -57,6 +57,9 @@ const WORDS = computed(() => ({
     open: 'Pick a date and time',
     previousMonth: 'Previous month',
     nextMonth: 'Next month',
+    previousYear: 'Earlier',
+    nextYear: 'Later',
+    chooseMonth: 'Choose month or year',
     today: 'Today',
     hours: 'Hours',
     minutes: 'Minutes',
@@ -157,6 +160,7 @@ function show() {
     viewYear.value = start.getFullYear();
     viewMonth.value = start.getMonth();
     focusedDay.value = new Date(start);
+    view.value = 'days';
     open.value = true;
     nextTick(scrollClockIntoView);
 }
@@ -196,6 +200,42 @@ function shiftMonth(by) {
     viewYear.value = next.getFullYear();
     viewMonth.value = next.getMonth();
 }
+
+/* ----- Jumping: the heading opens a month grid, its year a year grid ----- */
+
+const view = ref('days');
+const monthNames = computed(() => Array.from({ length: 12 }, (_, m) => new Intl.DateTimeFormat(props.locale, { month: 'short' }).format(new Date(2000, m, 1))));
+const yearPage = ref(null);
+const years = computed(() => {
+    const first = yearPage.value ?? viewYear.value - 5;
+
+    return Array.from({ length: 12 }, (_, i) => first + i);
+});
+
+function toggleHeading() {
+    view.value = view.value === 'days' ? 'months' : view.value === 'months' ? 'years' : 'days';
+    if (view.value === 'years') yearPage.value = viewYear.value - 5;
+}
+
+function shiftView(by) {
+    if (view.value === 'days') shiftMonth(by);
+    if (view.value === 'months') viewYear.value += by;
+    if (view.value === 'years') yearPage.value = (yearPage.value ?? viewYear.value - 5) + by * 12;
+}
+
+function pickMonth(month) {
+    viewMonth.value = month;
+    view.value = 'days';
+}
+
+function pickYear(year) {
+    viewYear.value = year;
+    view.value = 'months';
+}
+
+const navLabels = computed(() => (view.value === 'days'
+    ? [WORDS.value.previousMonth, WORDS.value.nextMonth]
+    : [WORDS.value.previousYear, WORDS.value.nextYear]));
 
 function dayAllowed(date) {
     const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
@@ -309,6 +349,11 @@ function pickShortcut(shortcut) {
 
 const pad = (n) => String(n).padStart(2, '0');
 
+// Stretched to the calendar's height, scrolled by wheel, keys and the entries themselves — no scrollbar drawn.
+const CLOCK_LIST =
+    'h-full flex-1 overflow-y-auto px-2 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500';
+
 const popoverWidth = computed(() => {
     // The clock alone still needs room for its footer.
     const desired = hasCalendar.value ? 288 + (hasClock.value ? 137 : 0) : 216;
@@ -352,20 +397,43 @@ const popoverWidth = computed(() => {
             <div class="flex flex-wrap">
                 <div v-if="hasCalendar" class="w-72 p-3">
                     <div class="flex items-center justify-between">
-                        <IconButton size="md" :label="WORDS.previousMonth" :tooltip="false" @click="shiftMonth(-1)">
+                        <IconButton size="md" :label="navLabels[0]" :tooltip="false" @click="shiftView(-1)">
                             <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd"/></svg>
                         </IconButton>
-                        <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ heading }}</span>
-                        <IconButton size="md" :label="WORDS.nextMonth" :tooltip="false" @click="shiftMonth(1)">
+                        <Button size="sm" tone="ghost" :aria-label="WORDS.chooseMonth" class="font-semibold text-gray-900 dark:text-gray-100" @click="toggleHeading">
+                            {{ view === 'years' ? `${years[0]} – ${years[years.length - 1]}` : view === 'months' ? viewYear : heading }}
+                        </Button>
+                        <IconButton size="md" :label="navLabels[1]" :tooltip="false" @click="shiftView(1)">
                             <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></svg>
                         </IconButton>
                     </div>
 
-                    <div class="mt-2 grid grid-cols-7 text-center text-[10px] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    <div v-if="view === 'months'" class="mt-2 grid h-[15.5rem] grid-cols-3 content-start gap-1">
+                        <Button
+                            v-for="(name, month) in monthNames"
+                            :key="name"
+                            size="md"
+                            :tone="month === viewMonth ? 'cta' : 'ghost'"
+                            @click="pickMonth(month)"
+                        >{{ name }}</Button>
+                    </div>
+
+                    <div v-else-if="view === 'years'" class="mt-2 grid h-[15.5rem] grid-cols-3 content-start gap-1">
+                        <Button
+                            v-for="year in years"
+                            :key="year"
+                            size="md"
+                            :tone="year === viewYear ? 'cta' : 'ghost'"
+                            class="tabular-nums"
+                            @click="pickYear(year)"
+                        >{{ year }}</Button>
+                    </div>
+
+                    <div v-if="view === 'days'" class="mt-2 grid grid-cols-7 text-center text-[10px] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
                         <span v-for="name in weekdays" :key="name" class="py-1">{{ name }}</span>
                     </div>
 
-                    <div role="grid" class="grid grid-cols-7 gap-y-0.5" @keydown="onGridKey">
+                    <div v-if="view === 'days'" role="grid" class="grid grid-cols-7 gap-y-0.5" @keydown="onGridKey">
                         <Button
                             v-for="cell in grid"
                             :id="dayId(cell.date)"
@@ -389,13 +457,15 @@ const popoverWidth = computed(() => {
                     </div>
                 </div>
 
-                <div v-if="hasClock" class="flex border-gray-200 dark:border-white/10" :class="hasCalendar ? 'w-[136px] border-l' : 'w-full'">
+                <!-- Absolutely placed inside a stretched box, so the columns take the calendar's height instead of dictating it. -->
+                <div v-if="hasClock" class="relative self-stretch border-gray-200 dark:border-white/10" :class="hasCalendar ? 'w-[136px] border-l' : 'h-72 w-full'">
+                  <div class="absolute inset-0 flex">
                     <div
                         ref="hourList"
                         role="listbox"
                         tabindex="0"
                         :aria-label="WORDS.hours"
-                        class="h-72 flex-1 overflow-y-auto px-2 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500"
+                        :class="CLOCK_LIST"
                         @keydown="onClockKey($event, hours, draftHour, setHour)"
                     >
                         <Button
@@ -416,7 +486,7 @@ const popoverWidth = computed(() => {
                         role="listbox"
                         tabindex="0"
                         :aria-label="WORDS.minutes"
-                        class="h-72 flex-1 overflow-y-auto border-l border-gray-200 px-2 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500 dark:border-white/10"
+                        :class="[CLOCK_LIST, 'border-l border-gray-200 dark:border-white/10']"
                         @keydown="onClockKey($event, minutes, draftMinute, setMinute)"
                     >
                         <Button
@@ -432,6 +502,7 @@ const popoverWidth = computed(() => {
                             @click="setMinute(minute)"
                         >{{ pad(minute) }}</Button>
                     </div>
+                  </div>
                 </div>
             </div>
 

@@ -166,7 +166,10 @@ the browser's local time and shows a 24-hour clock.
 | `shortcuts` | `[]` | `{ label, value }` rows above the calendar; `value` is a Date, a model string or a function returning either. |
 | `weekStart` | `1` | Monday. `0` or `7` start the week on Sunday. |
 | `locale` | browser | BCP 47 tag for month and weekday names. |
-| `labels` | `{}` | `open`, `previousMonth`, `nextMonth`, `today`, `hours`, `minutes`, `clear`, `apply`. |
+| `labels` | `{}` | `open`, `previousMonth`, `nextMonth`, `previousYear`, `nextYear`, `chooseMonth`, `today`, `hours`, `minutes`, `clear`, `apply`. |
+
+The month heading is a button: one press shows the twelve months, a second the surrounding
+years, so a far-off date is three clicks away.
 
 `formatDateTime`, `parseTypedDateTime`, `toDateTimeModel` and `parseDateTimeModel` are exported
 alongside for a view that wants the same wording or parsing elsewhere.
