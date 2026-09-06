@@ -142,6 +142,35 @@ A native `<select>` on the shared frame, for a short list. Props: `options`
 Props: `accept`, `multiple` (model becomes a `FileList`), `label`, `hint`. Events:
 `update:modelValue`, `change`. Reset by setting the model to `null`.
 
+### `DateTimeField`
+
+A field for a moment, a day or a time of day. Typing is understood in the common shapes
+(`8.9.2026 14:00`, `8.9. 14:00`, `2026-09-08T14:00`, `14:00`); the button beside it opens a
+calendar and two clock columns, where the choice stays a draft until it is applied. Works in
+the browser's local time and shows a 24-hour clock.
+
+```vue
+<DateTimeField v-model="form.pickupAt" :labels="{ apply: t('Apply'), clear: t('Clear'), today: t('Today') }" />
+<DateTimeField v-model="settings.opensAt" mode="time" :minute-step="15" />
+<DateTimeField
+    v-model="form.dueAt"
+    :shortcuts="[{ label: t('Tomorrow 09:00'), value: () => tomorrowAt(9) }]"
+/>
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `mode` | `'datetime'` | `datetime` · `date` · `time`. The model is an ISO string, `YYYY-MM-DD` or `HH:MM`; `null` while empty. |
+| `minuteStep` | `5` | Entries of the minute column; `1` lists every minute. |
+| `min`, `max` | `null` | Bounds in the model's format; days outside are struck through. |
+| `shortcuts` | `[]` | `{ label, value }` rows above the calendar; `value` is a Date, a model string or a function returning either. |
+| `weekStart` | `1` | Monday. `0` or `7` start the week on Sunday. |
+| `locale` | browser | BCP 47 tag for month and weekday names. |
+| `labels` | `{}` | `open`, `previousMonth`, `nextMonth`, `today`, `hours`, `minutes`, `clear`, `apply`. |
+
+`formatDateTime`, `parseTypedDateTime`, `toDateTimeModel` and `parseDateTimeModel` are exported
+alongside for a view that wants the same wording or parsing elsewhere.
+
 ### `Checkbox`
 
 Props: `indeterminate`, `ariaLabel` (required when no visible label sits beside it).
