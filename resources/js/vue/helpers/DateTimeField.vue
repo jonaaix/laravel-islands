@@ -304,7 +304,7 @@ function dayTone(cell) {
 
 function dayClass(cell) {
     if (sameDay(cell.date, draft.value)) return 'font-semibold';
-    if (sameDay(cell.date, today)) return 'ring-1 ring-inset ring-gray-300 dark:ring-white/20';
+    if (sameDay(cell.date, today)) return 'ring-1 ring-inset ring-gray-200 dark:ring-white/10';
 
     return cell.inMonth ? '' : 'opacity-50';
 }
