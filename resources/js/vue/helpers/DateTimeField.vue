@@ -297,12 +297,16 @@ function onGridKey(event) {
 const uid = `dtf-${Math.random().toString(36).slice(2, 8)}`;
 const dayId = (date) => `${uid}-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
 
-// Every cell is a Button: the chosen day speaks with the CTA tone, today with the primary tint, the rest stay ghosts.
+// Every cell is a Button: the chosen day carries the primary tint, today only a ring, the rest stay ghosts.
 function dayTone(cell) {
-    if (sameDay(cell.date, draft.value)) return 'cta';
-    if (sameDay(cell.date, today)) return 'primary';
+    return sameDay(cell.date, draft.value) ? 'primary' : 'ghost';
+}
 
-    return 'ghost';
+function dayClass(cell) {
+    if (sameDay(cell.date, draft.value)) return 'font-semibold';
+    if (sameDay(cell.date, today)) return 'ring-1 ring-inset ring-primary-400 dark:ring-primary-500/60';
+
+    return cell.inMonth ? '' : 'opacity-50';
 }
 
 /* ----- Clock ----- */
@@ -441,7 +445,7 @@ const popoverWidth = computed(() => {
                             v-for="(name, month) in monthNames"
                             :key="name"
                             size="md"
-                            :tone="month === viewMonth ? 'cta' : 'ghost'"
+                            :tone="month === viewMonth ? 'primary' : 'ghost'"
                             @click="pickMonth(month)"
                         >{{ name }}</Button>
                     </div>
@@ -451,7 +455,7 @@ const popoverWidth = computed(() => {
                             v-for="year in years"
                             :key="year"
                             size="md"
-                            :tone="year === viewYear ? 'cta' : 'ghost'"
+                            :tone="year === viewYear ? 'primary' : 'ghost'"
                             class="w-full px-0 tabular-nums"
                             @click="pickYear(year)"
                         >{{ year }}</Button>
@@ -467,7 +471,7 @@ const popoverWidth = computed(() => {
                             :id="dayId(cell.date)"
                             :key="cell.date.getTime()"
                             role="gridcell"
-                            shape="pill"
+                            shape="rounded"
                             size="md"
                             :tone="dayTone(cell)"
                             :tabindex="sameDay(cell.date, focusedDay) ? 0 : -1"
@@ -475,13 +479,13 @@ const popoverWidth = computed(() => {
                             :aria-label="formatDisplay(cell.date, 'date', locale)"
                             :disabled="!dayAllowed(cell.date)"
                             class="mx-auto w-9 px-0 tabular-nums"
-                            :class="cell.inMonth || sameDay(cell.date, draft) ? '' : 'opacity-50'"
+                            :class="dayClass(cell)"
                             @click="pickDay(cell.date)"
                         >{{ cell.date.getDate() }}</Button>
                     </div>
 
                     <div class="mt-2 flex justify-end">
-                        <Button size="sm" tone="secondary" @click="goToday">{{ WORDS.today }}</Button>
+                        <Button size="sm" tone="ghost" @click="goToday">{{ WORDS.today }}</Button>
                     </div>
                 </div>
 
@@ -502,7 +506,7 @@ const popoverWidth = computed(() => {
                             size="sm"
                             tabindex="-1"
                             full-width
-                            :tone="draftHour === hour ? 'cta' : 'ghost'"
+                            :tone="draftHour === hour ? 'primary' : 'ghost'"
                             :aria-selected="draftHour === hour ? 'true' : 'false'"
                             class="my-0.5 px-0 tabular-nums"
                             @click="setHour(hour)"
@@ -523,7 +527,7 @@ const popoverWidth = computed(() => {
                             size="sm"
                             tabindex="-1"
                             full-width
-                            :tone="draftMinute === minute ? 'cta' : 'ghost'"
+                            :tone="draftMinute === minute ? 'primary' : 'ghost'"
                             :aria-selected="draftMinute === minute ? 'true' : 'false'"
                             class="my-0.5 px-0 tabular-nums"
                             @click="setMinute(minute)"
