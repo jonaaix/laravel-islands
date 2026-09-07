@@ -471,7 +471,7 @@ const popoverWidth = computed(() => {
                             :id="dayId(cell.date)"
                             :key="cell.date.getTime()"
                             role="gridcell"
-                            shape="rounded"
+                            shape="pill"
                             size="md"
                             :tone="dayTone(cell)"
                             :tabindex="sameDay(cell.date, focusedDay) ? 0 : -1"
