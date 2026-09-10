@@ -1,18 +1,26 @@
-import { createApp } from 'vue';
+import { createApp, defineAsyncComponent } from 'vue';
 import { registerAdapter, startIslands } from '../core/registry.js';
 import { ISLAND_KEY } from './context.js';
 
 /**
  * Register the Vue adapter and boot every Vue island in the DOM.
  *
- * @param {Record<string, { default: import('vue').Component }>} registry
- *        Result of import.meta.glob('./islands/**\/*.island.vue', { eager: true })
+ * @param {Record<string, { default: import('vue').Component } | (() => Promise<{ default: import('vue').Component }>)>} registry
+ *        Result of import.meta.glob('./islands/**\/*.island.vue') — with `{ eager: true }`
+ *        every island is part of the entry bundle, without it each one is fetched when a
+ *        page actually mounts it.
  * @param {{ setup?: (app: import('vue').App, payload: object) => void }} [options]
  */
 export function startVueIslands(registry, options = {}) {
-    const resolve = (name) =>
-        registry[`./islands/${name}.island.vue`]?.default ??
-        registry[`./${name}.island.vue`]?.default;
+    const resolve = (name) => {
+        const entry = registry[`./islands/${name}.island.vue`] ?? registry[`./${name}.island.vue`];
+
+        if (typeof entry === 'function') {
+            return defineAsyncComponent(() => entry().then((module) => module.default));
+        }
+
+        return entry?.default;
+    };
 
     registerAdapter('vue', (el, payload) => {
         const component = resolve(el.dataset.island);

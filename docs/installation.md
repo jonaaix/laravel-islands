@@ -65,12 +65,20 @@ Register your islands and start the runtime once, in your application's entry fi
 // resources/js/app.js
 import { startVueIslands } from '@aaix/laravel-islands/vue';
 
-startVueIslands(import.meta.glob('./islands/**/*.island.vue', { eager: true }));
+startVueIslands(import.meta.glob('./islands/**/*.island.vue'));
 ```
 
 `startVueIslands()` mounts every `[data-island]` element on the page and mounts again
 after `livewire:navigated`, so islands keep working across Livewire and Filament
 navigation.
+
+### Eager or Lazy
+
+The glob above is lazy: it hands over one loader per island, and only the island a page
+actually mounts is fetched. With `{ eager: true }` every island becomes part of the entry
+bundle instead — the component is there the moment the page is, at the cost of shipping all
+of them to every page. An application with a handful of islands can stay eager; from a dozen
+on, lazy is what keeps a page from loading the code of every other view.
 
 ### Registering Feature Folders
 
@@ -83,12 +91,12 @@ and normalise its keys so the entry file's basename becomes the mount name:
 import { startVueIslands } from '@aaix/laravel-islands/vue';
 
 const featureIslands = Object.fromEntries(
-    Object.entries(import.meta.glob('../../app/Islands/**/*.island.vue', { eager: true }))
-        .map(([path, module]) => [`./islands/${path.split('/').pop()}`, module]),
+    Object.entries(import.meta.glob('../../app/Islands/**/*.island.vue'))
+        .map(([path, loader]) => [`./islands/${path.split('/').pop()}`, loader]),
 );
 
 startVueIslands({
-    ...import.meta.glob('./islands/**/*.island.vue', { eager: true }),
+    ...import.meta.glob('./islands/**/*.island.vue'),
     ...featureIslands,
 });
 ```

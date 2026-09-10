@@ -36,7 +36,9 @@ The payload is one JSON object: `props` is yours; `_island` carries the subscrip
 ## Resolving the Component
 
 `startVueIslands(registry)` receives the object `import.meta.glob()` produces — a map of
-file paths to modules. For a `name`, it tries two keys in order:
+file paths to modules, or to loaders when the glob is lazy. A loader is wrapped in
+`defineAsyncComponent()`, so the island is fetched when the page mounts it. For a `name`, it
+tries two keys in order:
 
 1. `./islands/<name>.island.vue`
 2. `./<name>.island.vue`
