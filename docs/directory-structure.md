@@ -63,12 +63,12 @@ generator creates the folder on first use. Alias it in Vite so imports stay shor
 ```js
 // vite.config.js
 alias: {
-    '@shared': fileURLToPath(new URL('./app/Islands/@Shared', import.meta.url)),
+    '@islands/shared': fileURLToPath(new URL('./app/Islands/@Shared', import.meta.url)),
 },
 ```
 
 ```js
-import { formatCurrency } from '@shared/format.js';
+import { formatCurrency } from '@islands/shared/format.js';
 ```
 
 ## Rules

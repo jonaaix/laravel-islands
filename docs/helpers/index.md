@@ -95,7 +95,7 @@ Hand the set over once, in the setup of the component that renders the island. E
 ```vue
 <script setup>
 import { Icon, provideIcons } from '@aaix/laravel-islands/vue/helpers';
-import { ICONS } from '@shared/icons.js';
+import { ICONS } from '@islands/shared/icons.js';
 
 provideIcons(ICONS);
 </script>

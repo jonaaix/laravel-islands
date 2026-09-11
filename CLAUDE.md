@@ -82,7 +82,7 @@ content belongs under the toolbar it scrolls past, not above it.
 
 ## Formatting
 
-Numbers, dates, money and weights go through `@shared/format.js` — `formatCurrency`,
+Numbers, dates, money and weights go through `@islands/shared/format.js` — `formatCurrency`,
 `formatDate`, `formatRelative`, `formatWeight`. Figures use `tabular-nums`.
 Times display in the user's timezone, 24-hour format — never the server's.
 
