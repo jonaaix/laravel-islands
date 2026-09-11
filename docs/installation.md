@@ -25,37 +25,39 @@ carries on when `window.Echo` is missing.
 
 ## Vite
 
-Point the import name at the sources under `vendor/`:
+The package brings its own Vite plugin. Register it, and the import names resolve
+themselves:
 
 ```js
 // vite.config.js
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
-import { fileURLToPath, URL } from 'node:url';
+import islands from './vendor/aaix/laravel-islands/vite.js';
 
 export default defineConfig({
     plugins: [
         laravel({ input: ['resources/css/app.css', 'resources/js/app.js'], refresh: true }),
         vue(),
+        islands(),
     ],
-    resolve: {
-        alias: {
-            '@aaix/laravel-islands': fileURLToPath(
-                new URL('./vendor/aaix/laravel-islands/resources/js', import.meta.url),
-            ),
-        },
-    },
 });
 ```
 
-Three entry points hang off that alias:
+The plugin reads the package's own entry points, so a name can never drift out of step with
+the sources. Three of them are public:
 
 | Import | Contents |
 | --- | --- |
 | `@aaix/laravel-islands` | the framework-agnostic core: `startIslands`, `registerAdapter`, `mountIslands`, `createEchoController` |
 | `@aaix/laravel-islands/vue` | the Vue adapter: `startVueIslands` and the composables |
 | `@aaix/laravel-islands/vue/helpers` | the optional [UI helpers](/helpers/) |
+
+### Developing the package locally
+
+When the package is wired in as a Composer path repository, the plugin finds that working
+copy through your `composer.json` and uses it instead of the copy under `vendor/`. Nothing
+to configure — the same one line covers development and production.
 
 ## The App Entry
 
