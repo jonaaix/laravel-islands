@@ -7,6 +7,7 @@
     "main": "resources/js/core/index.js",
     "exports": {
         ".": "./resources/js/core/index.js",
+        "./ripple": "./resources/js/core/ripple.js",
         "./vue": "./resources/js/vue/index.js",
         "./vue/helpers": "./resources/js/vue/helpers/index.js",
         "./vite": "./vite.js"

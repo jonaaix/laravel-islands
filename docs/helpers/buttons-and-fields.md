@@ -80,7 +80,25 @@ The press feedback as a directive, for anything a pointer lands on:
 ```
 
 The ripple spawns on `pointerdown`; the element is made `relative` and clipped if it was
-not already. No stylesheet to import.
+not already. No stylesheet to import. A viewer who asked for reduced motion gets none.
+
+### Outside Vue
+
+The effect itself carries no framework — the directive is a shell around
+`@aaix/laravel-islands/ripple`, which any adapter or plain DOM code can use directly:
+
+```js
+import { attachRipple, delegateRipple } from '@aaix/laravel-islands/ripple';
+
+const detach = attachRipple(element);
+const detachAll = delegateRipple(document, '.sidebar-item, .topbar-btn');
+```
+
+`attachRipple` binds one element, `delegateRipple` listens once at a root and serves every
+element matching the selector — the one to reach for when a server-rendered fragment gets
+replaced, since a directly bound listener would not survive the swap. Both take an optional
+`isEnabled(el)` predicate and return a detach function. `spawnRipple(el, event)` is the
+primitive underneath, for a press that some other gesture decides.
 
 ## Fields
 
