@@ -84,11 +84,12 @@ not already. No stylesheet to import. A viewer who asked for reduced motion gets
 
 ### Outside Vue
 
-The effect itself carries no framework — the directive is a shell around
-`@aaix/laravel-islands/ripple`, which any adapter or plain DOM code can use directly:
+The effect itself carries no framework — the directive is a shell around the core, which
+any adapter or plain DOM code can use directly. It ships from the package root, and from
+`@aaix/laravel-islands/ripple` for a consumer that wants the effect without the runtime:
 
 ```js
-import { attachRipple, delegateRipple } from '@aaix/laravel-islands/ripple';
+import { attachRipple, delegateRipple } from '@aaix/laravel-islands';
 
 const detach = attachRipple(element);
 const detachAll = delegateRipple(document, '.sidebar-item, .topbar-btn');
