@@ -9,7 +9,6 @@ use Aaix\LaravelIslands\View\Components\Island;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 
 class IslandsServiceProvider extends ServiceProvider
 {
@@ -54,39 +53,13 @@ class IslandsServiceProvider extends ServiceProvider
             return;
         }
 
-        $root = base_path((string) config('laravel-islands.path', 'app/Islands'));
+        $islands = IslandRoutes::discover(null, (string) ($config['file'] ?? 'Routes.php'));
 
-        if (! is_dir($root)) {
-            return;
-        }
-
-        $file = (string) ($config['file'] ?? 'Routes.php');
-
-        foreach ($this->islandRouteFiles($root, $file) as $island => $routes) {
-            Route::middleware((array) ($config['middleware'] ?? ['web']))
+        foreach ($islands as $island => $routes) {
+            Route::middleware((array) ($config['middleware'] ?? ['web', 'auth']))
                 ->prefix(trim((string) ($config['prefix'] ?? 'islands'), '/').'/'.$island)
                 ->name((string) ($config['name'] ?? 'islands.').$island.'.')
                 ->group($routes);
         }
-    }
-
-    /**
-     * @return array<string, string> Island slug, mapped to the absolute path of its route file.
-     */
-    private function islandRouteFiles(string $root, string $file): array
-    {
-        $found = [];
-
-        foreach ((array) glob($root.'/*', GLOB_ONLYDIR) as $directory) {
-            $routes = $directory.'/'.$file;
-
-            if (is_file($routes)) {
-                $found[Str::kebab(basename($directory))] = $routes;
-            }
-        }
-
-        ksort($found);
-
-        return $found;
     }
 }

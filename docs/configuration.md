@@ -35,7 +35,7 @@ return [
 | `translations.enabled` | `true` | Ship the JSON translation lines of the current locale with every island payload. See [Translations](/translations). |
 | `path` | `app/Islands` | The directory, relative to the project root, that holds one folder per island. Read by route discovery and `make:island`. |
 | `namespace` | `App\Islands` | The namespace the island classes live under. Used by `make:island` for the generated files. Must match the PSR-4 mapping of `path`. |
-| `routes.enabled` | `true` | Discover and register each island's route file. See [Routes & Controllers](/routes-and-controllers). |
+| `routes.enabled` | `true` | Discover and register each island's route file. Turn it off to register them from a route group of your own — see [Registering the Routes Elsewhere](/routes-and-controllers#registering-the-routes-elsewhere). |
 | `routes.file` | `Routes.php` | The file name looked for at each island root. Global — it cannot vary per island. |
 | `routes.prefix` | `islands` | The URL prefix. The island's slug is appended: `islands/shop-orders`. |
 | `routes.name` | `islands.` | The route name prefix. The slug and a dot are appended: `islands.shop-orders.`. |
@@ -75,9 +75,9 @@ application that has no private ones:
 ],
 ```
 
-Islands inside a Filament panel usually need the panel's own middleware instead. Point the
-group at the panel's stack, or disable discovery and register those islands' routes from
-the panel provider.
+Islands inside a Filament panel need the panel's own middleware instead, and a panel with
+tenancy needs its routes registered by the panel altogether — see [Inside a Filament
+Panel](/routes-and-controllers#inside-a-filament-panel).
 
 Who may reach an island is only half of it. What the island then hands back is the
 controller's decision — see [Guarding an Island](/routes-and-controllers#guarding-an-island).
