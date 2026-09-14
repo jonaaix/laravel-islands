@@ -10,7 +10,7 @@ At boot, the service provider scans one level of directories under `app/Islands`
 configured `path`). Every directory containing a `Routes.php` is registered as a group:
 
 ```php
-Route::middleware(['web'])
+Route::middleware(['web', 'auth'])
     ->prefix('islands/shop-orders')
     ->name('islands.shop-orders.')
     ->group('app/Islands/ShopOrders/Routes.php');
@@ -22,7 +22,7 @@ The slug is the folder name in kebab-case. So for a folder `ShopOrders`:
 | --- | --- |
 | URL prefix | `/islands/shop-orders` |
 | Route name prefix | `islands.shop-orders.` |
-| Middleware | `web` |
+| Middleware | `web`, `auth` |
 
 All three are configurable — see [Configuration](/configuration). The file name is fixed
 per application and cannot be moved into a subfolder. Discovery runs at boot, so a new
@@ -30,19 +30,12 @@ island is picked up on the next request; if you cache routes, run `route:cache` 
 
 ## Guarding an Island
 
-An island endpoint is an HTTP route like any other, and nothing here is closed by default.
-Two separate things have to be decided, and forgetting either one publishes what the island
-returns:
+An island endpoint is an HTTP route like any other. Two separate things decide who gets an
+answer from it:
 
-**Who may reach it** is the group middleware. `web` alone means a session, not a login — add
-`auth` in [Configuration](/configuration#requiring-authentication-everywhere) to put every
-island behind one:
-
-```php
-'middleware' => ['web', 'auth'],
-```
-
-A single island that should stay public opts out in its own `Routes.php`:
+**Who may reach it** is the group middleware, and `auth` is in it from the start — see
+[Authentication](/configuration#authentication). An island that belongs on a public page
+opts out in its own `Routes.php`:
 
 ```php
 Route::get('data', [PricingIslandController::class, 'data'])->withoutMiddleware('auth');
@@ -50,8 +43,9 @@ Route::get('data', [PricingIslandController::class, 'data'])->withoutMiddleware(
 
 **Who may see this island's data** is the controller's job, and the package leaves it to
 you. `make:island` scaffolds `authorizeAccess()` with an empty body — an endpoint whose
-guard is still empty answers everyone the middleware let through. Fill it in before the
-island ships; [The Island Controller](#the-island-controller) shows the shape.
+guard is still empty answers every user the middleware let through, which on a shared login
+is all of them. Fill it in before the island ships; [The Island
+Controller](#the-island-controller) shows the shape.
 
 ## `Routes.php`
 
@@ -133,9 +127,9 @@ class ShopOrdersIslandController extends Controller
 ```
 
 ::: danger Authorization is yours
-The package registers island routes with the `web` middleware group and nothing else. A
-scaffolded endpoint answers to anyone who can reach the URL until `authorizeAccess()` is
-filled in. Do that before the island shows real data.
+The middleware settles who is logged in, never who may see this island. A scaffolded
+endpoint answers every signed-in user until `authorizeAccess()` is filled in. Do that before
+the island shows real data.
 :::
 
 ## Response Shape

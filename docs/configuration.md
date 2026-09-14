@@ -23,7 +23,7 @@ return [
         'file' => 'Routes.php',
         'prefix' => 'islands',
         'name' => 'islands.',
-        'middleware' => ['web'],
+        'middleware' => ['web', 'auth'],
     ],
 ];
 ```
@@ -39,7 +39,7 @@ return [
 | `routes.file` | `Routes.php` | The file name looked for at each island root. Global — it cannot vary per island. |
 | `routes.prefix` | `islands` | The URL prefix. The island's slug is appended: `islands/shop-orders`. |
 | `routes.name` | `islands.` | The route name prefix. The slug and a dot are appended: `islands.shop-orders.`. |
-| `routes.middleware` | `['web']` | The middleware applied to every island route group. Add `auth` here to require a session for all islands at once. |
+| `routes.middleware` | `['web', 'auth']` | The middleware applied to every island route group. An island starts behind a login; see [Authentication](#authentication). |
 | `broadcast_auth_endpoint` | `/broadcasting/auth` | Reserved for the runtime. Channel authorization is currently handled by your Echo configuration. |
 
 ## Moving the Islands Directory
@@ -54,17 +54,30 @@ return [
 Vite needs to know as well — adjust the feature-folder glob in your
 [app entry](/installation#registering-feature-folders).
 
-## Requiring Authentication Everywhere
+## Authentication
 
-Most islands live behind a login. Rather than repeating `auth` in every `Routes.php`, put
-it in the group middleware:
+An island endpoint is an HTTP route like any other, so `auth` is in the group middleware
+from the start and every island is behind a login.
+
+An island that belongs on a public page opts out on its own route — the exception then sits
+where it applies, rather than the rule being invisible:
+
+```php
+Route::get('data', [PricingIslandController::class, 'data'])->withoutMiddleware('auth');
+```
+
+Dropping `auth` from the group opens every island at once, which is worth doing only in an
+application that has no private ones:
 
 ```php
 'routes' => [
-    'middleware' => ['web', 'auth'],
+    'middleware' => ['web'],
 ],
 ```
 
 Islands inside a Filament panel usually need the panel's own middleware instead. Point the
 group at the panel's stack, or disable discovery and register those islands' routes from
 the panel provider.
+
+Who may reach an island is only half of it. What the island then hands back is the
+controller's decision — see [Guarding an Island](/routes-and-controllers#guarding-an-island).

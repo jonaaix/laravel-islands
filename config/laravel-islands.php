@@ -67,6 +67,8 @@ return [
 
         'name' => 'islands.',
 
-        'middleware' => ['web'],
+        // An island endpoint is an HTTP route like any other, so it starts behind a login.
+        // A single public island opts out with `->withoutMiddleware('auth')` on its route.
+        'middleware' => ['web', 'auth'],
     ],
 ];

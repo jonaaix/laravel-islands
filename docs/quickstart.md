@@ -61,8 +61,9 @@ class RecentOrdersQuery
 
 ## 3. Guard the Endpoint
 
-The generated controller already calls the query. Fill in the authorization — the package
-leaves that decision to you, and the endpoint is public until you do:
+The generated controller already calls the query. Fill in the authorization — the route is
+behind a login, but which signed-in user may see this island is yours to decide, and until
+you do, every one of them may:
 
 ```php
 <?php

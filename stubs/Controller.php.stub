@@ -25,8 +25,8 @@ class {{ class }}IslandController extends Controller
     }
 
     /**
-     * Guard every endpoint of this island. An island is reachable over HTTP like any
-     * other route, so leaving this open would publish whatever it returns.
+     * Guard every endpoint of this island. The middleware settles who is logged in, never
+     * who may see this island — left empty, every signed-in user gets what it returns.
      */
     private function authorizeAccess(): void
     {
