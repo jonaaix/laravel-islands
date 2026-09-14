@@ -86,11 +86,6 @@ function islandGlob(path) {
     return `/${trimmed}/**/*.island.vue`;
 }
 
-/**
- * The registry the Vue adapter expects, built from the island directory the package
- * configures. The glob is Vite's own, so the islands stay lazy and a newly scaffolded
- * one appears without restarting the dev server.
- */
 function registryModule(path) {
     return `const modules = import.meta.glob('${islandGlob(path)}');
 
@@ -112,10 +107,7 @@ export default registry;
 `;
 }
 
-/**
- * @param {{ path?: string }} [options]  Island directory relative to the project root,
- *                                       matching `laravel-islands.path`.
- */
+/** @param {{ path?: string }} [options] */
 export default function islands(options = {}) {
     return {
         name: 'aaix:laravel-islands',
