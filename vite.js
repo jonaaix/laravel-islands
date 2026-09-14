@@ -4,6 +4,9 @@ import { fileURLToPath } from 'node:url';
 
 const PACKAGE_NAME = '@aaix/laravel-islands';
 const COMPOSER_NAME = 'aaix/laravel-islands';
+const REGISTRY_IMPORT = `${PACKAGE_NAME}/islands`;
+const REGISTRY_MODULE_ID = `\0${REGISTRY_IMPORT}`;
+const DEFAULT_ISLAND_PATH = 'app/Islands';
 
 const packageRoot = dirname(fileURLToPath(import.meta.url));
 
@@ -77,9 +80,46 @@ function aliasEntries(source) {
         }));
 }
 
-export default function islands() {
+function islandGlob(path) {
+    const trimmed = String(path ?? DEFAULT_ISLAND_PATH).replace(/^\/+|\/+$/g, '');
+
+    return `/${trimmed}/**/*.island.vue`;
+}
+
+/**
+ * The registry the Vue adapter expects, built from the island directory the package
+ * configures. The glob is Vite's own, so the islands stay lazy and a newly scaffolded
+ * one appears without restarting the dev server.
+ */
+function registryModule(path) {
+    return `const modules = import.meta.glob('${islandGlob(path)}');
+
+const registry = {};
+
+for (const [path, loader] of Object.entries(modules)) {
+    const file = path.split('/').pop();
+    const key = \`./islands/\${file}\`;
+
+    if (key in registry) {
+        console.warn(\`[islands] two islands are named "\${file}" — "\${path}" stays unmounted\`);
+        continue;
+    }
+
+    registry[key] = loader;
+}
+
+export default registry;
+`;
+}
+
+/**
+ * @param {{ path?: string }} [options]  Island directory relative to the project root,
+ *                                       matching `laravel-islands.path`.
+ */
+export default function islands(options = {}) {
     return {
         name: 'aaix:laravel-islands',
+        enforce: 'pre',
         config(userConfig) {
             const root = userConfig.root ? resolve(userConfig.root) : process.cwd();
 
@@ -88,6 +128,12 @@ export default function islands() {
                     alias: aliasEntries(resolvePackageSource(root)),
                 },
             };
+        },
+        resolveId(id) {
+            return id === REGISTRY_IMPORT ? REGISTRY_MODULE_ID : null;
+        },
+        load(id) {
+            return id === REGISTRY_MODULE_ID ? registryModule(options.path) : null;
         },
     };
 }

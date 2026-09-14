@@ -35,18 +35,19 @@ The payload is one JSON object: `props` is yours; `_island` carries the subscrip
 
 ## Resolving the Component
 
-`startVueIslands(registry)` receives the object `import.meta.glob()` produces — a map of
-file paths to modules, or to loaders when the glob is lazy. A loader is wrapped in
-`defineAsyncComponent()`, so the island is fetched when the page mounts it. For a `name`, it
-tries two keys in order:
+`startVueIslands(registry)` receives a map of keys to modules, or to loaders when the entry
+is lazy — the shape both `@aaix/laravel-islands/islands` and `import.meta.glob()` produce. A
+loader is wrapped in `defineAsyncComponent()`, so the island is fetched when the page mounts
+it. For a `name`, it tries two keys in order:
 
 1. `./islands/<name>.island.vue`
 2. `./<name>.island.vue`
 
-With the glob from the [installation](/installation#the-app-entry), a lone component under
-`resources/js/islands/product-view/ProductView.island.vue` is therefore mounted as
-`name="product-view/ProductView"`, and a feature island whose keys were normalised to the
-basename is mounted as `name="Products"`.
+The registry from the [installation](/installation#the-app-entry) keys every island by its
+entry file name, so `app/Islands/Products/Products.island.vue` is mounted as
+`name="Products"`. A glob added by hand keeps the paths it produces: a lone component under
+`resources/js/islands/product-view/ProductView.island.vue` is mounted as
+`name="product-view/ProductView"`.
 
 When no key matches, the runtime logs `[islands] vue component not found: "…"` and leaves
 the element empty. When the element names an adapter nobody registered, it logs

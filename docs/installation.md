@@ -45,13 +45,17 @@ export default defineConfig({
 ```
 
 The plugin reads the package's own entry points, so a name can never drift out of step with
-the sources. Three of them are public:
+the sources. Four imports are public:
 
 | Import | Contents |
 | --- | --- |
 | `@aaix/laravel-islands` | the framework-agnostic core: `startIslands`, `registerAdapter`, `mountIslands`, `createEchoController` |
 | `@aaix/laravel-islands/vue` | the Vue adapter: `startVueIslands` and the composables |
 | `@aaix/laravel-islands/vue/helpers` | the optional [UI helpers](/helpers/) |
+| `@aaix/laravel-islands/islands` | every island in the island directory, ready to hand to `startVueIslands` |
+
+The last one has no file behind it — the plugin builds it while bundling, so it exists only
+where the plugin is registered.
 
 ### Developing the package locally
 
@@ -65,47 +69,51 @@ Register your islands and start the runtime once, in your application's entry fi
 
 ```js
 // resources/js/app.js
+import islands from '@aaix/laravel-islands/islands';
 import { startVueIslands } from '@aaix/laravel-islands/vue';
 
-startVueIslands(import.meta.glob('./islands/**/*.island.vue'));
+startVueIslands(islands);
 ```
+
+`@aaix/laravel-islands/islands` is built by the Vite plugin, not by a file on disk: it
+collects every `*.island.vue` under the island directory and keys each one by its entry
+file name, so `<x-island name="Products">` resolves to
+`app/Islands/Products/Products.island.vue`. Two islands must not share an entry file name —
+the second one is skipped with a warning in the console. How the lookup works is described
+under [Mounting Islands](/mounting#resolving-the-component).
 
 `startVueIslands()` mounts every `[data-island]` element on the page and mounts again
 after `livewire:navigated`, so islands keep working across Livewire and Filament
 navigation.
 
-### Eager or Lazy
+The registry is lazy: it hands over one loader per island, and only the island a page
+actually mounts is fetched. A newly scaffolded island appears without restarting the dev
+server.
 
-The glob above is lazy: it hands over one loader per island, and only the island a page
-actually mounts is fetched. With `{ eager: true }` every island becomes part of the entry
-bundle instead — the component is there the moment the page is, at the cost of shipping all
-of them to every page. An application with a handful of islands can stay eager; from a dozen
-on, lazy is what keeps a page from loading the code of every other view.
+### A Different Island Directory
 
-### Registering Feature Folders
+The plugin looks under `app/Islands`, the same default as `laravel-islands.path`. An
+application that moved its islands passes the new path along:
 
-The glob above covers lone components under `resources/js/islands`. Islands scaffolded by
-`make:island` live in `app/Islands/<Island>/` instead, next to their PHP. Add a second glob
-and normalise its keys so the entry file's basename becomes the mount name:
+```js
+islands({ path: 'src/Islands' }),
+```
+
+### Registering Further Components
+
+An island that lives outside the island directory — a lone component under
+`resources/js/islands`, say — is merged in with a glob of its own:
 
 ```js
 // resources/js/app.js
+import islands from '@aaix/laravel-islands/islands';
 import { startVueIslands } from '@aaix/laravel-islands/vue';
 
-const featureIslands = Object.fromEntries(
-    Object.entries(import.meta.glob('../../app/Islands/**/*.island.vue'))
-        .map(([path, loader]) => [`./islands/${path.split('/').pop()}`, loader]),
-);
-
 startVueIslands({
+    ...islands,
     ...import.meta.glob('./islands/**/*.island.vue'),
-    ...featureIslands,
 });
 ```
-
-With that in place `<x-island name="Products">` resolves to
-`app/Islands/Products/Products.island.vue`. Two islands must not share an entry file name.
-How the lookup works is described under [Mounting Islands](/mounting#resolving-the-component).
 
 ## Tailwind
 
