@@ -7,7 +7,6 @@ use Aaix\LaravelIslands\Console\ExtractTranslationsCmd;
 use Aaix\LaravelIslands\Console\MakeIslandCmd;
 use Aaix\LaravelIslands\View\Components\Island;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class IslandsServiceProvider extends ServiceProvider
@@ -37,7 +36,8 @@ class IslandsServiceProvider extends ServiceProvider
             $this->commands([MakeIslandCmd::class, ExtractTranslationsCmd::class]);
         }
 
-        $this->registerIslandRoutes();
+        // After every provider has booted, so a Filament panel has claimed its islands before the rest is registered globally.
+        $this->app->booted(fn () => $this->registerIslandRoutes());
     }
 
     /**
@@ -53,13 +53,12 @@ class IslandsServiceProvider extends ServiceProvider
             return;
         }
 
-        $islands = IslandRoutes::discover(null, (string) ($config['file'] ?? 'Routes.php'));
+        $islands = array_filter(
+            IslandRoutes::discover(),
+            fn (string $slug): bool => ! IslandRoutes::isServedElsewhere($slug),
+            ARRAY_FILTER_USE_KEY,
+        );
 
-        foreach ($islands as $island => $routes) {
-            Route::middleware((array) ($config['middleware'] ?? ['web', 'auth']))
-                ->prefix(trim((string) ($config['prefix'] ?? 'islands'), '/').'/'.$island)
-                ->name((string) ($config['name'] ?? 'islands.').$island.'.')
-                ->group($routes);
-        }
+        IslandRoutes::register($islands, (array) ($config['middleware'] ?? ['web', 'auth']));
     }
 }

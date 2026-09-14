@@ -51,8 +51,8 @@ return [
 'namespace' => 'Modules\\Shop\\Islands',
 ```
 
-Vite needs to know as well — adjust the feature-folder glob in your
-[app entry](/installation#registering-feature-folders).
+Vite needs to know as well — pass the path to the plugin, see [A Different Island
+Directory](/installation#a-different-island-directory).
 
 ## Authentication
 
@@ -75,8 +75,8 @@ application that has no private ones:
 ],
 ```
 
-Islands inside a Filament panel need the panel's own middleware instead, and a panel with
-tenancy needs its routes registered by the panel altogether — see [Inside a Filament
+Islands inside a Filament panel are registered by the panel itself, behind its own
+authentication and tenant middleware — see [Inside a Filament
 Panel](/routes-and-controllers#inside-a-filament-panel).
 
 Who may reach an island is only half of it. What the island then hands back is the

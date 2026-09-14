@@ -1,8 +1,8 @@
 # Quickstart
 
 This page builds one island from scratch: a list of recent orders with a refresh button.
-It assumes the [installation](/installation) is done, including the feature-folder glob in
-your app entry.
+It assumes the [installation](/installation) is done, including the Vite plugin and the
+app entry.
 
 ## 1. Scaffold the Island
 

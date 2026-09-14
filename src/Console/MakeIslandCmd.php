@@ -2,6 +2,7 @@
 
 namespace Aaix\LaravelIslands\Console;
 
+use Aaix\LaravelIslands\IslandRoutes;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
@@ -62,8 +63,8 @@ class MakeIslandCmd extends Command
             '{{ slug }}' => $slug,
             '{{ title }}' => Str::headline($class),
             '{{ namespace }}' => (string) config('laravel-islands.namespace', 'App\\Islands').'\\'.$class,
-            '{{ routeName }}' => (string) config('laravel-islands.routes.name', 'islands.').$slug.'.',
-            '{{ routePrefix }}' => trim((string) config('laravel-islands.routes.prefix', 'islands'), '/').'/'.$slug,
+            '{{ routeName }}' => IslandRoutes::name($slug),
+            '{{ routePrefix }}' => IslandRoutes::prefix($slug),
         ];
 
         if (! is_dir($directory) && ! mkdir($directory, 0755, true) && ! is_dir($directory)) {

@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace App\Islands\Products;
 
+use Aaix\LaravelIslands\IslandRoutes;
 use App\Islands\Products\Queries\ProductsQuery;
 use App\Islands\Products\State\ProductsPreferences;
 use Illuminate\Http\Request;
@@ -30,9 +31,9 @@ class ProductsProps
     public function build(Request $request): array
     {
         return [
-            'dataUrl' => route('islands.products.data'),
-            'preferencesUrl' => route('islands.products.preferences'),
-            'productUrl' => route('islands.products.show', ['product' => '__ID__']),
+            'dataUrl' => IslandRoutes::route('products', 'data'),
+            'preferencesUrl' => IslandRoutes::route('products', 'preferences'),
+            'productUrl' => IslandRoutes::route('products', 'show', ['product' => '__ID__']),
             'preferences' => $this->preferences->for($request->user()),
             'brands' => $this->query->brandOptions(),
             'initial' => $this->initialState($request),
@@ -57,8 +58,10 @@ The page resolves it from the container and passes the result to the tag:
 
 ## What Belongs in Props
 
-- **Endpoint URLs**, generated with `route()`. A URL that needs a record id the client only
-  knows later takes a placeholder: `props.productUrl.replace('__ID__', row.id)`.
+- **Endpoint URLs**, generated with `IslandRoutes::route()`, which finds the island wherever
+  its routes are registered — by discovery or by a [Filament
+  panel](/routes-and-controllers#inside-a-filament-panel). A URL that needs a record id the
+  client only knows later takes a placeholder: `props.productUrl.replace('__ID__', row.id)`.
 - **The initial view state**, read and validated from the URL, so a shared link renders
   its view on the first frame. Validate here even though the endpoint validates again.
 - **Per-user preferences** — columns, view mode — so the first draw needs no request.

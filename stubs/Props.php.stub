@@ -2,6 +2,7 @@
 
 namespace {{ namespace }};
 
+use Aaix\LaravelIslands\IslandRoutes;
 use Illuminate\Http\Request;
 
 /**
@@ -13,7 +14,7 @@ class {{ class }}Props
     public function build(Request $request): array
     {
         return [
-            'dataUrl' => route('{{ routeName }}data'),
+            'dataUrl' => IslandRoutes::route('{{ slug }}', 'data'),
             'initial' => [
                 //
             ],
