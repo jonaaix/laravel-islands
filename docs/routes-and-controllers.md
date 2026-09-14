@@ -28,6 +28,31 @@ All three are configurable — see [Configuration](/configuration). The file nam
 per application and cannot be moved into a subfolder. Discovery runs at boot, so a new
 island is picked up on the next request; if you cache routes, run `route:cache` again.
 
+## Guarding an Island
+
+An island endpoint is an HTTP route like any other, and nothing here is closed by default.
+Two separate things have to be decided, and forgetting either one publishes what the island
+returns:
+
+**Who may reach it** is the group middleware. `web` alone means a session, not a login — add
+`auth` in [Configuration](/configuration#requiring-authentication-everywhere) to put every
+island behind one:
+
+```php
+'middleware' => ['web', 'auth'],
+```
+
+A single island that should stay public opts out in its own `Routes.php`:
+
+```php
+Route::get('data', [PricingIslandController::class, 'data'])->withoutMiddleware('auth');
+```
+
+**Who may see this island's data** is the controller's job, and the package leaves it to
+you. `make:island` scaffolds `authorizeAccess()` with an empty body — an endpoint whose
+guard is still empty answers everyone the middleware let through. Fill it in before the
+island ships; [The Island Controller](#the-island-controller) shows the shape.
+
 ## `Routes.php`
 
 Inside the file, routes are relative to the group. The scaffolded version:
