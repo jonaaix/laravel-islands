@@ -92,10 +92,27 @@ class ProductsPage extends Page
 </x-filament-panels::page>
 ```
 
-The runtime listens for `livewire:navigated` and mounts again after every Filament
-navigation, so an island placed inside a panel needs nothing more. Livewire morphs around
-the mount element rather than through it; keep the `<x-island>` tag inside a plain `<div>`
-so Livewire has a stable node to diff.
+Livewire morphs around the mount element rather than through it; keep the `<x-island>` tag
+inside a plain `<div>` so Livewire has a stable node to diff.
+
+## Navigating Without a Page Load
+
+With Filament's `->spa()` — or any `wire:navigate` link — Livewire swaps the body instead of
+loading a page, and the runtime follows along:
+
+- On `livewire:navigating` every island is unmounted before the swap. Composables clean up
+  behind it: Echo channels are left, window listeners and history handlers removed. Livewire
+  stores the page for the back button right after that point, so the snapshot holds empty
+  mount elements rather than a dead copy of the rendered islands.
+- On `livewire:navigated` the islands of the new page mount, and an island whose element a
+  Livewire morph removed in between is unmounted.
+- A back or forward step that Livewire restores from its snapshot mounts the islands again
+  from the restored markup.
+
+Nothing has to be configured. Without navigate events the runtime behaves as on a classic
+page load. A datagrid's history entries carry Livewire's navigation state as well, so a
+back step into a filtered table works from another page, and a step within the page is
+answered by the table itself — see [Table State](https://aaix.github.io/laravel-islands-datagrid/table-state#the-url).
 
 ::: tip Multiple islands per page
 A page may carry any number of islands. Each is its own Vue application — a dashboard

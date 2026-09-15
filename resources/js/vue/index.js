@@ -37,6 +37,8 @@ export function startVueIslands(registry, options = {}) {
         app.provide(ISLAND_KEY, payload);
         options.setup?.(app, payload);
         app.mount(el);
+
+        return () => app.unmount();
     });
 
     startIslands();
