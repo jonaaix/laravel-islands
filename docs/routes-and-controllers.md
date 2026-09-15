@@ -86,9 +86,9 @@ and a created record gets no tenant id.
 The package ships a plugin that registers the islands where they belong:
 
 ```php
-use Aaix\LaravelIslands\Filament\IslandsPlugin;
+use Aaix\LaravelIslands\Filament\LaravelIslandsPlugin;
 
-$panel->plugin(IslandsPlugin::make());
+$panel->plugin(LaravelIslandsPlugin::make());
 ```
 
 Every discovered island is registered through the panel's `authenticatedTenantRoutes()`
@@ -98,7 +98,7 @@ only. `only()` and `except()` narrow the set; what stays out is registered by di
 before:
 
 ```php
-$panel->plugin(IslandsPlugin::make()->except(['pricing-form', 'contact-form']));
+$panel->plugin(LaravelIslandsPlugin::make()->except(['pricing-form', 'contact-form']));
 ```
 
 Inside the panel, three things change for the island:
@@ -122,6 +122,9 @@ scaffolded [props class](/props) uses:
 'dataUrl' => IslandRoutes::route('shop-orders', 'data'),
 'orderUrl' => IslandRoutes::route('shop-orders', 'show', ['order' => '__ID__']),
 ```
+
+`IslandRoutes::routeName('shop-orders', 'data')` gives the name alone, for `Route::has()`
+and route assertions in tests.
 
 ## `Routes.php`
 

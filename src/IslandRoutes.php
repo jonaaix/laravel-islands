@@ -11,9 +11,14 @@ use Illuminate\Support\Str;
 class IslandRoutes
 {
     /**
-     * @var array<string, Closure(string, array<string, mixed>): string> Island slug, mapped to the URL builder of whoever registers its routes instead of discovery.
+     * @var array<string, Closure(string): string> Island slug, mapped to the closure that qualifies a route name for whoever registers its routes instead of discovery.
      */
-    private static array $servedElsewhere = [];
+    private static array $qualifiers = [];
+
+    /**
+     * @var array<string, Closure(array<string, mixed>): array<string, mixed>> Island slug, mapped to the closure that completes the route parameters.
+     */
+    private static array $parameterDefaults = [];
 
     /**
      * @return array<string, string> Island slug, mapped to the absolute path of its route file.
@@ -58,18 +63,33 @@ class IslandRoutes
 
     /**
      * @param  array<int, string>  $islands
-     * @param  Closure(string, array<string, mixed>): string  $url  Receives the full route name and its parameters.
+     * @param  Closure(string): string  $qualifyName  Turns the discovery route name into the name the routes are registered under.
+     * @param  Closure(array<string, mixed>): array<string, mixed>|null  $completeParameters  Adds parameters the route needs but the caller does not know, such as the tenant.
      */
-    public static function serve(array $islands, Closure $url): void
+    public static function serve(array $islands, Closure $qualifyName, ?Closure $completeParameters = null): void
     {
         foreach ($islands as $island) {
-            self::$servedElsewhere[self::slug($island)] = $url;
+            $slug = self::slug($island);
+            self::$qualifiers[$slug] = $qualifyName;
+
+            if ($completeParameters) {
+                self::$parameterDefaults[$slug] = $completeParameters;
+            }
         }
     }
 
     public static function isServedElsewhere(string $island): bool
     {
-        return array_key_exists(self::slug($island), self::$servedElsewhere);
+        return array_key_exists(self::slug($island), self::$qualifiers);
+    }
+
+    public static function routeName(string $island, string $route): string
+    {
+        $slug = self::slug($island);
+        $name = self::name($slug).$route;
+        $qualify = self::$qualifiers[$slug] ?? null;
+
+        return $qualify ? $qualify($name) : $name;
     }
 
     /**
@@ -77,11 +97,9 @@ class IslandRoutes
      */
     public static function route(string $island, string $route, array $parameters = []): string
     {
-        $slug = self::slug($island);
-        $name = self::name($slug).$route;
-        $url = self::$servedElsewhere[$slug] ?? null;
+        $complete = self::$parameterDefaults[self::slug($island)] ?? null;
 
-        return $url ? $url($name, $parameters) : route($name, $parameters);
+        return route(self::routeName($island, $route), $complete ? $complete($parameters) : $parameters);
     }
 
     public static function prefix(string $island): string

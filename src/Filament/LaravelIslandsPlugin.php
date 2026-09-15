@@ -9,7 +9,7 @@ use Filament\Contracts\Plugin;
 use Filament\Facades\Filament;
 use Filament\Panel;
 
-class IslandsPlugin implements Plugin
+class LaravelIslandsPlugin implements Plugin
 {
     /**
      * @var array<int, string>|null
@@ -57,7 +57,8 @@ class IslandsPlugin implements Plugin
 
         IslandRoutes::serve(
             array_keys($islands),
-            fn (string $name, array $parameters): string => $panel->route($name, $this->withTenant($panel, $parameters)),
+            $panel->generateRouteName(...),
+            fn (array $parameters): array => $this->withTenant($panel, $parameters),
         );
 
         $panel->authenticatedTenantRoutes(fn () => IslandRoutes::register($islands));
