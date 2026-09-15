@@ -3,6 +3,7 @@
 namespace Aaix\LaravelIslands\View\Components;
 
 use Aaix\LaravelIslands\Broadcasting\ChannelResolver;
+use Aaix\LaravelIslands\Translations\IslandTranslations;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -42,7 +43,7 @@ class Island extends Component
             'props' => $props,
             '_island' => [
                 'subscriptions' => $resolver->resolve($this->subscriptions),
-                'translations' => $this->loadTranslations(),
+                ...$this->translations(),
                 'locale' => app()->getLocale(),
             ],
         ];
@@ -55,20 +56,29 @@ class Island extends Component
     }
 
     /**
-     * The app's JSON translation lines for the current locale, keyed by source
-     * string. Shipped with the payload so islands can translate client-side.
+     * The island's translation lines, keyed by source string, or the URL of the whole
+     * locale file when the manifest cannot tell which lines the island uses.
      *
-     * @return array<string, string>
+     * @return array{translations: array<string, string>, translationsUrl?: string}
      */
-    protected function loadTranslations(): array
+    protected function translations(): array
     {
-        if (! config('laravel-islands.translations.enabled', true)) {
-            return [];
+        $translations = app(IslandTranslations::class);
+        $locale = app()->getLocale();
+
+        if (! $translations->enabled()) {
+            return ['translations' => []];
         }
 
-        $translations = app('translator')->getLoader()->load(app()->getLocale(), '*', '*');
+        if ($translations->knows($this->name)) {
+            return ['translations' => $translations->forIsland($this->name, $locale)];
+        }
 
-        return is_array($translations) ? $translations : [];
+        $url = $translations->url($locale);
+
+        return $url
+            ? ['translations' => [], 'translationsUrl' => $url]
+            : ['translations' => $translations->lines($locale)];
     }
 
     /**

@@ -13,6 +13,7 @@ return [
 
     'translations' => [
         'enabled' => true,
+        'manifest' => 'public/build/islands-translations.json',
     ],
 
     'path' => 'app/Islands',
@@ -32,7 +33,8 @@ return [
 
 | Key | Default | Meaning |
 | --- | --- | --- |
-| `translations.enabled` | `true` | Ship the JSON translation lines of the current locale with every island payload. See [Translations](/translations). |
+| `translations.enabled` | `true` | Hand every island the JSON translation lines of the current locale. See [Translations](/translations). |
+| `translations.manifest` | `public/build/islands-translations.json` | Where the Vite plugin writes the keys each island uses, and where `<x-island>` reads them. Pass the same path to the plugin as `islands({ translations: { manifest } })` when you move it. |
 | `path` | `app/Islands` | The directory, relative to the project root, that holds one folder per island. Read by route discovery and `make:island`. |
 | `namespace` | `App\Islands` | The namespace the island classes live under. Used by `make:island` for the generated files. Must match the PSR-4 mapping of `path`. |
 | `routes.enabled` | `true` | Discover and register each island's route file. Turn it off to register them from a route group of your own — see [Registering the Routes Elsewhere](/routes-and-controllers#registering-the-routes-elsewhere). |

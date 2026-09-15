@@ -5,8 +5,11 @@ namespace Aaix\LaravelIslands;
 use Aaix\LaravelIslands\Broadcasting\ChannelResolver;
 use Aaix\LaravelIslands\Console\ExtractTranslationsCmd;
 use Aaix\LaravelIslands\Console\MakeIslandCmd;
+use Aaix\LaravelIslands\Http\TranslationsController;
+use Aaix\LaravelIslands\Translations\IslandTranslations;
 use Aaix\LaravelIslands\View\Components\Island;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class IslandsServiceProvider extends ServiceProvider
@@ -16,6 +19,7 @@ class IslandsServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/laravel-islands.php', 'laravel-islands');
 
         $this->app->singleton(ChannelResolver::class);
+        $this->app->singleton(IslandTranslations::class);
     }
 
     public function boot(): void
@@ -37,7 +41,24 @@ class IslandsServiceProvider extends ServiceProvider
         }
 
         // After every provider has booted, so a Filament panel has claimed its islands before the rest is registered globally.
-        $this->app->booted(fn () => $this->registerIslandRoutes());
+        $this->app->booted(function (): void {
+            $this->registerIslandRoutes();
+            $this->registerTranslationsRoute();
+        });
+    }
+
+    private function registerTranslationsRoute(): void
+    {
+        if (! config('laravel-islands.translations.enabled', true)) {
+            return;
+        }
+
+        $config = (array) config('laravel-islands.routes', []);
+
+        Route::middleware((array) ($config['middleware'] ?? ['web', 'auth']))
+            ->get(trim((string) ($config['prefix'] ?? 'islands'), '/').'/translations/{locale}/{hash}.json', TranslationsController::class)
+            ->where(['locale' => '[A-Za-z_-]+', 'hash' => '[a-f0-9]+'])
+            ->name((string) ($config['name'] ?? 'islands.').'translations');
     }
 
     /**

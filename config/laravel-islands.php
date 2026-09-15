@@ -18,13 +18,18 @@ return [
     |--------------------------------------------------------------------------
     |
     | When enabled, the app's JSON translation lines (lang/{locale}.json) for
-    | the current locale are shipped with every island payload and made
-    | available in the frontend via the `useTranslations()` composable. The
-    | English source string doubles as the translation key.
+    | the current locale reach every island and are read in the frontend via
+    | the `useTranslations()` composable. The English source string doubles as
+    | the translation key. The Vite plugin writes a manifest of the keys each
+    | island uses, so an island is shipped only those lines; an island the
+    | manifest does not know, or one that builds keys at runtime, gets the
+    | whole file instead.
     |
     */
     'translations' => [
         'enabled' => true,
+
+        'manifest' => 'public/build/islands-translations.json',
     ],
 
     /*

@@ -1,12 +1,14 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { collectTranslationManifest, findIslandEntries, writeManifest } from './vite/translations.js';
 
 const PACKAGE_NAME = '@aaix/laravel-islands';
 const COMPOSER_NAME = 'aaix/laravel-islands';
 const REGISTRY_IMPORT = `${PACKAGE_NAME}/islands`;
 const REGISTRY_MODULE_ID = `\0${REGISTRY_IMPORT}`;
 const DEFAULT_ISLAND_PATH = 'app/Islands';
+const DEFAULT_MANIFEST_PATH = 'public/build/islands-translations.json';
 
 const packageRoot = dirname(fileURLToPath(import.meta.url));
 
@@ -107,19 +109,75 @@ export default registry;
 `;
 }
 
-/** @param {{ path?: string }} [options] */
+/** @param {{ path?: string, translations?: { manifest?: string } }} [options] */
 export default function islands(options = {}) {
+    let root = process.cwd();
+    let command = 'serve';
+    let logger = console;
+    let sources = new Set();
+
+    const islandRoot = () => resolve(root, String(options.path ?? DEFAULT_ISLAND_PATH));
+    const manifestPath = () => resolve(root, String(options.translations?.manifest ?? DEFAULT_MANIFEST_PATH));
+
+    async function refreshManifest(resolveImport) {
+        const { manifest, files } = await collectTranslationManifest(findIslandEntries(islandRoot()), resolveImport);
+        sources = files;
+
+        if (writeManifest(manifestPath(), manifest)) {
+            const keys = Object.values(manifest).reduce((sum, island) => sum + island.keys.length, 0);
+            logger.info(`[islands] translation manifest: ${Object.keys(manifest).length} islands, ${keys} keys`);
+        }
+    }
+
     return {
         name: 'aaix:laravel-islands',
         enforce: 'pre',
         config(userConfig) {
-            const root = userConfig.root ? resolve(userConfig.root) : process.cwd();
+            const configRoot = userConfig.root ? resolve(userConfig.root) : process.cwd();
 
             return {
                 resolve: {
-                    alias: aliasEntries(resolvePackageSource(root)),
+                    alias: aliasEntries(resolvePackageSource(configRoot)),
                 },
             };
+        },
+        configResolved(config) {
+            root = config.root;
+            command = config.command;
+            logger = config.logger;
+        },
+        async buildStart() {
+            if (!existsSync(islandRoot())) {
+                const message = `[islands] island directory not found: ${islandRoot()}`;
+
+                if (command === 'build') {
+                    this.error(message);
+                }
+
+                logger.error(message);
+
+                return;
+            }
+
+            await refreshManifest((source, importer) => this.resolve(source, importer));
+        },
+        configureServer(server) {
+            let pending = null;
+            const refresh = () => {
+                clearTimeout(pending);
+                pending = setTimeout(() => {
+                    refreshManifest((source, importer) => server.pluginContainer.resolveId(source, importer)).catch((error) => logger.error(`[islands] ${error.message}`));
+                }, 100);
+            };
+            const concerns = (file) => sources.has(file) || file.startsWith(islandRoot());
+
+            for (const event of ['add', 'change', 'unlink']) {
+                server.watcher.on(event, (file) => {
+                    if (concerns(file)) {
+                        refresh();
+                    }
+                });
+            }
         },
         resolveId(id) {
             return id === REGISTRY_IMPORT ? REGISTRY_MODULE_ID : null;

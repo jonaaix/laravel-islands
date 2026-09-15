@@ -112,9 +112,15 @@ class ExtractTranslationsCmd extends Command
      */
     private function collectKeys(): array
     {
-        $keys = [];
+        $manifest = $this->manifestKeys();
 
-        foreach ($this->sourceDirectories() as $directory) {
+        if ($manifest === null) {
+            $this->components->warn('No translation manifest found, scanning the island directory instead. The Vite build writes the manifest and resolves the components an island imports.');
+        }
+
+        $keys = array_fill_keys($manifest ?? [], true);
+
+        foreach ($this->sourceDirectories($manifest !== null) as $directory) {
             foreach ($this->sourceFiles($directory) as $file) {
                 preg_match_all(self::PATTERN, (string) file_get_contents($file->getPathname()), $matches);
 
@@ -128,14 +134,46 @@ class ExtractTranslationsCmd extends Command
     }
 
     /**
+     * @return list<string>|null
+     */
+    private function manifestKeys(): ?array
+    {
+        $path = base_path((string) config('laravel-islands.translations.manifest', 'public/build/islands-translations.json'));
+        $manifest = is_file($path) ? json_decode((string) file_get_contents($path), true) : null;
+
+        if (! is_array($manifest)) {
+            return null;
+        }
+
+        $keys = [];
+        $dynamic = [];
+
+        foreach ($manifest as $island => $entry) {
+            foreach ((array) ($entry['keys'] ?? []) as $key) {
+                $keys[(string) $key] = true;
+            }
+
+            if ($entry['dynamic'] ?? false) {
+                $dynamic[] = (string) $island;
+            }
+        }
+
+        if ($dynamic !== []) {
+            $this->components->warn('Keys built at runtime in '.implode(', ', $dynamic).'; these islands receive the whole locale file.');
+        }
+
+        return array_keys($keys);
+    }
+
+    /**
      * @return list<string>
      */
-    private function sourceDirectories(): array
+    private function sourceDirectories(bool $manifestCoversIslands): array
     {
         return array_values(array_filter([
-            base_path((string) config('laravel-islands.path', 'app/Islands')),
+            $manifestCoversIslands ? null : base_path((string) config('laravel-islands.path', 'app/Islands')),
             resource_path('js/islands'),
-        ], 'is_dir'));
+        ], fn (?string $directory): bool => $directory !== null && is_dir($directory)));
     }
 
     /**

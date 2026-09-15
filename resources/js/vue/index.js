@@ -1,5 +1,6 @@
 import { createApp, defineAsyncComponent } from 'vue';
 import { registerAdapter, startIslands } from '../core/registry.js';
+import { resolveTranslations } from '../core/translations.js';
 import { ISLAND_KEY } from './context.js';
 
 /**
@@ -22,13 +23,15 @@ export function startVueIslands(registry, options = {}) {
         return entry?.default;
     };
 
-    registerAdapter('vue', (el, payload) => {
+    registerAdapter('vue', async (el, payload) => {
         const component = resolve(el.dataset.island);
 
         if (!component) {
             console.warn(`[islands] vue component not found: "${el.dataset.island}"`);
             return;
         }
+
+        await resolveTranslations(payload);
 
         const app = createApp(component, payload.props ?? {});
         app.provide(ISLAND_KEY, payload);
