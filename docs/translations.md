@@ -58,6 +58,10 @@ the file changes. The payload then carries `_island.translationsUrl`; the runtim
 file once per page, shares it between the islands that need it, and mounts each of them
 when it has arrived, so no key flashes before its translation.
 
+The route sits behind `routes.middleware`, so a visitor who is not logged in cannot load
+the file: a public island renders translated only through the manifest. Keep its keys
+literal, or the visitor sees the English source.
+
 The manifest lives at `public/build/islands-translations.json` and the dev server rewrites it
 whenever an island or one of its imports changes, so development runs the same path as
 production. Without the manifest every island takes the whole file — the view stays
