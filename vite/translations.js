@@ -128,8 +128,12 @@ export async function collectTranslationManifest(entries, resolveImport) {
     return { manifest, files };
 }
 
+export function serializeManifest(manifest) {
+    return JSON.stringify(manifest, null, 2) + '\n';
+}
+
 export function writeManifest(path, manifest) {
-    const json = JSON.stringify(manifest, null, 2) + '\n';
+    const json = serializeManifest(manifest);
 
     if (existsSync(path) && readFileSync(path, 'utf8') === json) {
         return false;

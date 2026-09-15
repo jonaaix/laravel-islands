@@ -62,8 +62,10 @@ The route sits behind `routes.middleware`, so a visitor who is not logged in can
 the file: a public island renders translated only through the manifest. Keep its keys
 literal, or the visitor sees the English source.
 
-The manifest lives at `public/build/islands-translations.json` and the dev server rewrites it
-whenever an island or one of its imports changes, so development runs the same path as
+The manifest is `islands-translations.json` in Vite's build directory. A build emits it as
+part of the bundle, so it survives Vite emptying the directory and lands in a versioned build
+directory along with the assets; the dev server writes it into the same place and rewrites
+it whenever an island or one of its imports changes, so development runs the same path as
 production. Without the manifest every island takes the whole file — the view stays
 translated, only the payload grows.
 

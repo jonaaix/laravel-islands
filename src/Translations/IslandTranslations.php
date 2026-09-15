@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aaix\LaravelIslands\Translations;
 
+use Illuminate\Foundation\Vite;
 use Illuminate\Support\Facades\Route;
 
 class IslandTranslations
@@ -85,9 +86,22 @@ class IslandTranslations
     /**
      * @return array<string, array{keys: list<string>, dynamic: bool}>
      */
+    public function manifestPath(): string
+    {
+        $configured = config('laravel-islands.translations.manifest');
+
+        if (is_string($configured) && $configured !== '') {
+            return base_path($configured);
+        }
+
+        $buildDirectory = (fn (): string => (string) $this->buildDirectory)->call(app(Vite::class));
+
+        return public_path(trim($buildDirectory, '/').'/islands-translations.json');
+    }
+
     private function manifest(): array
     {
-        $path = base_path((string) config('laravel-islands.translations.manifest', 'public/build/islands-translations.json'));
+        $path = $this->manifestPath();
         $mtime = $this->mtime($path);
 
         if ($this->manifest === null || $this->manifest['path'] !== $path || $this->manifest['mtime'] !== $mtime) {

@@ -21,15 +21,17 @@ return [
     | the current locale reach every island and are read in the frontend via
     | the `useTranslations()` composable. The English source string doubles as
     | the translation key. The Vite plugin writes a manifest of the keys each
-    | island uses, so an island is shipped only those lines; an island the
-    | manifest does not know, or one that builds keys at runtime, gets the
-    | whole file instead.
+    | island uses into the build directory, so an island is shipped only those
+    | lines; an island the manifest does not know, or one that builds keys at
+    | runtime, gets the whole file instead. Leave `manifest` null to read it
+    | from Vite's current build directory; set a path relative to the project
+    | root when the plugin was given one.
     |
     */
     'translations' => [
         'enabled' => true,
 
-        'manifest' => 'public/build/islands-translations.json',
+        'manifest' => null,
     ],
 
     /*

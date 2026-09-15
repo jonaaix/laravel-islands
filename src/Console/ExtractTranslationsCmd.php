@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aaix\LaravelIslands\Console;
 
+use Aaix\LaravelIslands\Translations\IslandTranslations;
 use Illuminate\Console\Command;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -138,7 +139,7 @@ class ExtractTranslationsCmd extends Command
      */
     private function manifestKeys(): ?array
     {
-        $path = base_path((string) config('laravel-islands.translations.manifest', 'public/build/islands-translations.json'));
+        $path = app(IslandTranslations::class)->manifestPath();
         $manifest = is_file($path) ? json_decode((string) file_get_contents($path), true) : null;
 
         if (! is_array($manifest)) {

@@ -1,14 +1,14 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { collectTranslationManifest, findIslandEntries, writeManifest } from './vite/translations.js';
+import { collectTranslationManifest, findIslandEntries, serializeManifest, writeManifest } from './vite/translations.js';
 
 const PACKAGE_NAME = '@aaix/laravel-islands';
 const COMPOSER_NAME = 'aaix/laravel-islands';
 const REGISTRY_IMPORT = `${PACKAGE_NAME}/islands`;
 const REGISTRY_MODULE_ID = `\0${REGISTRY_IMPORT}`;
 const DEFAULT_ISLAND_PATH = 'app/Islands';
-const DEFAULT_MANIFEST_PATH = 'public/build/islands-translations.json';
+const MANIFEST_FILE = 'islands-translations.json';
 
 const packageRoot = dirname(fileURLToPath(import.meta.url));
 
@@ -112,20 +112,32 @@ export default registry;
 /** @param {{ path?: string, translations?: { manifest?: string } }} [options] */
 export default function islands(options = {}) {
     let root = process.cwd();
+    let outDir = resolve(root, 'public/build');
     let command = 'serve';
     let logger = console;
     let sources = new Set();
+    let builtManifest = null;
 
     const islandRoot = () => resolve(root, String(options.path ?? DEFAULT_ISLAND_PATH));
-    const manifestPath = () => resolve(root, String(options.translations?.manifest ?? DEFAULT_MANIFEST_PATH));
+    const manifestPath = () => (options.translations?.manifest ? resolve(root, String(options.translations.manifest)) : join(outDir, MANIFEST_FILE));
 
-    async function refreshManifest(resolveImport) {
+    function report(manifest) {
+        const keys = Object.values(manifest).reduce((sum, island) => sum + island.keys.length, 0);
+        logger.info(`[islands] translation manifest: ${Object.keys(manifest).length} islands, ${keys} keys`);
+    }
+
+    async function collectManifest(resolveImport) {
         const { manifest, files } = await collectTranslationManifest(findIslandEntries(islandRoot()), resolveImport);
         sources = files;
 
+        return manifest;
+    }
+
+    async function refreshManifest(resolveImport) {
+        const manifest = await collectManifest(resolveImport);
+
         if (writeManifest(manifestPath(), manifest)) {
-            const keys = Object.values(manifest).reduce((sum, island) => sum + island.keys.length, 0);
-            logger.info(`[islands] translation manifest: ${Object.keys(manifest).length} islands, ${keys} keys`);
+            report(manifest);
         }
     }
 
@@ -143,6 +155,7 @@ export default function islands(options = {}) {
         },
         configResolved(config) {
             root = config.root;
+            outDir = resolve(config.root, config.build.outDir);
             command = config.command;
             logger = config.logger;
         },
@@ -159,7 +172,33 @@ export default function islands(options = {}) {
                 return;
             }
 
-            await refreshManifest((source, importer) => this.resolve(source, importer));
+            const resolveImport = (source, importer) => this.resolve(source, importer);
+
+            // Vite empties the output directory after buildStart, so a build hands the manifest to the bundle instead of writing it now.
+            if (command === 'build') {
+                builtManifest = await collectManifest(resolveImport);
+
+                return;
+            }
+
+            await refreshManifest(resolveImport);
+        },
+        generateBundle() {
+            if (!builtManifest) {
+                return;
+            }
+
+            const manifest = builtManifest;
+            builtManifest = null;
+            const inside = relative(outDir, manifestPath());
+
+            if (inside.startsWith('..') || isAbsolute(inside)) {
+                writeManifest(manifestPath(), manifest);
+            } else {
+                this.emitFile({ type: 'asset', fileName: inside, source: serializeManifest(manifest) });
+            }
+
+            report(manifest);
         },
         configureServer(server) {
             let pending = null;
