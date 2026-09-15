@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Aaix\LaravelIslands;
 
 use Closure;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -92,14 +93,11 @@ class IslandRoutes
         return $qualify ? $qualify($name) : $name;
     }
 
-    /**
-     * @param  array<string, mixed>  $parameters
-     */
-    public static function route(string $island, string $route, array $parameters = []): string
+    public static function route(string $island, string $route, mixed $parameters = []): string
     {
         $complete = self::$parameterDefaults[self::slug($island)] ?? null;
 
-        return route(self::routeName($island, $route), $complete ? $complete($parameters) : $parameters);
+        return route(self::routeName($island, $route), $complete ? $complete(Arr::wrap($parameters)) : $parameters);
     }
 
     public static function prefix(string $island): string
