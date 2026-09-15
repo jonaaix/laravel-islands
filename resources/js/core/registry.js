@@ -36,21 +36,48 @@ export function mountIslands() {
             return;
         }
 
-        const teardown = Promise.resolve(mount(el, payload));
-        mounted.set(el, () => teardown.then((fn) => fn?.()));
+        const island = { teardown: null, pending: null };
+
+        try {
+            island.pending = Promise.resolve(mount(el, payload)).then((teardown) => {
+                island.teardown = teardown ?? null;
+            });
+        } catch (error) {
+            console.error(`[islands] mount failed for "${el.dataset.island}"`, error);
+            return;
+        }
+
+        island.pending.catch((error) => console.error(`[islands] mount failed for "${el.dataset.island}"`, error));
+        mounted.set(el, island);
         el.setAttribute('data-island-mounted', '');
     });
 }
 
+function teardown(el, island) {
+    const report = (error) => console.error(`[islands] unmount failed for "${el.dataset.island}"`, error);
+
+    if (island.teardown) {
+        try {
+            island.teardown();
+        } catch (error) {
+            report(error);
+        }
+
+        return;
+    }
+
+    island.pending.then(() => island.teardown?.()).catch(report);
+}
+
 export function unmountIslands(shouldUnmount = () => true) {
-    for (const [el, teardown] of mounted) {
+    for (const [el, island] of mounted) {
         if (!shouldUnmount(el)) {
             continue;
         }
 
         mounted.delete(el);
         el.removeAttribute('data-island-mounted');
-        teardown().catch((error) => console.error(`[islands] unmount failed for "${el.dataset.island}"`, error));
+        teardown(el, island);
     }
 }
 
