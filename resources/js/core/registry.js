@@ -81,22 +81,12 @@ export function unmountIslands(shouldUnmount = () => true) {
     }
 }
 
-function isSamePageHistoryMove(event) {
-    return event.detail?.history && window.history.state?.islands && event.detail.url?.pathname === currentPath;
-}
-
 function isStrandedHistoryEntry(event) {
     return window.Livewire && !event.state?.alpine?.snapshotIdx && window.location.pathname !== currentPath;
 }
 
 export function startIslands() {
     mountIslands();
-
-    document.addEventListener('livewire:navigate', (event) => {
-        if (isSamePageHistoryMove(event)) {
-            event.preventDefault();
-        }
-    });
 
     document.addEventListener('livewire:navigating', () => unmountIslands());
 

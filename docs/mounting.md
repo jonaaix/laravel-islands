@@ -111,8 +111,9 @@ loading a page, and the runtime follows along:
 
 Nothing has to be configured. Without navigate events the runtime behaves as on a classic
 page load. A datagrid's history entries carry Livewire's navigation state as well, so a
-back step into a filtered table works from another page, and a step within the page is
-answered by the table itself — see [Table State](https://aaix.github.io/laravel-islands-datagrid/table-state#the-url).
+back step into a filtered table works from another page, and a step that changes only the
+table's own parameters is answered by the table itself — see
+[Table State](https://aaix.github.io/laravel-islands-datagrid/table-state#the-url).
 
 ::: tip Multiple islands per page
 A page may carry any number of islands. Each is its own Vue application — a dashboard
