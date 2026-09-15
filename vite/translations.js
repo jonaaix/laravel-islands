@@ -5,11 +5,13 @@ const ENTRY_SUFFIX = '.island.vue';
 const SOURCE_EXTENSIONS = new Set(['.vue', '.js', '.mjs', '.ts']);
 const IMPORT_PATTERNS = [
     /\bimport\s+(?:[^'"()]*?\s+from\s+)?['"]([^'"]+)['"]/g,
-    /\bexport\s+(?:\*|\{[^}]*\})\s+from\s+['"]([^'"]+)['"]/g,
+    /\bexport\s+(?:\*(?:\s+as\s+\w+)?|\{[^}]*\})\s+from\s+['"]([^'"]+)['"]/g,
     /\bimport\(\s*['"]([^'"]+)['"]\s*\)/g,
 ];
 const LITERAL_KEY = /\bt\(\s*(['"])((?:\\.|(?!\1).)*)\1/gs;
-const DYNAMIC_KEY = /(?<!function\s)(?<!\.)\bt\(\s*(?!['"])[^)\s]/;
+const DYNAMIC_KEY = /(?<!function\s)\bt\(\s*(?!['"])[^)\s]/;
+// Only the islands packages are followed into node_modules; anything else there is framework code with no t() of its own.
+const FOLLOWED_MODULES = /\/node_modules\/@aaix\//;
 
 export function findIslandEntries(root) {
     const entries = {};
@@ -56,7 +58,11 @@ function sourceFile(resolved) {
 
     const path = resolved.split('?')[0];
 
-    if (!SOURCE_EXTENSIONS.has(extname(path)) || path.includes('/node_modules/') || !existsSync(path)) {
+    if (!SOURCE_EXTENSIONS.has(extname(path)) || !existsSync(path)) {
+        return null;
+    }
+
+    if (path.includes('/node_modules/') && !FOLLOWED_MODULES.test(path)) {
         return null;
     }
 

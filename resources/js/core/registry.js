@@ -1,8 +1,17 @@
+const PAGE_STATES_LIMIT = 10;
+
 const adapters = {};
 
 const mounted = new Map();
 
+const pageStates = new Map();
+
 let currentPath = typeof window === 'undefined' ? '' : window.location.pathname;
+
+// On a back or forward step the address already names the destination when the page is left.
+let currentUrl = typeof window === 'undefined' ? '' : window.location.pathname + window.location.search;
+
+let historyMove = false;
 
 export function registerAdapter(name, mount) {
     adapters[name] = mount;
@@ -17,7 +26,21 @@ function parsePayload(el) {
     }
 }
 
+function pageKey() {
+    return window.location.pathname + window.location.search;
+}
+
+function normalizeMountResult(result) {
+    if (typeof result === 'function') {
+        return { teardown: result, snapshot: null };
+    }
+
+    return { teardown: result?.teardown ?? null, snapshot: result?.snapshot ?? null };
+}
+
 export function mountIslands() {
+    const remembered = pageStates.get(pageKey())?.islands ?? {};
+
     document.querySelectorAll('[data-island]').forEach((el) => {
         if (mounted.has(el)) {
             return;
@@ -36,11 +59,16 @@ export function mountIslands() {
             return;
         }
 
-        const island = { teardown: null, pending: null };
+        if (remembered[el.dataset.island] !== undefined) {
+            payload._island = { ...(payload._island ?? {}), restored: remembered[el.dataset.island] };
+        }
+
+        const island = { teardown: null, snapshot: null, pending: null };
+        const context = { isCancelled: () => mounted.get(el) !== island };
 
         try {
-            island.pending = Promise.resolve(mount(el, payload)).then((teardown) => {
-                island.teardown = teardown ?? null;
+            island.pending = Promise.resolve(mount(el, payload, context)).then((result) => {
+                Object.assign(island, normalizeMountResult(result));
             });
         } catch (error) {
             console.error(`[islands] mount failed for "${el.dataset.island}"`, error);
@@ -81,6 +109,45 @@ export function unmountIslands(shouldUnmount = () => true) {
     }
 }
 
+function rememberPage() {
+    const islands = {};
+
+    for (const [el, island] of mounted) {
+        try {
+            const state = island.snapshot?.();
+
+            if (state !== null && state !== undefined) {
+                islands[el.dataset.island] = state;
+            }
+        } catch (error) {
+            console.error(`[islands] state of "${el.dataset.island}" could not be kept`, error);
+        }
+    }
+
+    if (Object.keys(islands).length === 0) {
+        return;
+    }
+
+    pageStates.delete(currentUrl);
+    pageStates.set(currentUrl, { islands, scrollY: window.scrollY });
+
+    while (pageStates.size > PAGE_STATES_LIMIT) {
+        pageStates.delete(pageStates.keys().next().value);
+    }
+}
+
+function restoreScroll() {
+    const scrollY = pageStates.get(pageKey())?.scrollY;
+
+    if (scrollY === undefined) {
+        return;
+    }
+
+    Promise.allSettled([...mounted.values()].map((island) => island.pending)).then(() => {
+        window.scrollTo({ top: scrollY, left: 0, behavior: 'instant' });
+    });
+}
+
 function isStrandedHistoryEntry(event) {
     return window.Livewire && !event.state?.alpine?.snapshotIdx && window.location.pathname !== currentPath;
 }
@@ -88,15 +155,26 @@ function isStrandedHistoryEntry(event) {
 export function startIslands() {
     mountIslands();
 
-    document.addEventListener('livewire:navigating', () => unmountIslands());
+    document.addEventListener('livewire:navigating', () => {
+        rememberPage();
+        unmountIslands();
+    });
 
     document.addEventListener('livewire:navigated', () => {
         currentPath = window.location.pathname;
+        currentUrl = pageKey();
         unmountIslands((el) => !el.isConnected);
         mountIslands();
+
+        if (historyMove) {
+            historyMove = false;
+            restoreScroll();
+        }
     });
 
     window.addEventListener('popstate', (event) => {
+        historyMove = Boolean(event.state?.alpine?.snapshotIdx);
+
         if (isStrandedHistoryEntry(event)) {
             window.location.reload();
         }

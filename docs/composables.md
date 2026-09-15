@@ -4,7 +4,7 @@ Everything below is exported from `@aaix/laravel-islands/vue` and works inside a
 component of an island, not only the root.
 
 ```js
-import { useIsland, useTranslations, useModel, useEcho, useViewWidth, useSortableTiles } from '@aaix/laravel-islands/vue';
+import { useIsland, useIslandState, useTranslations, useModel, useEcho, useViewWidth, useSortableTiles } from '@aaix/laravel-islands/vue';
 ```
 
 ## `useIsland()`
@@ -34,6 +34,27 @@ t('Delete :count products', { count: 12 });
 
 Looks the key up in the shipped lines, falls back to the key, and replaces `:token`
 placeholders. See [Translations](/translations).
+
+## `useIslandState(key, provide)`
+
+State that outlives a page swap under `wire:navigate`. When the page is left, the runtime
+calls `provide()` and keeps the result together with the URL; the next mount of the island
+at that URL gets it back as the return value.
+
+```js
+const remembered = useIslandState('chart', () => ({ range: range.value, series: series.value }));
+
+if (remembered) {
+    range.value = remembered.range;
+    series.value = remembered.series;
+}
+```
+
+`provide()` must return plain data. The `key` is unique within the island; a component
+used twice keys by something it owns, the way a table keys by its data URL. Outside an
+island, and on a classic page load, the composable returns `null` and stores nothing. The
+runtime keeps the ten most recently left pages in memory; a reload starts clean. See
+[Navigating Without a Page Load](/mounting#navigating-without-a-page-load).
 
 ## `useModel(key, options)`
 

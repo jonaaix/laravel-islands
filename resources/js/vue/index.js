@@ -1,7 +1,26 @@
 import { createApp, defineAsyncComponent } from 'vue';
 import { registerAdapter, startIslands } from '../core/registry.js';
 import { resolveTranslations } from '../core/translations.js';
-import { ISLAND_KEY } from './context.js';
+import { ISLAND_KEY, ISLAND_STATE_KEY } from './context.js';
+
+function createIslandState(payload) {
+    const providers = new Map();
+
+    return {
+        context: {
+            restored: payload._island?.restored ?? null,
+            register: (key, provide) => providers.set(key, provide),
+            unregister: (key) => providers.delete(key),
+        },
+        snapshot: () => {
+            if (providers.size === 0) {
+                return null;
+            }
+
+            return Object.fromEntries([...providers].map(([key, provide]) => [key, provide()]));
+        },
+    };
+}
 
 /**
  * Register the Vue adapter and boot every Vue island in the DOM.
@@ -23,7 +42,7 @@ export function startVueIslands(registry, options = {}) {
         return entry?.default;
     };
 
-    registerAdapter('vue', async (el, payload) => {
+    registerAdapter('vue', async (el, payload, context) => {
         const component = resolve(el.dataset.island);
 
         if (!component) {
@@ -33,18 +52,25 @@ export function startVueIslands(registry, options = {}) {
 
         await resolveTranslations(payload);
 
+        if (context?.isCancelled()) {
+            return;
+        }
+
+        const islandState = createIslandState(payload);
         const app = createApp(component, payload.props ?? {});
         app.provide(ISLAND_KEY, payload);
+        app.provide(ISLAND_STATE_KEY, islandState.context);
         options.setup?.(app, payload);
         app.mount(el);
 
-        return () => app.unmount();
+        return { teardown: () => app.unmount(), snapshot: islandState.snapshot };
     });
 
     startIslands();
 }
 
 export { useIsland } from './composables/useIsland.js';
+export { useIslandState } from './composables/useIslandState.js';
 export { useEcho } from './composables/useEcho.js';
 export { useModel } from './composables/useModel.js';
 export { useSortableTiles } from './composables/useSortableTiles.js';
