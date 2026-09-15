@@ -46,7 +46,6 @@ export { default as IconButton } from './IconButton.vue';
 export { vRipple } from './ripple.js';
 export { default as Table } from './Table.vue';
 export { default as Tabs } from './Tabs.vue';
-export { default as WysiwygEditor } from './WysiwygEditor.vue';
 export { default as ConfirmHost } from './ConfirmHost.vue';
 export { createConfirm, provideConfirm, useConfirm, CONFIRM_KEY } from './confirm.js';
 export { default as ToastHost } from './ToastHost.vue';

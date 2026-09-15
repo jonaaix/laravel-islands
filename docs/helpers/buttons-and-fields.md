@@ -251,8 +251,17 @@ alpha rail, presets and a format switch.
 
 ### `WysiwygEditor`
 
-A TipTap rich-text field. The model is HTML; an empty document emits `''`. Install the
-editor in your application: `npm install @tiptap/vue-3 @tiptap/starter-kit`.
+A TipTap rich-text field. The model is HTML; an empty document emits `''`. It is the one
+helper with a dependency of its own, so it lives behind its own import and the rest of the
+helpers load without TipTap installed:
+
+```bash
+npm install @tiptap/vue-3 @tiptap/starter-kit
+```
+
+```js
+import { WysiwygEditor } from '@aaix/laravel-islands/vue/helpers/wysiwyg';
+```
 
 ### `FieldCaption` and `FieldGroup`
 

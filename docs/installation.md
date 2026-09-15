@@ -21,7 +21,9 @@ npm install vue @vitejs/plugin-vue
 ```
 
 Laravel Echo is only needed for [real-time models](/realtime); the runtime warns once and
-carries on when `window.Echo` is missing.
+carries on when `window.Echo` is missing. The [UI helpers](/helpers/) bring no dependency of
+their own except the rich-text editor, which sits behind its own import and needs TipTap —
+see [`WysiwygEditor`](/helpers/buttons-and-fields#wysiwygeditor).
 
 ## Vite
 
