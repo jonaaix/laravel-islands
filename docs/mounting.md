@@ -92,8 +92,10 @@ class ProductsPage extends Page
 </x-filament-panels::page>
 ```
 
-Livewire morphs around the mount element rather than through it; keep the `<x-island>` tag
-inside a plain `<div>` so Livewire has a stable node to diff.
+The mount element carries `wire:ignore`, so a Livewire re-render of the surrounding component
+morphs around it instead of through it — without that, the server's empty mount element would
+replace everything the island has drawn. Keep the `<x-island>` tag inside a plain `<div>` so
+Livewire has a stable node to diff.
 
 ## Navigating Without a Page Load
 
