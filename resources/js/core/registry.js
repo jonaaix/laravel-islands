@@ -1,5 +1,10 @@
 const PAGE_STATES_LIMIT = 10;
 
+const STORAGE_KEY = 'islands.pageStates';
+
+// A page left longer ago than this paints from a fresh fetch again: its rows would be too old to show even for a moment.
+const STORAGE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+
 const adapters = {};
 
 const mounted = new Map();
@@ -109,6 +114,25 @@ export function unmountIslands(shouldUnmount = () => true) {
     }
 }
 
+function readStoredPages() {
+    try {
+        const stored = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? '[]');
+        const cutoff = Date.now() - STORAGE_MAX_AGE_MS;
+
+        return Array.isArray(stored) ? stored.filter(([, page]) => (page?.storedAt ?? 0) > cutoff) : [];
+    } catch {
+        return [];
+    }
+}
+
+function storePages() {
+    try {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify([...pageStates]));
+    } catch {
+        return;
+    }
+}
+
 function rememberPage() {
     const islands = {};
 
@@ -129,11 +153,13 @@ function rememberPage() {
     }
 
     pageStates.delete(currentUrl);
-    pageStates.set(currentUrl, { islands, scrollY: window.scrollY });
+    pageStates.set(currentUrl, { islands, scrollY: window.scrollY, storedAt: Date.now() });
 
     while (pageStates.size > PAGE_STATES_LIMIT) {
         pageStates.delete(pageStates.keys().next().value);
     }
+
+    storePages();
 }
 
 function restoreScroll() {
@@ -153,12 +179,18 @@ function isStrandedHistoryEntry(event) {
 }
 
 export function startIslands() {
+    for (const [url, page] of readStoredPages()) {
+        pageStates.set(url, page);
+    }
+
     mountIslands();
 
     document.addEventListener('livewire:navigating', () => {
         rememberPage();
         unmountIslands();
     });
+
+    window.addEventListener('pagehide', rememberPage);
 
     document.addEventListener('livewire:navigated', () => {
         currentPath = window.location.pathname;

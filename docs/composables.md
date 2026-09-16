@@ -52,8 +52,10 @@ if (remembered) {
 
 `provide()` must return plain data. The `key` is unique within the island; a component
 used twice keys by something it owns, the way a table keys by its data URL. Outside an
-island, and on a classic page load, the composable returns `null` and stores nothing. The
-runtime keeps the ten most recently left pages in memory; a reload starts clean. See
+island the composable returns `null` and stores nothing. The runtime keeps the ten most
+recently left pages and writes them to `localStorage` as well, so a reload or a direct visit
+to a URL seen in the last 24 hours paints the same first frame; older entries are dropped.
+State that must not stay on the device is simply not provided. See
 [Navigating Without a Page Load](/mounting#navigating-without-a-page-load).
 
 ## `useModel(key, options)`

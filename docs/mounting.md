@@ -109,11 +109,13 @@ loading a page, and the runtime follows along:
 - A back or forward step that Livewire restores from its snapshot mounts the islands again
   from the restored markup.
 - An island that hands the runtime state through [`useIslandState()`](/composables#useislandstate-key-provide)
-  gets it back when the same URL is shown again — after a back step, and after a link to a
-  page seen before — so it paints its first frame with what the user last saw and refreshes
-  behind it. After a back or forward step the runtime also puts the scroll position back once
-  the islands have mounted; Livewire's own restore runs before they exist. The datagrid does
-  this for its rows out of the box, and `restore: false` turns it off for a table.
+  gets it back when the same URL is shown again — after a back step, after a link to a page
+  seen before, and after a reload or a direct visit, since the runtime also keeps the last
+  ten pages in `localStorage` for a day — so it paints its first frame with what the user
+  last saw and refreshes behind it. After a back or forward step the runtime also puts the
+  scroll position back once the islands have mounted; Livewire's own restore runs before
+  they exist. The datagrid does this for its rows out of the box, and `restore: false` turns
+  it off for a table.
 
 Nothing has to be configured. Without navigate events the runtime behaves as on a classic
 page load. A datagrid's history entries carry Livewire's navigation state as well, so a
