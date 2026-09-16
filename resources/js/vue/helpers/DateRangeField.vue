@@ -271,15 +271,26 @@ function isBetween(date) {
 }
 
 // The ends are solid and the days between a clear tint, stronger than a single date: a span has to read as one block. Today only a ring, the rest stay ghosts.
-function dayTone(cell) {
-    if (isEnd(cell.date)) return 'cta';
+function isPaintedEnd(cell) {
+    return cell.inMonth && isEnd(cell.date);
+}
 
-    return isBetween(cell.date) ? 'primary' : 'ghost';
+function isPaintedBetween(cell) {
+    return cell.inMonth && isBetween(cell.date);
+}
+
+// With more than one month on screen, a neighbouring day would stand twice.
+const showsOutsideDays = computed(() => pages.value.length === 1);
+
+function dayTone(cell) {
+    if (isPaintedEnd(cell)) return 'cta';
+
+    return isPaintedBetween(cell) ? 'primary' : 'ghost';
 }
 
 function dayClass(cell) {
-    if (isEnd(cell.date)) return 'font-semibold';
-    if (isBetween(cell.date)) return '';
+    if (isPaintedEnd(cell)) return 'font-semibold';
+    if (isPaintedBetween(cell)) return '';
     if (sameDay(cell.date, today)) return 'ring-1 ring-inset ring-il-neutral-200 dark:ring-white/10';
 
     return cell.inMonth ? '' : 'opacity-50';
@@ -456,23 +467,25 @@ const footerText = computed(() => formatDayRange(painted.value[0], painted.value
                         </div>
 
                         <div role="grid" class="il-date-range-field__days grid grid-cols-7 gap-y-0.5" @keydown="onGridKey">
-                            <Button
-                                v-for="cell in page.grid"
-                                :id="dayId(cell.date)"
-                                :key="cell.date.getTime()"
-                                role="gridcell"
-                                shape="pill"
-                                size="md"
-                                :tone="dayTone(cell)"
-                                :tabindex="sameDay(cell.date, focusedDay) ? 0 : -1"
-                                :aria-selected="isEnd(cell.date) || isBetween(cell.date) ? 'true' : 'false'"
-                                :aria-label="formatDisplay(cell.date, 'date', locale)"
-                                :disabled="!dayAllowed(cell.date)"
-                                class="mx-auto w-9 px-0 tabular-nums"
-                                :class="dayClass(cell)"
-                                @mouseenter="hovered = cell.date"
-                                @click="pickDay(cell.date)"
-                            >{{ cell.date.getDate() }}</Button>
+                            <template v-for="cell in page.grid" :key="cell.date.getTime()">
+                                <span v-if="!cell.inMonth && !showsOutsideDays" role="gridcell" aria-hidden="true" class="mx-auto h-9 w-9"></span>
+                                <Button
+                                    v-else
+                                    :id="dayId(cell.date)"
+                                    role="gridcell"
+                                    shape="pill"
+                                    size="md"
+                                    :tone="dayTone(cell)"
+                                    :tabindex="sameDay(cell.date, focusedDay) ? 0 : -1"
+                                    :aria-selected="isPaintedEnd(cell) || isPaintedBetween(cell) ? 'true' : 'false'"
+                                    :aria-label="formatDisplay(cell.date, 'date', locale)"
+                                    :disabled="!dayAllowed(cell.date)"
+                                    class="mx-auto w-9 px-0 tabular-nums"
+                                    :class="dayClass(cell)"
+                                    @mouseenter="hovered = cell.date"
+                                    @click="pickDay(cell.date)"
+                                >{{ cell.date.getDate() }}</Button>
+                            </template>
                         </div>
                     </div>
                 </div>
