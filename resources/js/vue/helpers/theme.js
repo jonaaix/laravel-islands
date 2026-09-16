@@ -13,6 +13,7 @@ import {
     OPTION_STRIP_SIZES,
     OPTION_STRIP_SKINS,
     SWITCH_TONES,
+    TABS_SKINS,
     TOAST_SURFACE,
     TOAST_TONES,
 } from './surfaceStyles.js';
@@ -81,6 +82,10 @@ export const defaultTheme = {
     switch: {
         tone: 'primary',
         tones: SWITCH_TONES,
+    },
+    tabs: {
+        variant: 'underline',
+        skins: TABS_SKINS,
     },
     fieldGroup: {
         surfaces: FIELD_GROUP_SURFACES,

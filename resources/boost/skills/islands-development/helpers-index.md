@@ -62,7 +62,7 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 | `PersonChip` | avatar with a name-based fallback |
 | `List`, `ListItem` | hairline-divided list; item takes `label`, `description`, `descriptionTone` |
 | `Table` | thin frame over a native `<table>` — uniform header typography, no silent truncation |
-| `Tabs` | underline tabs with icon/count/mark per item |
+| `Tabs` | tab strip with icon/count/mark per item; `variant` = `underline` · `pills`, the theme decides when unset |
 
 ### Overlays
 

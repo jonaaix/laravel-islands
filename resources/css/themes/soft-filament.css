@@ -1,0 +1,247 @@
+/*
+ * The Soft preset for the Filament panel around the islands: sidebar, topbar, global search,
+ * tabs and badges drawn with the same tokens, so the panel and the islands read as one surface.
+ * Import it into the panel's Tailwind entry after `themes/soft.css`. It reaches Filament through
+ * its `fi-*` classes, so a Filament release may move a hook; every rule here is plain CSS on
+ * those hooks and nothing else.
+ */
+
+/* ----- Sidebar ----- */
+
+.fi-body .fi-sidebar {
+    background-color: var(--color-il-neutral-50);
+}
+
+.dark .fi-body .fi-sidebar {
+    background-color: var(--color-il-neutral-950);
+}
+
+.fi-body .fi-sidebar.fi-sidebar-open {
+    box-shadow: inset -1px 0 0 var(--color-il-neutral-200);
+}
+
+.dark .fi-body .fi-sidebar.fi-sidebar-open {
+    box-shadow: inset -1px 0 0 rgb(255 255 255 / 0.08);
+}
+
+.fi-body .fi-sidebar-nav {
+    padding: 1.25rem 0.75rem 2rem;
+    row-gap: 1.5rem;
+}
+
+.fi-body .fi-sidebar-nav-groups {
+    margin-inline: 0;
+    row-gap: 1.5rem;
+}
+
+.fi-sidebar-group-btn {
+    padding: 0.25rem 0.75rem;
+}
+
+.fi-sidebar-group-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-il-neutral-400);
+}
+
+.fi-sidebar-group-btn > .fi-icon {
+    color: var(--color-il-neutral-400);
+}
+
+.fi-sidebar-group-items {
+    row-gap: 0.125rem;
+}
+
+.fi-sidebar-item-btn {
+    border-radius: var(--radius-il-control);
+    padding: 0.5rem 0.75rem;
+    transition: background-color var(--il-duration-fast), color var(--il-duration-fast);
+}
+
+.fi-sidebar-item-label {
+    font-size: 0.875rem;
+    color: var(--color-il-neutral-600);
+}
+
+.dark .fi-sidebar-item-label {
+    color: var(--color-il-neutral-300);
+}
+
+.fi-sidebar-item-btn > .fi-icon {
+    color: var(--color-il-neutral-400);
+}
+
+.fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover,
+.fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:focus-visible {
+    background-color: color-mix(in oklab, var(--color-il-neutral-200) 70%, transparent);
+}
+
+.dark .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover,
+.dark .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:focus-visible {
+    background-color: rgb(255 255 255 / 0.06);
+}
+
+.fi-sidebar-item > .fi-sidebar-item-btn:active {
+    background-color: var(--color-il-neutral-200);
+}
+
+.dark .fi-sidebar-item > .fi-sidebar-item-btn:active {
+    background-color: rgb(255 255 255 / 0.12);
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn:hover {
+    background-color: color-mix(in oklab, var(--color-il-primary-500) 10%, transparent);
+}
+
+.dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
+.dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn:hover {
+    background-color: color-mix(in oklab, var(--color-il-primary-500) 15%, transparent);
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label {
+    font-weight: 500;
+    color: var(--color-il-primary-700);
+}
+
+.dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label {
+    color: var(--color-il-primary-300);
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon {
+    color: var(--color-il-primary-600);
+}
+
+.dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon {
+    color: var(--color-il-primary-400);
+}
+
+.fi-sidebar-item-grouped-border-part-not-first,
+.fi-sidebar-item-grouped-border-part-not-last {
+    background-color: var(--color-il-neutral-200);
+}
+
+.dark .fi-sidebar-item-grouped-border-part-not-first,
+.dark .fi-sidebar-item-grouped-border-part-not-last {
+    background-color: rgb(255 255 255 / 0.1);
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-grouped-border > .fi-sidebar-item-grouped-border-part {
+    background-color: var(--color-il-primary-500);
+}
+
+/* ----- Topbar ----- */
+
+.fi-body .fi-topbar {
+    box-shadow: inset 0 -1px 0 var(--color-il-neutral-200);
+}
+
+.dark .fi-body .fi-topbar {
+    box-shadow: inset 0 -1px 0 rgb(255 255 255 / 0.08);
+}
+
+.fi-topbar .fi-icon-btn,
+.fi-topbar .fi-user-menu-trigger {
+    border-radius: var(--radius-il-control);
+}
+
+.fi-topbar .fi-global-search-field .fi-input-wrp {
+    border-radius: var(--radius-il-control);
+    background-color: var(--color-il-neutral-100);
+    box-shadow: none;
+    transition: background-color var(--il-duration-fast);
+}
+
+.fi-topbar .fi-global-search-field .fi-input-wrp:hover {
+    background-color: color-mix(in oklab, var(--color-il-neutral-200) 70%, transparent);
+}
+
+.fi-topbar .fi-global-search-field .fi-input-wrp:focus-within {
+    background-color: white;
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-il-primary-500) 40%, transparent);
+}
+
+.dark .fi-topbar .fi-global-search-field .fi-input-wrp {
+    background-color: rgb(255 255 255 / 0.1);
+}
+
+.dark .fi-topbar .fi-global-search-field .fi-input-wrp:focus-within {
+    background-color: var(--color-il-neutral-800);
+}
+
+.fi-topbar .fi-global-search-results-ctn {
+    border-radius: var(--radius-il-menu);
+}
+
+.fi-topbar .fi-dropdown-panel {
+    border-radius: var(--radius-il-menu);
+}
+
+/* ----- Tabs ----- */
+
+.fi-tabs {
+    column-gap: 0.25rem;
+    border-radius: var(--radius-il-menu);
+    background-color: var(--color-il-neutral-100);
+    padding: 0.25rem;
+}
+
+.fi-tabs.fi-contained {
+    border-bottom: 0;
+}
+
+.fi-tabs:not(.fi-contained) {
+    box-shadow: none;
+}
+
+.dark .fi-tabs {
+    background-color: rgb(255 255 255 / 0.05);
+}
+
+.fi-tabs.fi-vertical.fi-contained {
+    border-inline-end: 0;
+}
+
+.fi-tabs-item {
+    border-radius: var(--radius-il-control);
+    padding: 0.375rem 0.875rem;
+    transition: background-color var(--il-duration-fast), color var(--il-duration-fast);
+}
+
+.fi-tabs-item:not(.fi-active):hover,
+.fi-tabs-item:not(.fi-active):focus-visible {
+    background-color: rgb(255 255 255 / 0.6);
+}
+
+.dark .fi-tabs-item:not(.fi-active):hover,
+.dark .fi-tabs-item:not(.fi-active):focus-visible {
+    background-color: rgb(255 255 255 / 0.05);
+}
+
+.fi-tabs-item.fi-active {
+    background-color: white;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.dark .fi-tabs-item.fi-active {
+    background-color: var(--color-il-neutral-800);
+}
+
+.fi-tabs-item.fi-active .fi-tabs-item-label,
+.fi-tabs-item.fi-active > .fi-icon {
+    color: var(--color-il-neutral-900);
+}
+
+.dark .fi-tabs-item.fi-active .fi-tabs-item-label,
+.dark .fi-tabs-item.fi-active > .fi-icon {
+    color: white;
+}
+
+/* ----- Badges ----- */
+
+.fi-badge {
+    border-radius: 9999px;
+    box-shadow: none;
+}

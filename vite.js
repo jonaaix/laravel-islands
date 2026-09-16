@@ -10,7 +10,7 @@ const REGISTRY_MODULE_ID = `\0${REGISTRY_IMPORT}`;
 const DEFAULT_ISLAND_PATH = 'app/Islands';
 const MANIFEST_FILE = 'islands-translations.json';
 const THEME_SOURCE = 'resources/css';
-const THEME_FILES = ['theme.css', 'themes/material.css', 'themes/soft.css'];
+const THEME_FILES = ['theme.css', 'themes/material.css', 'themes/soft.css', 'themes/soft-filament.css'];
 const DEFAULT_THEME_OUTPUT = 'resources/css/islands';
 const THEME_HEADER = '/* Written by the @aaix/laravel-islands Vite plugin from the package\'s resources/css. Do not edit; override its variables in your own stylesheet. */\n';
 

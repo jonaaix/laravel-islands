@@ -49,6 +49,31 @@ export const OPTION_STRIP_SKINS = {
     },
 };
 
+/**
+ * The strip and its tabs: `underline` draws a rule under the row and marks the active tab on it,
+ * `pills` sets the tabs in a filled track and lifts the active one out as a pill.
+ */
+export const TABS_SKINS = {
+    underline: {
+        strip: 'flex items-center gap-1 overflow-x-auto border-b border-il-neutral-200 px-3 dark:border-white/10',
+        tab: 'flex shrink-0 items-center gap-1.5 whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition-colors',
+        active: 'border-il-primary-500 text-il-primary-600 dark:text-il-primary-400',
+        inactive: 'border-transparent text-il-neutral-500 hover:text-il-neutral-700 dark:text-il-neutral-400 dark:hover:text-il-neutral-300',
+        disabled: 'cursor-default border-transparent text-il-neutral-300 dark:text-il-neutral-600',
+        countActive: 'bg-il-primary-100 text-il-primary-700 dark:bg-il-primary-500/20 dark:text-il-primary-300',
+        countInactive: 'bg-il-neutral-100 text-il-neutral-500 dark:bg-il-neutral-800 dark:text-il-neutral-400',
+    },
+    pills: {
+        strip: 'flex items-center gap-1 overflow-x-auto rounded-il-menu bg-il-neutral-100 p-1 dark:bg-white/5',
+        tab: 'flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-il-control px-3.5 py-1.5 text-sm font-medium transition-colors duration-[var(--il-duration-fast)]',
+        active: 'bg-white text-il-neutral-900 shadow-sm dark:bg-il-neutral-800 dark:text-white',
+        inactive: 'text-il-neutral-500 hover:bg-white/60 hover:text-il-neutral-700 dark:text-il-neutral-400 dark:hover:bg-white/5 dark:hover:text-il-neutral-200',
+        disabled: 'cursor-default text-il-neutral-300 dark:text-il-neutral-600',
+        countActive: 'bg-il-primary-500/10 text-il-primary-700 dark:bg-il-primary-500/20 dark:text-il-primary-300',
+        countInactive: 'bg-il-neutral-200/70 text-il-neutral-500 dark:bg-white/10 dark:text-il-neutral-400',
+    },
+};
+
 /** Track, the mark on the handle and the pointer halo, per meaning of being on. */
 export const SWITCH_TONES = {
     primary: { track: 'bg-il-primary-600 dark:bg-il-primary-500', icon: 'text-il-primary-600 dark:text-il-primary-500', halo: 'bg-il-primary-500' },

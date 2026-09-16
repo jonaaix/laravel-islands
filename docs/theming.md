@@ -139,7 +139,7 @@ single utility class; use the attribute where a bare class does not win.
 | Slider | `il-slider` · `data-state` `data-disabled` | `__track` `__rail` `__fill` `__tick` `__handle` `__labels` |
 | Switch | `il-switch` · `data-state` `data-tone` `data-disabled` | `__input` `__track` `__halo` `__handle` |
 | Table | `il-table` | |
-| Tabs | `il-tabs` | `__tab` · `data-state` · `__icon` `__count` `__mark` |
+| Tabs | `il-tabs` · `data-variant` | `__tab` · `data-state` · `__icon` `__count` `__mark` |
 | ToastHost | `il-toasts`, `il-toast` · `data-tone` | `__rail` `__icon` `__title` `__message` `__close` `__timer` |
 | Tooltip | `il-tooltip` · `data-state` | `__tip` · `data-placement` · `__arrow` |
 | TreeSelect | `il-tree-select` · `data-state` `data-disabled` | `__trigger` `__clear` `__menu` `__search` `__list` `__heading` `__option` `__footer` |
@@ -166,6 +166,7 @@ startVueIslands(islands, {
         card: { mediaRatio: '3 / 2' },
         modal: { size: 'md' },
         optionStrip: { variant: 'pills', size: 'md' },
+        tabs: { variant: 'underline' },
         switch: { tone: 'primary' },
         menuItem: { tone: 'default' },
         editButton: { size: 'sm' },
@@ -194,7 +195,7 @@ and win over the theme where both are set.
 The class tables live in the same sections: `button.tones`, `button.sizes`, `button.shapes`,
 `button.split`, `iconButton.tones|boxes|glyphs`, `field.base|shapes|sizes|textareaSizes`,
 `select.skins`, `badge.tones`, `modal.sizes`, `toast.surface|tones`,
-`optionStrip.frames|sizes|skins`, `switch.tones`, `fieldGroup.surfaces|tones`,
+`optionStrip.frames|sizes|skins`, `tabs.skins`, `switch.tones`, `fieldGroup.surfaces|tones`,
 `listItem.tones`, `menuItem.tones`, `editButton.sizes`. The merge is key by key, so a theme
 adds or replaces one entry and keeps the rest.
 
@@ -240,8 +241,20 @@ startVueIslands(islands, { theme: materialTheme });
 strips; `material.css` rounds the radius tokens and raises the control heights.
 
 `softTheme` with `themes/soft.css` is the quieter one: fields and select triggers are filled
-rather than framed, actions are tinted rather than saturated, corners are generous
-(`0.75rem` controls, `1.25rem` cards) and the neutral is Tailwind's cooler slate. It replaces
-`field.base` — the box every input draws — which is the knob for any filled-field look.
+rather than framed, actions are tinted rather than saturated, tabs sit as pills in a filled
+track, corners are generous (`0.75rem` controls, `1.25rem` cards) and the neutral is
+Tailwind's cooler slate. It replaces `field.base` — the box every input draws — which is the
+knob for any filled-field look.
+
+`themes/soft-filament.css` carries the same look into the Filament panel around the islands:
+sidebar, topbar, global search, tabs and badges, drawn with the same tokens through Filament's
+`fi-*` classes. Import it into the panel's Tailwind entry after `soft.css`; the Vite plugin
+writes it beside the other files.
+
+```css
+@import './islands/theme.css';
+@import './islands/themes/soft.css';
+@import './islands/themes/soft-filament.css';
+```
 
 `defaultTheme` is exported beside them, for a theme that starts from the package's tables.

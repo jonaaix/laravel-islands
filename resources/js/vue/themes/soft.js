@@ -43,4 +43,7 @@ export const softTheme = defineTheme({
     optionStrip: {
         variant: 'segmented',
     },
+    tabs: {
+        variant: 'pills',
+    },
 });
