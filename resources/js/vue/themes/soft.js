@@ -28,13 +28,13 @@ export const softTheme = defineTheme({
         skins: {
             field: {
                 base: 'flex h-il-control items-center rounded-il-control border border-transparent pl-3 pr-1 text-sm transition-colors focus-within:ring-2 focus-within:ring-il-primary-500/40',
-                on: 'bg-il-neutral-100 text-il-neutral-900 hover:bg-il-neutral-200/70 dark:bg-white/10 dark:text-il-neutral-100 dark:hover:bg-white/15',
+                on: 'bg-il-neutral-100 font-medium text-il-neutral-900 hover:bg-il-neutral-200/70 dark:bg-white/10 dark:text-il-neutral-100 dark:hover:bg-white/15',
                 off: 'bg-il-neutral-100 text-il-neutral-500 hover:bg-il-neutral-200/70 dark:bg-white/10 dark:text-il-neutral-400 dark:hover:bg-white/15',
                 clear: 'hover:bg-il-neutral-200 dark:hover:bg-white/10',
             },
             filter: {
                 base: 'flex h-il-control items-center rounded-il-control border border-transparent pl-3 pr-1 text-sm transition-colors focus-within:ring-2 focus-within:ring-il-primary-500/40',
-                on: 'bg-il-primary-500/10 text-il-primary-800 dark:bg-il-primary-500/15 dark:text-il-primary-200',
+                on: 'bg-il-primary-500/10 font-medium text-il-primary-800 dark:bg-il-primary-500/15 dark:text-il-primary-200',
                 off: 'bg-il-neutral-100 text-il-neutral-600 hover:bg-il-neutral-200/70 dark:bg-white/10 dark:text-il-neutral-300 dark:hover:bg-white/15',
                 clear: 'hover:bg-il-primary-200/60 dark:hover:bg-il-primary-500/25',
             },
