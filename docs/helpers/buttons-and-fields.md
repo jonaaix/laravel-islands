@@ -263,6 +263,18 @@ npm install @tiptap/vue-3 @tiptap/starter-kit
 import { WysiwygEditor } from '@aaix/laravel-islands/vue/helpers/wysiwyg';
 ```
 
+Two extension points keep one editor for every field: `extensions` takes TipTap extensions
+beyond the starter kit, and the `tools` slot renders after the built-in buttons with the
+`editor` as slot prop, for a control the buttons cannot express.
+
+```vue
+<WysiwygEditor v-model="html" :extensions="[FontSize]">
+    <template #tools="{ editor }">
+        <SelectField :model-value="editor.getAttributes('fontSize').size ?? ''" :options="sizes" @update:model-value="editor.chain().focus().setFontSize($event).run()" />
+    </template>
+</WysiwygEditor>
+```
+
 ### `FieldCaption` and `FieldGroup`
 
 `FieldCaption` is the 10px uppercase caption above a value — always a `<span>`, wrapped by

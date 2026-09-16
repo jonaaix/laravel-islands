@@ -5,12 +5,14 @@ import StarterKit from '@tiptap/starter-kit';
 
 const props = defineProps({
     modelValue: { type: String, default: '' },
+    /** TipTap extensions the field needs beyond the starter kit — a mark, a node, a keymap. */
+    extensions: { type: Array, default: () => [] },
 });
 const emit = defineEmits(['update:modelValue']);
 
 const editor = useEditor({
     content: props.modelValue,
-    extensions: [StarterKit],
+    extensions: [StarterKit, ...props.extensions],
     editorProps: {
         attributes: {
             class: 'min-h-[8rem] px-3 py-2 text-sm focus:outline-none',
@@ -58,6 +60,8 @@ const TOOLS = [
             >
                 {{ tool.label }}
             </button>
+
+            <slot name="tools" :editor="editor" />
         </div>
         <EditorContent :editor="editor" class="bg-white text-sm text-gray-900 dark:bg-gray-900 dark:text-gray-100" />
     </div>
