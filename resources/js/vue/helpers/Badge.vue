@@ -17,7 +17,7 @@ const toneClass = computed(() => theme.tones[props.tone ?? theme.tone] ?? theme.
 
 <template>
     <span
-        class="il-badge inline-flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-0.5 text-xs font-medium"
+        class="il-badge inline-flex items-center gap-1 whitespace-nowrap rounded-il-control px-2 py-0.5 text-xs font-medium"
         :class="[toneClass, numeric ? 'tabular-nums' : '']"
         :data-tone="tone ?? theme.tone"
     >

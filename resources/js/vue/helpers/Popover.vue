@@ -139,7 +139,7 @@ defineExpose({ position });
         <div
             v-if="open"
             ref="panel"
-            class="il-popover fixed overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10"
+            class="il-popover fixed overflow-hidden rounded-il-card bg-white shadow-2xl ring-1 ring-il-neutral-200 dark:bg-il-neutral-800 dark:ring-white/10"
             :style="{ ...style, zIndex: layer + 1, ...(placed ? {} : unplacedStyle) }"
             @keydown.esc.stop="emit('close')"
             @click.stop

@@ -1,0 +1,123 @@
+/*
+ * Design tokens of @aaix/laravel-islands.
+ *
+ * Import once in the host's Tailwind entry, after `@import 'tailwindcss'`:
+ *
+ *     @import '@aaix/laravel-islands/css/theme.css';
+ *
+ * Every helper draws its colours, radii and control heights from the `il-*` utilities this
+ * block generates (`bg-il-primary-500`, `rounded-il-control`, `h-il-control`), and those read
+ * the variables below at runtime. A theme overrides variables — in a stylesheet loaded after
+ * this one, on `.dark`, or on any element to theme a subtree:
+ *
+ *     :root { --radius-il-control: 9999px; --color-il-primary-500: oklch(0.6 0.2 30); }
+ *
+ * The primary and neutral roles follow the host's palette where it has one (Filament publishes
+ * `--color-primary-*` and `--color-gray-*`) and fall back to Tailwind's blue and gray. The status
+ * roles keep Tailwind's red, amber, emerald and blue on their own, so a panel's status palette
+ * does not silently recolour the helpers; a host that wants them to follow maps them:
+ *
+ *     @theme { --color-il-danger-500: var(--color-danger-500); … }
+ */
+@theme {
+    /* ----- Colour roles ----- */
+
+    --color-il-primary-50: var(--color-primary-50, oklch(0.97 0.014 254.604));
+    --color-il-primary-100: var(--color-primary-100, oklch(0.932 0.032 255.585));
+    --color-il-primary-200: var(--color-primary-200, oklch(0.882 0.059 254.128));
+    --color-il-primary-300: var(--color-primary-300, oklch(0.809 0.105 251.813));
+    --color-il-primary-400: var(--color-primary-400, oklch(0.707 0.165 254.624));
+    --color-il-primary-500: var(--color-primary-500, oklch(0.623 0.214 259.815));
+    --color-il-primary-600: var(--color-primary-600, oklch(0.546 0.245 262.881));
+    --color-il-primary-700: var(--color-primary-700, oklch(0.488 0.243 264.376));
+    --color-il-primary-800: var(--color-primary-800, oklch(0.424 0.199 265.638));
+    --color-il-primary-900: var(--color-primary-900, oklch(0.379 0.146 265.522));
+    --color-il-primary-950: var(--color-primary-950, oklch(0.282 0.091 267.935));
+
+    --color-il-neutral-50: var(--color-gray-50, oklch(0.985 0.002 247.839));
+    --color-il-neutral-100: var(--color-gray-100, oklch(0.967 0.003 264.542));
+    --color-il-neutral-200: var(--color-gray-200, oklch(0.928 0.006 264.531));
+    --color-il-neutral-300: var(--color-gray-300, oklch(0.872 0.01 258.338));
+    --color-il-neutral-400: var(--color-gray-400, oklch(0.707 0.022 261.325));
+    --color-il-neutral-500: var(--color-gray-500, oklch(0.551 0.027 264.364));
+    --color-il-neutral-600: var(--color-gray-600, oklch(0.446 0.03 256.802));
+    --color-il-neutral-700: var(--color-gray-700, oklch(0.373 0.034 259.733));
+    --color-il-neutral-800: var(--color-gray-800, oklch(0.278 0.033 256.848));
+    --color-il-neutral-900: var(--color-gray-900, oklch(0.21 0.034 264.665));
+    --color-il-neutral-950: var(--color-gray-950, oklch(0.13 0.028 261.692));
+
+    --color-il-danger-50: oklch(0.971 0.013 17.38);
+    --color-il-danger-100: oklch(0.936 0.032 17.717);
+    --color-il-danger-200: oklch(0.885 0.062 18.334);
+    --color-il-danger-300: oklch(0.808 0.114 19.571);
+    --color-il-danger-400: oklch(0.704 0.191 22.216);
+    --color-il-danger-500: oklch(0.637 0.237 25.331);
+    --color-il-danger-600: oklch(0.577 0.245 27.325);
+    --color-il-danger-700: oklch(0.505 0.213 27.518);
+    --color-il-danger-800: oklch(0.444 0.177 26.899);
+    --color-il-danger-900: oklch(0.396 0.141 25.723);
+    --color-il-danger-950: oklch(0.258 0.092 26.042);
+
+    --color-il-warning-50: oklch(0.987 0.022 95.277);
+    --color-il-warning-100: oklch(0.962 0.059 95.617);
+    --color-il-warning-200: oklch(0.924 0.12 95.746);
+    --color-il-warning-300: oklch(0.879 0.169 91.605);
+    --color-il-warning-400: oklch(0.828 0.189 84.429);
+    --color-il-warning-500: oklch(0.769 0.188 70.08);
+    --color-il-warning-600: oklch(0.666 0.179 58.318);
+    --color-il-warning-700: oklch(0.555 0.163 48.998);
+    --color-il-warning-800: oklch(0.473 0.137 46.201);
+    --color-il-warning-900: oklch(0.414 0.112 45.904);
+    --color-il-warning-950: oklch(0.279 0.077 45.635);
+
+    --color-il-success-50: oklch(0.979 0.021 166.113);
+    --color-il-success-100: oklch(0.95 0.052 163.051);
+    --color-il-success-200: oklch(0.905 0.093 164.15);
+    --color-il-success-300: oklch(0.845 0.143 164.978);
+    --color-il-success-400: oklch(0.765 0.177 163.223);
+    --color-il-success-500: oklch(0.696 0.17 162.48);
+    --color-il-success-600: oklch(0.596 0.145 163.225);
+    --color-il-success-700: oklch(0.508 0.118 165.612);
+    --color-il-success-800: oklch(0.432 0.095 166.913);
+    --color-il-success-900: oklch(0.378 0.077 168.94);
+    --color-il-success-950: oklch(0.262 0.051 172.552);
+
+    --color-il-info-50: oklch(0.97 0.014 254.604);
+    --color-il-info-100: oklch(0.932 0.032 255.585);
+    --color-il-info-200: oklch(0.882 0.059 254.128);
+    --color-il-info-300: oklch(0.809 0.105 251.813);
+    --color-il-info-400: oklch(0.707 0.165 254.624);
+    --color-il-info-500: oklch(0.623 0.214 259.815);
+    --color-il-info-600: oklch(0.546 0.245 262.881);
+    --color-il-info-700: oklch(0.488 0.243 264.376);
+    --color-il-info-800: oklch(0.424 0.199 265.638);
+    --color-il-info-900: oklch(0.379 0.146 265.522);
+    --color-il-info-950: oklch(0.282 0.091 267.935);
+
+    /* ----- Radius roles ----- */
+
+    /* Fields, buttons, select triggers, badges: what a pointer aims at. */
+    --radius-il-control: 0.375rem;
+    /* Menus, popovers, icon boxes, toasts. */
+    --radius-il-menu: 0.5rem;
+    /* Cards, modals, panels. */
+    --radius-il-card: 0.75rem;
+
+    /* ----- Control heights ----- */
+
+    --spacing-il-control-xs: 1.75rem;
+    --spacing-il-control-sm: 2rem;
+    --spacing-il-control: 2.25rem;
+    --spacing-il-control-lg: 2.5rem;
+}
+
+/*
+ * Motion. Plain variables, read through `duration-[var(--il-duration-fast)]` where a helper
+ * animates; a theme that wants everything snappier or calmer changes them here.
+ */
+:root {
+    --il-duration-fast: 150ms;
+    --il-duration-hover: 500ms;
+    --il-duration-panel: 350ms;
+    --il-duration-tooltip: 120ms;
+}

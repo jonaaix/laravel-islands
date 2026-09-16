@@ -245,8 +245,8 @@ defineExpose({ show, close });
         </div>
 
         <Popover :anchor="triggerEl" :open="open" :width="menuWidth" @close="close">
-            <div class="il-multi-combobox__search relative border-b border-gray-100 p-2 dark:border-white/10">
-                <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-gray-400">
+            <div class="il-multi-combobox__search relative border-b border-il-neutral-100 p-2 dark:border-white/10">
+                <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-il-neutral-400">
                     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd"/></svg>
                 </span>
                 <input
@@ -255,12 +255,12 @@ defineExpose({ show, close });
                     type="search"
                     :placeholder="searchPlaceholder"
                     @keydown="onKeydown"
-                    class="h-8 w-full rounded-md border border-gray-200 bg-white pl-8 pr-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-white/10 dark:bg-gray-900 dark:text-gray-100"
+                    class="h-8 w-full rounded-il-control border border-il-neutral-200 bg-white pl-8 pr-2 text-sm text-il-neutral-900 placeholder:text-il-neutral-400 focus:border-il-primary-500 focus:outline-none focus:ring-1 focus:ring-il-primary-500 dark:border-white/10 dark:bg-il-neutral-900 dark:text-il-neutral-100"
                 />
             </div>
 
             <ul role="listbox" aria-multiselectable="true" class="il-multi-combobox__list slim-scrollbar overflow-y-auto py-1" :style="{ maxHeight: `${menuHeight}px` }">
-                <li v-if="search.loadingOptions.value" class="il-multi-combobox__loading flex items-center justify-center gap-2 py-6 text-sm text-gray-400">
+                <li v-if="search.loadingOptions.value" class="il-multi-combobox__loading flex items-center justify-center gap-2 py-6 text-sm text-il-neutral-400">
                     <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" />
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v3a5 5 0 0 0-5 5H4Z" />
@@ -277,7 +277,7 @@ defineExpose({ show, close });
                     >
                         <p
                             v-if="option.disabled"
-                            class="il-multi-combobox__heading px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400"
+                            class="il-multi-combobox__heading px-3 py-1.5 text-sm text-il-neutral-500 dark:text-il-neutral-400"
                             :style="indent(option)"
                         >
                             <slot name="option" :key-value="option.value" :label="option.label" :option="option" :checked="false">
@@ -289,8 +289,8 @@ defineExpose({ show, close });
                             class="il-multi-combobox__option flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm transition-colors"
                             :data-state="isChecked(option) ? 'checked' : (i === highlighted ? 'highlighted' : undefined)"
                             :class="[
-                                i === highlighted ? 'bg-gray-50 dark:bg-white/5' : 'hover:bg-gray-50 dark:hover:bg-white/5',
-                                isChecked(option) ? 'font-medium text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-200',
+                                i === highlighted ? 'bg-il-neutral-50 dark:bg-white/5' : 'hover:bg-il-neutral-50 dark:hover:bg-white/5',
+                                isChecked(option) ? 'font-medium text-il-primary-700 dark:text-il-primary-300' : 'text-il-neutral-700 dark:text-il-neutral-200',
                             ]"
                             :style="indent(option)"
                             @mouseenter="highlighted = i"
@@ -301,7 +301,7 @@ defineExpose({ show, close });
                             </slot>
                         </label>
                     </li>
-                    <li v-if="!search.filtered.value.length" class="il-multi-combobox__empty py-6 text-center text-sm text-gray-400">{{ emptyLabel }}</li>
+                    <li v-if="!search.filtered.value.length" class="il-multi-combobox__empty py-6 text-center text-sm text-il-neutral-400">{{ emptyLabel }}</li>
                 </template>
             </ul>
 
@@ -309,7 +309,7 @@ defineExpose({ show, close });
                 v-if="count > 0 && clearOption"
                 type="button"
                 @click="clear"
-                class="il-multi-combobox__clear-option flex w-full items-center justify-center border-t border-gray-100 px-3 py-2 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 dark:border-white/10 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200"
+                class="il-multi-combobox__clear-option flex w-full items-center justify-center border-t border-il-neutral-100 px-3 py-2 text-xs font-medium text-il-neutral-500 transition-colors hover:bg-il-neutral-50 hover:text-il-neutral-700 dark:border-white/10 dark:text-il-neutral-400 dark:hover:bg-white/5 dark:hover:text-il-neutral-200"
             >{{ allLabel }}</button>
         </Popover>
     </div>

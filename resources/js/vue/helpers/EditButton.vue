@@ -25,7 +25,7 @@ const SIZES = { sm: 'h-3.5 w-3.5', md: 'h-4 w-4' };
             @click="emit('click', $event)"
             :aria-label="label"
             :data-size="size"
-            class="il-edit-button rounded p-0.5 text-gray-400 opacity-0 transition-opacity duration-500 hover:text-gray-700 focus-visible:opacity-100 group-hover/edit:opacity-100 dark:text-gray-500 dark:hover:text-gray-300"
+            class="il-edit-button rounded p-0.5 text-il-neutral-400 opacity-0 transition-opacity duration-[var(--il-duration-hover)] hover:text-il-neutral-700 focus-visible:opacity-100 group-hover/edit:opacity-100 dark:text-il-neutral-500 dark:hover:text-il-neutral-300"
         >
             <svg
                 class="il-edit-button__glyph"

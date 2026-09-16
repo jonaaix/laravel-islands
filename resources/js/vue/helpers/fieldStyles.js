@@ -5,14 +5,14 @@
 
 export const FIELD_SHAPES = {
     sharp: 'rounded-none',
-    rounded: 'rounded-md',
+    rounded: 'rounded-il-control',
     pill: 'rounded-full',
 };
 
 export const FIELD_SIZES = {
-    sm: 'h-8 text-xs',
-    md: 'h-9 text-sm',
-    lg: 'h-10 text-base',
+    sm: 'h-il-control-sm text-xs',
+    md: 'h-il-control text-sm',
+    lg: 'h-il-control-lg text-base',
 };
 
 export const TEXTAREA_SIZES = {
@@ -22,13 +22,13 @@ export const TEXTAREA_SIZES = {
 };
 
 const BASE_BOX =
-    'block w-full border border-gray-200 bg-white px-2.5 ' +
-    'focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 ' +
-    'dark:border-white/10 dark:bg-gray-800 dark:text-gray-100';
+    'block w-full border border-il-neutral-200 bg-white px-2.5 ' +
+    'focus:border-il-primary-500 focus:outline-none focus:ring-1 focus:ring-il-primary-500 ' +
+    'dark:border-white/10 dark:bg-il-neutral-800 dark:text-il-neutral-100';
 
-const DISABLED = 'disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-gray-50 dark:disabled:bg-gray-800/60';
+const DISABLED = 'disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-il-neutral-50 dark:disabled:bg-il-neutral-800/60';
 
-const READONLY = 'read-only:bg-gray-50 read-only:text-gray-600 dark:read-only:bg-gray-800/60 dark:read-only:text-gray-300';
+const READONLY = 'read-only:bg-il-neutral-50 read-only:text-il-neutral-600 dark:read-only:bg-il-neutral-800/60 dark:read-only:text-il-neutral-300';
 
 /**
  * `shapes` and `sizes` are the theme's tables; the package's own apply when a caller passes none.

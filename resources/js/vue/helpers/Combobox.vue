@@ -196,9 +196,9 @@ function onKeydown(e) {
 
         <Teleport to="body">
         <div v-if="open" class="il-combobox__backdrop fixed inset-0" :style="backdropStyle" @click="close"></div>
-        <div v-if="open" class="il-combobox__menu fixed overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10" :style="{ ...menuStyle, ...panelStyle }" :data-variant="variant">
-            <div class="il-combobox__search relative border-b border-gray-100 p-2 dark:border-white/10">
-                <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-gray-400">
+        <div v-if="open" class="il-combobox__menu fixed overflow-hidden rounded-il-menu bg-white shadow-lg ring-1 ring-il-neutral-200 dark:bg-il-neutral-800 dark:ring-white/10" :style="{ ...menuStyle, ...panelStyle }" :data-variant="variant">
+            <div class="il-combobox__search relative border-b border-il-neutral-100 p-2 dark:border-white/10">
+                <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-il-neutral-400">
                     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd"/></svg>
                 </span>
                 <input
@@ -207,11 +207,11 @@ function onKeydown(e) {
                     type="search"
                     :placeholder="searchPlaceholder"
                     @keydown="onKeydown"
-                    class="h-8 w-full rounded-md border border-gray-200 bg-white pl-8 pr-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-white/10 dark:bg-gray-900 dark:text-gray-100"
+                    class="h-8 w-full rounded-il-control border border-il-neutral-200 bg-white pl-8 pr-2 text-sm text-il-neutral-900 placeholder:text-il-neutral-400 focus:border-il-primary-500 focus:outline-none focus:ring-1 focus:ring-il-primary-500 dark:border-white/10 dark:bg-il-neutral-900 dark:text-il-neutral-100"
                 />
             </div>
             <ul role="listbox" class="il-combobox__list overflow-y-auto py-1" :style="{ maxHeight: `${menuHeight}px` }">
-                <li v-if="loadingOptions" class="il-combobox__loading flex items-center justify-center gap-2 py-6 text-sm text-gray-400">
+                <li v-if="loadingOptions" class="il-combobox__loading flex items-center justify-center gap-2 py-6 text-sm text-il-neutral-400">
                     <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" />
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v3a5 5 0 0 0-5 5H4Z" />
@@ -220,7 +220,7 @@ function onKeydown(e) {
                 </li>
                 <template v-else>
                 <li v-if="hasValue && clearOption">
-                    <button type="button" @click="clear" class="il-combobox__clear-option flex w-full items-center px-3 py-1.5 text-left text-sm text-primary-700 hover:bg-gray-50 dark:text-primary-300 dark:hover:bg-white/5">
+                    <button type="button" @click="clear" class="il-combobox__clear-option flex w-full items-center px-3 py-1.5 text-left text-sm text-il-primary-700 hover:bg-il-neutral-50 dark:text-il-primary-300 dark:hover:bg-white/5">
                         {{ allLabel }}
                     </button>
                 </li>
@@ -233,20 +233,20 @@ function onKeydown(e) {
                         @mouseenter="option.disabled ? null : (highlighted = i)"
                         class="il-combobox__option flex w-full items-center justify-between gap-2 px-3 py-1.5 text-left text-sm"
                         :class="[
-                            i === highlighted && !option.disabled ? 'bg-gray-50 dark:bg-white/5' : '',
-                            option.disabled ? 'cursor-default text-gray-500 dark:text-gray-400' : '',
-                            String(option.value) === String(modelValue) ? 'font-semibold text-primary-700 dark:text-primary-300' : (option.disabled ? '' : 'text-gray-700 dark:text-gray-200'),
+                            i === highlighted && !option.disabled ? 'bg-il-neutral-50 dark:bg-white/5' : '',
+                            option.disabled ? 'cursor-default text-il-neutral-500 dark:text-il-neutral-400' : '',
+                            String(option.value) === String(modelValue) ? 'font-semibold text-il-primary-700 dark:text-il-primary-300' : (option.disabled ? '' : 'text-il-neutral-700 dark:text-il-neutral-200'),
                         ]"
                     >
                         <slot name="option" :key-value="option.value" :label="option.label" :option="option">
                             <span class="truncate">{{ option.label }}</span>
                         </slot>
-                        <svg v-if="String(option.value) === String(modelValue)" class="h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <svg v-if="String(option.value) === String(modelValue)" class="h-4 w-4 shrink-0 text-il-primary-600 dark:text-il-primary-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
                         </svg>
                     </button>
                 </li>
-                <li v-if="!filtered.length" class="il-combobox__empty py-6 text-center text-sm text-gray-400">{{ emptyLabel }}</li>
+                <li v-if="!filtered.length" class="il-combobox__empty py-6 text-center text-sm text-il-neutral-400">{{ emptyLabel }}</li>
                 </template>
             </ul>
         </div>

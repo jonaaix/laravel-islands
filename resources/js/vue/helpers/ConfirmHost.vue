@@ -21,11 +21,11 @@ const confirmTone = computed(() => options.value.tone === 'danger' ? 'danger' : 
         <p
             v-if="options.title"
             class="il-confirm__title text-sm font-semibold"
-            :class="options.tone === 'danger' ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-gray-100'"
+            :class="options.tone === 'danger' ? 'text-il-danger-600 dark:text-il-danger-400' : 'text-il-neutral-900 dark:text-il-neutral-100'"
             :data-tone="options.tone || undefined"
         >{{ options.title }}</p>
 
-        <p v-if="options.message" class="il-confirm__message whitespace-pre-line text-sm text-gray-700 dark:text-gray-300" :class="options.title ? 'mt-2' : ''">{{ options.message }}</p>
+        <p v-if="options.message" class="il-confirm__message whitespace-pre-line text-sm text-il-neutral-700 dark:text-il-neutral-300" :class="options.title ? 'mt-2' : ''">{{ options.message }}</p>
 
         <template #footer>
             <Button tone="secondary" size="sm" @click="confirm.answer(false)">{{ options.cancelLabel }}</Button>

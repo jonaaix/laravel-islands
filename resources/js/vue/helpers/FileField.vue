@@ -50,8 +50,8 @@ const zoneClasses = computed(() =>
     [
         'group relative flex w-full cursor-pointer flex-col items-center justify-center gap-1 border-2 border-dashed px-4 py-6 text-center transition-colors',
         dragging.value
-            ? 'border-primary-500 bg-primary-50 dark:border-primary-400 dark:bg-primary-500/10'
-            : 'border-gray-300 bg-white hover:border-primary-500 hover:bg-primary-50/40 dark:border-white/15 dark:bg-gray-950 dark:hover:border-primary-400 dark:hover:bg-primary-500/10',
+            ? 'border-il-primary-500 bg-il-primary-50 dark:border-il-primary-400 dark:bg-il-primary-500/10'
+            : 'border-il-neutral-300 bg-white hover:border-il-primary-500 hover:bg-il-primary-50/40 dark:border-white/15 dark:bg-il-neutral-950 dark:hover:border-il-primary-400 dark:hover:bg-il-primary-500/10',
         props.disabled ? 'cursor-not-allowed opacity-60' : '',
         shape.value,
     ]
@@ -138,13 +138,13 @@ function formatBytes(n) {
             @dragleave="onDragLeave"
             @drop.prevent="onDrop"
         >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-6 w-6 text-gray-400 group-hover:text-primary-500 dark:group-hover:text-primary-400" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-6 w-6 text-il-neutral-400 group-hover:text-il-primary-500 dark:group-hover:text-il-primary-400" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9m0 0-3 3m3-3 3 3M6.75 19.5h10.5A2.25 2.25 0 0 0 19.5 17.25V15m-15 0v2.25A2.25 2.25 0 0 0 6.75 19.5Z"/>
             </svg>
-            <p class="text-sm font-medium text-gray-700 group-hover:text-primary-700 dark:text-gray-300 dark:group-hover:text-primary-300">
+            <p class="text-sm font-medium text-il-neutral-700 group-hover:text-il-primary-700 dark:text-il-neutral-300 dark:group-hover:text-il-primary-300">
                 {{ displayedLabel }}
             </p>
-            <p v-if="hint" class="text-xs text-gray-500 dark:text-gray-400">{{ hint }}</p>
+            <p v-if="hint" class="text-xs text-il-neutral-500 dark:text-il-neutral-400">{{ hint }}</p>
         </button>
 
         <input
@@ -162,16 +162,16 @@ function formatBytes(n) {
             <li
                 v-for="(file, i) in displayed"
                 :key="i"
-                class="il-file-field__file flex items-center gap-2 rounded-md bg-gray-50 px-3 py-2 text-xs dark:bg-gray-900"
+                class="il-file-field__file flex items-center gap-2 rounded-il-control bg-il-neutral-50 px-3 py-2 text-xs dark:bg-il-neutral-900"
             >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-4 w-4 shrink-0 text-il-primary-600 dark:text-il-primary-400" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 15l2.25 2.25L15 12.75M6.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25V9.564c0-.596-.237-1.168-.659-1.591L14.686 3.03A2.25 2.25 0 0 0 13.094 2.37H6.75A2.25 2.25 0 0 0 4.5 4.62v14.88a2.25 2.25 0 0 0 2.25 2.25Z"/>
                 </svg>
-                <span class="min-w-0 flex-1 truncate font-medium text-gray-700 dark:text-gray-200">{{ file.name }}</span>
-                <span class="shrink-0 tabular-nums text-gray-500 dark:text-gray-400">{{ formatBytes(file.size) }}</span>
+                <span class="min-w-0 flex-1 truncate font-medium text-il-neutral-700 dark:text-il-neutral-200">{{ file.name }}</span>
+                <span class="shrink-0 tabular-nums text-il-neutral-500 dark:text-il-neutral-400">{{ formatBytes(file.size) }}</span>
                 <button
                     type="button"
-                    class="il-file-field__remove shrink-0 rounded-full p-1 text-gray-400 transition-colors hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-500/15 dark:hover:text-red-300"
+                    class="il-file-field__remove shrink-0 rounded-full p-1 text-il-neutral-400 transition-colors hover:bg-il-danger-100 hover:text-il-danger-600 dark:hover:bg-il-danger-500/15 dark:hover:text-il-danger-300"
                     :aria-label="'Remove ' + file.name"
                     @click="(e) => removeAt(i, e)"
                 >

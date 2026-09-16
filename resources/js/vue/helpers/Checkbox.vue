@@ -46,16 +46,16 @@ const TICK_LENGTH = 20;
         -->
         <span
             aria-hidden="true"
-            class="il-checkbox__halo pointer-events-none absolute -inset-[11px] rounded-full opacity-0 transition-opacity duration-150 peer-hover:opacity-[0.08] peer-focus-visible:opacity-[0.14] peer-active:opacity-[0.18] peer-disabled:opacity-0"
-            :class="marked ? 'bg-primary-500' : 'bg-gray-500 dark:bg-gray-300'"
+            class="il-checkbox__halo pointer-events-none absolute -inset-[11px] rounded-full opacity-0 transition-opacity duration-[var(--il-duration-fast)] peer-hover:opacity-[0.08] peer-focus-visible:opacity-[0.14] peer-active:opacity-[0.18] peer-disabled:opacity-0"
+            :class="marked ? 'bg-il-primary-500' : 'bg-il-neutral-500 dark:bg-il-neutral-300'"
         ></span>
 
         <span
             aria-hidden="true"
-            class="il-checkbox__box pointer-events-none relative flex h-full w-full items-center justify-center rounded-[4px] border-2 transition-colors duration-150"
+            class="il-checkbox__box pointer-events-none relative flex h-full w-full items-center justify-center rounded-[4px] border-2 transition-colors duration-[var(--il-duration-fast)]"
             :class="marked
-                ? 'border-primary-600 bg-primary-600 dark:border-primary-500 dark:bg-primary-500'
-                : 'border-gray-400 bg-transparent dark:border-gray-500'"
+                ? 'border-il-primary-600 bg-il-primary-600 dark:border-il-primary-500 dark:bg-il-primary-500'
+                : 'border-il-neutral-400 bg-transparent dark:border-il-neutral-500'"
         >
             <svg viewBox="0 0 18 18" class="h-full w-full text-white">
                 <!-- Drawn rather than switched on: the stroke is wiped off and runs back in. -->
@@ -67,7 +67,7 @@ const TICK_LENGTH = 20;
                     stroke-width="2.4"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="transition-[stroke-dashoffset] duration-150 ease-out"
+                    class="transition-[stroke-dashoffset] duration-[var(--il-duration-fast)] ease-out"
                     :style="{ strokeDasharray: TICK_LENGTH, strokeDashoffset: modelValue ? 0 : TICK_LENGTH }"
                 />
                 <path

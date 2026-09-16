@@ -8,17 +8,17 @@ const props = defineProps({
 
 const toasts = useToast();
 
-const SURFACE = 'bg-white ring-gray-200 dark:bg-gray-900 dark:ring-white/10';
+const SURFACE = 'bg-white ring-il-neutral-200 dark:bg-il-neutral-900 dark:ring-white/10';
 
 /**
  * The status colour appears twice and only twice: in the rail down the left edge and in the
  * icon. Tinting the surface as well would drown the message it is meant to mark.
  */
 const TONES = {
-    info: { rail: 'bg-gray-400 dark:bg-gray-500', accent: 'text-gray-400 dark:text-gray-500' },
-    success: { rail: 'bg-emerald-500', accent: 'text-emerald-500' },
-    warning: { rail: 'bg-amber-500', accent: 'text-amber-500' },
-    danger: { rail: 'bg-red-500', accent: 'text-red-500' },
+    info: { rail: 'bg-il-neutral-400 dark:bg-il-neutral-500', accent: 'text-il-neutral-400 dark:text-il-neutral-500' },
+    success: { rail: 'bg-il-success-500', accent: 'text-il-success-500' },
+    warning: { rail: 'bg-il-warning-500', accent: 'text-il-warning-500' },
+    danger: { rail: 'bg-il-danger-500', accent: 'text-il-danger-500' },
 };
 
 const PATHS = {
@@ -46,7 +46,7 @@ function tone(name) {
                 <div
                     v-for="toast in toasts.items.value"
                     :key="toast.id"
-                    class="il-toast pointer-events-auto relative w-full max-w-sm overflow-hidden rounded-lg py-3 pl-5 pr-3 shadow-lg ring-1"
+                    class="il-toast pointer-events-auto relative w-full max-w-sm overflow-hidden rounded-il-menu py-3 pl-5 pr-3 shadow-lg ring-1"
                     :class="SURFACE"
                     :data-tone="toast.tone"
                     role="status"
@@ -73,14 +73,14 @@ function tone(name) {
                         </svg>
 
                         <div class="min-w-0 flex-1">
-                            <p v-if="toast.title" class="il-toast__title text-sm font-semibold leading-5 text-gray-900 dark:text-white">{{ toast.title }}</p>
-                            <p class="il-toast__message text-sm leading-5 text-gray-700 dark:text-gray-300">{{ toast.message }}</p>
+                            <p v-if="toast.title" class="il-toast__title text-sm font-semibold leading-5 text-il-neutral-900 dark:text-white">{{ toast.title }}</p>
+                            <p class="il-toast__message text-sm leading-5 text-il-neutral-700 dark:text-il-neutral-300">{{ toast.message }}</p>
                         </div>
 
                         <button
                             type="button"
                             :aria-label="closeLabel"
-                            class="il-toast__close flex h-5 w-5 shrink-0 items-center justify-center text-gray-400 transition hover:text-gray-600 dark:hover:text-gray-200"
+                            class="il-toast__close flex h-5 w-5 shrink-0 items-center justify-center text-il-neutral-400 transition hover:text-il-neutral-600 dark:hover:text-il-neutral-200"
                             @click="toasts.dismiss(toast.id)"
                         >
                             <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -92,7 +92,7 @@ function tone(name) {
                     <!-- How much of its time is left, quietly, so a message that goes is no surprise. -->
                     <span
                         v-if="toast.duration > 0"
-                        class="il-toast__timer toast-timer absolute inset-x-0 bottom-0 h-px origin-left bg-gray-300 dark:bg-white/20"
+                        class="il-toast__timer toast-timer absolute inset-x-0 bottom-0 h-px origin-left bg-il-neutral-300 dark:bg-white/20"
                         :style="{ animationDuration: `${toast.duration}ms` }"
                     ></span>
                 </div>

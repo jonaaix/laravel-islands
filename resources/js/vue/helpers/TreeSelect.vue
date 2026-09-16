@@ -275,23 +275,23 @@ defineExpose({ show, close, loadOptions, refresh });
                     @click.stop="show()"
                     :disabled="disabled"
                     :aria-expanded="open"
-                    class="il-tree-select__trigger flex h-9 w-full items-center gap-1 rounded-md border border-gray-200 bg-white pl-2.5 text-left text-sm transition-colors hover:bg-gray-50 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/10 dark:bg-gray-900 dark:hover:bg-white/5"
+                    class="il-tree-select__trigger flex h-il-control w-full items-center gap-1 rounded-il-control border border-il-neutral-200 bg-white pl-2.5 text-left text-sm transition-colors hover:bg-il-neutral-50 focus:border-il-primary-500 focus:outline-none focus:ring-1 focus:ring-il-primary-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/10 dark:bg-il-neutral-900 dark:hover:bg-white/5"
                     :class="clearable && hasValue ? 'pr-8' : 'pr-2'"
                 >
                     <span v-if="segments.length" class="flex min-w-0 flex-1 items-center gap-x-1 overflow-hidden">
                         <span
                             v-if="segments.length > 1"
-                            class="flex min-w-0 shrink items-center gap-x-1 overflow-hidden text-gray-500 dark:text-gray-400"
+                            class="flex min-w-0 shrink items-center gap-x-1 overflow-hidden text-il-neutral-500 dark:text-il-neutral-400"
                         >
                             <template v-for="(segment, i) in segments.slice(0, -1)" :key="i">
                                 <span class="truncate">{{ segment }}</span>
-                                <svg class="h-3 w-3 shrink-0 text-gray-300 dark:text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>
+                                <svg class="h-3 w-3 shrink-0 text-il-neutral-300 dark:text-il-neutral-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>
                             </template>
                         </span>
 
-                        <span class="max-w-full shrink-0 truncate text-gray-900 dark:text-gray-100">{{ segments[segments.length - 1] }}</span>
+                        <span class="max-w-full shrink-0 truncate text-il-neutral-900 dark:text-il-neutral-100">{{ segments[segments.length - 1] }}</span>
                     </span>
-                    <span v-else class="min-w-0 flex-1 truncate text-gray-400 dark:text-gray-500">{{ placeholder }}</span>
+                    <span v-else class="min-w-0 flex-1 truncate text-il-neutral-400 dark:text-il-neutral-500">{{ placeholder }}</span>
 
                     <svg v-if="!clearable || !hasValue" class="h-4 w-4 shrink-0 opacity-50 transition-transform" :class="open ? 'rotate-180' : ''" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
@@ -318,8 +318,8 @@ defineExpose({ show, close, loadOptions, refresh });
 
         <Popover :anchor="trigger" :open="open" :width="width" @close="close()">
             <div class="il-tree-select__menu">
-                <div class="il-tree-select__search relative border-b border-gray-100 p-2 dark:border-white/10">
-                    <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-gray-400">
+                <div class="il-tree-select__search relative border-b border-il-neutral-100 p-2 dark:border-white/10">
+                    <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-il-neutral-400">
                         <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd"/></svg>
                     </span>
                     <input
@@ -328,19 +328,19 @@ defineExpose({ show, close, loadOptions, refresh });
                         type="search"
                         :placeholder="searchPlaceholder"
                         @keydown="onKeydown"
-                        class="h-8 w-full rounded-md border border-gray-200 bg-white pl-8 pr-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-white/10 dark:bg-gray-900 dark:text-gray-100"
+                        class="h-8 w-full rounded-il-control border border-il-neutral-200 bg-white pl-8 pr-2 text-sm text-il-neutral-900 placeholder:text-il-neutral-400 focus:border-il-primary-500 focus:outline-none focus:ring-1 focus:ring-il-primary-500 dark:border-white/10 dark:bg-il-neutral-900 dark:text-il-neutral-100"
                     />
                 </div>
 
                 <ul ref="listEl" class="il-tree-select__list slim-scrollbar overflow-y-auto py-1" :style="{ maxHeight: `var(--picker-list-h, ${listHeight})` }" role="listbox">
-                    <li v-if="loading" class="flex items-center justify-center gap-2 py-8 text-sm text-gray-400">
+                    <li v-if="loading" class="flex items-center justify-center gap-2 py-8 text-sm text-il-neutral-400">
                         <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M12 3a9 9 0 1 0 9 9"/></svg>
                         {{ loadingLabel }}
                     </li>
 
                     <li v-else-if="failed" class="flex items-center justify-center gap-3 py-8 text-sm">
-                        <span class="text-red-600 dark:text-red-400">{{ errorLabel }}</span>
-                        <button type="button" @click="loadOptions()" class="rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200">{{ retryLabel }}</button>
+                        <span class="text-il-danger-600 dark:text-il-danger-400">{{ errorLabel }}</span>
+                        <button type="button" @click="loadOptions()" class="rounded-il-control bg-il-neutral-100 px-2 py-1 text-xs font-medium text-il-neutral-700 hover:bg-il-neutral-200 dark:bg-il-neutral-700 dark:text-il-neutral-200">{{ retryLabel }}</button>
                     </li>
 
                     <template v-else>
@@ -353,7 +353,7 @@ defineExpose({ show, close, loadOptions, refresh });
                         >
                             <div
                                 v-if="!option.selectable"
-                                class="il-tree-select__heading truncate py-1 pr-3 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500"
+                                class="il-tree-select__heading truncate py-1 pr-3 text-[11px] font-semibold uppercase tracking-wide text-il-neutral-400 dark:text-il-neutral-500"
                                 :style="{ paddingLeft: `${0.75 + option.depth * 0.85}rem` }"
                             >{{ option.name }}</div>
 
@@ -364,27 +364,27 @@ defineExpose({ show, close, loadOptions, refresh });
                                 @mouseenter="highlighted = i"
                                 :data-state="String(option.id) === String(modelValue) ? 'selected' : undefined"
                                 class="il-tree-select__option flex w-full items-center justify-between gap-2 py-1 pr-3 text-left"
-                                :class="i === highlighted ? 'bg-gray-50 dark:bg-white/5' : ''"
+                                :class="i === highlighted ? 'bg-il-neutral-50 dark:bg-white/5' : ''"
                                 :style="{ paddingLeft: `${0.75 + option.depth * 0.85}rem` }"
                             >
                                 <span class="min-w-0">
                                     <span
                                         class="block truncate text-sm leading-tight"
                                         :class="String(option.id) === String(modelValue)
-                                            ? 'font-semibold text-primary-700 dark:text-primary-300'
-                                            : 'text-gray-700 dark:text-gray-200'"
+                                            ? 'font-semibold text-il-primary-700 dark:text-il-primary-300'
+                                            : 'text-il-neutral-700 dark:text-il-neutral-200'"
                                     >{{ option.name }}</span>
                                 </span>
 
-                                <svg v-if="String(option.id) === String(modelValue)" class="h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/></svg>
+                                <svg v-if="String(option.id) === String(modelValue)" class="h-4 w-4 shrink-0 text-il-primary-600 dark:text-il-primary-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/></svg>
                             </button>
                         </li>
 
-                        <li v-if="!filtered.length" class="py-8 text-center text-sm text-gray-400">{{ emptyLabel }}</li>
+                        <li v-if="!filtered.length" class="py-8 text-center text-sm text-il-neutral-400">{{ emptyLabel }}</li>
                     </template>
                 </ul>
 
-                <div v-if="footer" class="il-tree-select__footer border-t border-gray-100 px-3 py-1.5 text-[11px] text-gray-400 dark:border-white/10 dark:text-gray-500">
+                <div v-if="footer" class="il-tree-select__footer border-t border-il-neutral-100 px-3 py-1.5 text-[11px] text-il-neutral-400 dark:border-white/10 dark:text-il-neutral-500">
                     {{ footer }}
                 </div>
             </div>

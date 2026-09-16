@@ -63,7 +63,7 @@ const rippleOn = computed(() => (props.ripple ?? theme.ripple ?? true) && !props
             :aria-disabled="href && disabled ? 'true' : undefined"
             :data-tone="resolvedTone"
             :data-size="resolvedSize"
-            class="il-icon-button relative flex shrink-0 items-center justify-center overflow-hidden rounded-full transition-colors duration-[250ms] ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-60"
+            class="il-icon-button relative flex shrink-0 items-center justify-center overflow-hidden rounded-full transition-colors duration-[250ms] ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-il-primary-500 disabled:cursor-not-allowed disabled:opacity-60"
             :class="[box, tone]"
         >
                 <span :class="glyph" class="il-icon-button__glyph flex items-center justify-center [&>svg]:h-full [&>svg]:w-full">

@@ -11,21 +11,21 @@ defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const TRACKS = {
-    primary: 'bg-primary-600 dark:bg-primary-500',
-    danger: 'bg-red-500',
-    success: 'bg-emerald-500',
+    primary: 'bg-il-primary-600 dark:bg-il-primary-500',
+    danger: 'bg-il-danger-500',
+    success: 'bg-il-success-500',
 };
 
 const ICONS = {
-    primary: 'text-primary-600 dark:text-primary-500',
-    danger: 'text-red-500',
-    success: 'text-emerald-500',
+    primary: 'text-il-primary-600 dark:text-il-primary-500',
+    danger: 'text-il-danger-500',
+    success: 'text-il-success-500',
 };
 
 const LAYERS = {
-    primary: 'bg-primary-500',
-    danger: 'bg-red-500',
-    success: 'bg-emerald-500',
+    primary: 'bg-il-primary-500',
+    danger: 'bg-il-danger-500',
+    success: 'bg-il-success-500',
 };
 </script>
 
@@ -55,28 +55,28 @@ const LAYERS = {
         <!-- Off is an outline, on is a fill: the state reads even before the colour does. -->
         <span
             aria-hidden="true"
-            class="il-switch__track pointer-events-none absolute inset-0 rounded-full transition-colors duration-150"
+            class="il-switch__track pointer-events-none absolute inset-0 rounded-full transition-colors duration-[var(--il-duration-fast)]"
             :class="modelValue
                 ? (TRACKS[tone] || TRACKS.primary)
-                : 'bg-gray-200 ring-2 ring-inset ring-gray-400 dark:bg-gray-700 dark:ring-gray-500'"
+                : 'bg-il-neutral-200 ring-2 ring-inset ring-il-neutral-400 dark:bg-il-neutral-700 dark:ring-il-neutral-500'"
         ></span>
 
         <!-- Centred on the handle and travelling with it, so the feedback belongs to what moves. -->
         <span
             aria-hidden="true"
-            class="il-switch__halo pointer-events-none absolute left-0 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full opacity-0 transition-[opacity,transform] duration-150 ease-out peer-hover:opacity-[0.08] peer-focus-visible:opacity-[0.14] peer-active:opacity-[0.18] peer-disabled:opacity-0"
+            class="il-switch__halo pointer-events-none absolute left-0 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full opacity-0 transition-[opacity,transform] duration-[var(--il-duration-fast)] ease-out peer-hover:opacity-[0.08] peer-focus-visible:opacity-[0.14] peer-active:opacity-[0.18] peer-disabled:opacity-0"
             :class="[
                 modelValue ? 'translate-x-2.5' : '-translate-x-1.5',
-                modelValue ? (LAYERS[tone] || LAYERS.primary) : 'bg-gray-500 dark:bg-gray-300',
+                modelValue ? (LAYERS[tone] || LAYERS.primary) : 'bg-il-neutral-500 dark:bg-il-neutral-300',
             ]"
         ></span>
 
         <span
             aria-hidden="true"
-            class="il-switch__handle pointer-events-none absolute left-0 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full transition-[transform,background-color] duration-150 ease-out"
+            class="il-switch__handle pointer-events-none absolute left-0 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full transition-[transform,background-color] duration-[var(--il-duration-fast)] ease-out"
             :class="[
                 modelValue ? 'translate-x-5' : 'translate-x-1',
-                modelValue ? 'bg-white' : 'bg-gray-400 dark:bg-gray-500',
+                modelValue ? 'bg-white' : 'bg-il-neutral-400 dark:bg-il-neutral-500',
             ]"
         >
             <svg
@@ -90,7 +90,7 @@ const LAYERS = {
             ><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
             <svg
                 v-else
-                class="h-3 w-3 text-gray-100 dark:text-gray-800"
+                class="h-3 w-3 text-il-neutral-100 dark:text-il-neutral-800"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"

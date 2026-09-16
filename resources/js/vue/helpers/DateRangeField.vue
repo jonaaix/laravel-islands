@@ -112,22 +112,22 @@ function order(a, b) {
 /* ----- The frame of the field variant, the skin of the filter ones ----- */
 
 const frame = computed(() => [
-    'inline-flex items-center overflow-hidden border bg-white dark:bg-gray-800 focus-within:ring-1',
+    'inline-flex items-center overflow-hidden border bg-white dark:bg-il-neutral-800 focus-within:ring-1',
     invalid.value
-        ? 'border-red-400 focus-within:border-red-500 focus-within:ring-red-500 dark:border-red-500/60'
-        : 'border-gray-200 focus-within:border-primary-500 focus-within:ring-primary-500 dark:border-white/10',
+        ? 'border-il-danger-400 focus-within:border-il-danger-500 focus-within:ring-il-danger-500 dark:border-il-danger-500/60'
+        : 'border-il-neutral-200 focus-within:border-il-primary-500 focus-within:ring-il-primary-500 dark:border-white/10',
     field.shapes[props.shape ?? field.shape] ?? field.shapes.rounded,
     field.sizes[props.size ?? field.size] ?? field.sizes.md,
     props.disabled ? 'cursor-not-allowed opacity-60' : '',
     attrs.class ?? '',
 ]);
 
-const FRAME_INPUT = 'h-full w-full min-w-0 border-0 bg-transparent px-2.5 tabular-nums focus:outline-none dark:text-gray-100';
+const FRAME_INPUT = 'h-full w-full min-w-0 border-0 bg-transparent px-2.5 tabular-nums focus:outline-none dark:text-il-neutral-100';
 
 const FRAME_BUTTON =
-    'flex h-full shrink-0 items-center justify-center px-2 text-gray-500 transition-colors ' +
-    'hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 ' +
-    'disabled:hover:bg-transparent dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200 dark:active:bg-white/15';
+    'flex h-full shrink-0 items-center justify-center px-2 text-il-neutral-500 transition-colors ' +
+    'hover:bg-il-neutral-100 hover:text-il-neutral-700 active:bg-il-neutral-200 disabled:cursor-not-allowed disabled:opacity-40 ' +
+    'disabled:hover:bg-transparent dark:text-il-neutral-400 dark:hover:bg-white/5 dark:hover:text-il-neutral-200 dark:active:bg-white/15';
 
 const skin = computed(() => selectSkin(props.variant, 'filter', selectTheme.skins));
 
@@ -279,8 +279,8 @@ function dayTone(cell) {
 
 function dayClass(cell) {
     if (isEnd(cell.date)) return 'font-semibold';
-    if (isBetween(cell.date)) return 'bg-primary-50 text-primary-800 dark:bg-primary-500/10 dark:text-primary-200';
-    if (sameDay(cell.date, today)) return 'ring-1 ring-inset ring-gray-200 dark:ring-white/10';
+    if (isBetween(cell.date)) return 'bg-il-primary-50 text-il-primary-800 dark:bg-il-primary-500/10 dark:text-il-primary-200';
+    if (sameDay(cell.date, today)) return 'ring-1 ring-inset ring-il-neutral-200 dark:ring-white/10';
 
     return cell.inMonth ? '' : 'opacity-50';
 }
@@ -426,7 +426,7 @@ const footerText = computed(() => formatDayRange(painted.value[0], painted.value
 
         <Popover :anchor="anchor" :open="open" :width="popoverWidth" @close="close">
             <div class="il-date-range-field__picker flex flex-wrap">
-                <div v-if="shortcuts.length" class="il-date-range-field__shortcuts flex w-40 flex-col gap-0.5 border-r border-gray-200 p-2 dark:border-white/10">
+                <div v-if="shortcuts.length" class="il-date-range-field__shortcuts flex w-40 flex-col gap-0.5 border-r border-il-neutral-200 p-2 dark:border-white/10">
                     <Button
                         v-for="shortcut in shortcuts"
                         :key="shortcut.label"
@@ -444,14 +444,14 @@ const footerText = computed(() => formatDayRange(painted.value[0], painted.value
                                 <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd"/></svg>
                             </IconButton>
                             <span v-else class="h-9 w-9" aria-hidden="true"></span>
-                            <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ page.heading }}</span>
+                            <span class="text-sm font-semibold text-il-neutral-900 dark:text-il-neutral-100">{{ page.heading }}</span>
                             <IconButton v-if="index === pages.length - 1" size="md" :label="WORDS.nextMonth" :tooltip="false" @click="shiftMonth(1)">
                                 <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></svg>
                             </IconButton>
                             <span v-else class="h-9 w-9" aria-hidden="true"></span>
                         </div>
 
-                        <div class="mt-2 grid grid-cols-7 text-center text-[10px] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                        <div class="mt-2 grid grid-cols-7 text-center text-[10px] font-medium uppercase tracking-wide text-il-neutral-500 dark:text-il-neutral-400">
                             <span v-for="name in weekdays" :key="name" class="py-1">{{ name }}</span>
                         </div>
 
@@ -478,10 +478,10 @@ const footerText = computed(() => formatDayRange(painted.value[0], painted.value
                 </div>
             </div>
 
-            <div class="il-date-range-field__footer flex items-center justify-between gap-2 border-t border-gray-200 p-2 dark:border-white/10">
+            <div class="il-date-range-field__footer flex items-center justify-between gap-2 border-t border-il-neutral-200 p-2 dark:border-white/10">
                 <Button size="sm" tone="ghost" @click="clear">{{ WORDS.clear }}</Button>
                 <div class="flex items-center gap-2">
-                    <span class="il-date-range-field__draft text-xs tabular-nums text-gray-500 dark:text-gray-400">{{ footerText }}</span>
+                    <span class="il-date-range-field__draft text-xs tabular-nums text-il-neutral-500 dark:text-il-neutral-400">{{ footerText }}</span>
                     <Button size="sm" tone="cta" :disabled="!draftFrom" @click="apply">{{ WORDS.apply }}</Button>
                 </div>
             </div>

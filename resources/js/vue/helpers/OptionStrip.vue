@@ -62,7 +62,7 @@ function pick(value) {
 const FRAME = {
     pills: 'inline-flex items-center gap-2',
     // One pixel all round, so the surface meets the frame's own ring instead of floating inside it.
-    segmented: 'inline-flex items-center gap-0.5 rounded-full p-px ring-1 ring-inset ring-gray-200 dark:ring-white/10',
+    segmented: 'inline-flex items-center gap-0.5 rounded-full p-px ring-1 ring-inset ring-il-neutral-200 dark:ring-white/10',
 };
 
 // The frame is one pixel taller than its options on either side, so the surface never touches the ring.
@@ -73,16 +73,16 @@ const SIZES = {
 
 const OPTION = {
     pills: {
-        base: 'inline-flex items-center gap-1.5 rounded-full text-xs font-medium ring-1 ring-inset transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500',
-        on: 'bg-primary-500/10 text-primary-700 ring-primary-500/25 hover:bg-primary-500/15 dark:text-primary-300',
-        off: 'bg-transparent text-gray-500 ring-gray-200 hover:bg-gray-50 hover:text-gray-700 dark:text-gray-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-gray-200',
+        base: 'inline-flex items-center gap-1.5 rounded-full text-xs font-medium ring-1 ring-inset transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-il-primary-500',
+        on: 'bg-il-primary-500/10 text-il-primary-700 ring-il-primary-500/25 hover:bg-il-primary-500/15 dark:text-il-primary-300',
+        off: 'bg-transparent text-il-neutral-500 ring-il-neutral-200 hover:bg-il-neutral-50 hover:text-il-neutral-700 dark:text-il-neutral-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-il-neutral-200',
     },
     segmented: {
         // Inset like the pills variant: drawn outward the ring lands exactly on the frame's own edge.
-        base: 'relative z-10 inline-flex items-center gap-1.5 rounded-full text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500',
-        on: 'text-gray-900 dark:text-white',
-        off: 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200',
-        surface: 'bg-white shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10',
+        base: 'relative z-10 inline-flex items-center gap-1.5 rounded-full text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-il-primary-500',
+        on: 'text-il-neutral-900 dark:text-white',
+        off: 'text-il-neutral-500 hover:text-il-neutral-700 dark:text-il-neutral-400 dark:hover:text-il-neutral-200',
+        surface: 'bg-white shadow-sm ring-1 ring-il-neutral-200 dark:bg-il-neutral-800 dark:ring-white/10',
     },
 };
 
@@ -224,7 +224,7 @@ watch(() => [props.modelValue, props.options, props.variant], remeasure, { deep:
             >
                 <span
                     v-if="marker && variant === 'pills' && isTaken(option.value)"
-                    class="il-option-strip__marker h-1.5 w-1.5 shrink-0 rounded-full bg-primary-600 dark:bg-primary-400"
+                    class="il-option-strip__marker h-1.5 w-1.5 shrink-0 rounded-full bg-il-primary-600 dark:bg-il-primary-400"
                 ></span>
                 <component :is="option.icon" v-if="option.icon" class="shrink-0" :class="scale.glyph" />
                 {{ option.label }}

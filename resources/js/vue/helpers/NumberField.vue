@@ -81,7 +81,7 @@ const atLower = computed(() => lower.value !== null && current.value <= lower.va
 const atUpper = computed(() => upper.value !== null && current.value >= upper.value);
 
 const stepperFrame = computed(() => [
-    'inline-flex items-center overflow-hidden border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-800',
+    'inline-flex items-center overflow-hidden border border-il-neutral-200 bg-white dark:border-white/10 dark:bg-il-neutral-800',
     shapeClass.value,
     sizeClass.value,
     props.disabled ? 'cursor-not-allowed opacity-60' : '',
@@ -89,14 +89,14 @@ const stepperFrame = computed(() => [
 ]);
 
 const STEP_BUTTON =
-    'flex h-full shrink-0 items-center justify-center px-2 text-gray-500 transition-colors ' +
-    'hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 ' +
-    'disabled:hover:bg-transparent dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200 dark:active:bg-white/15';
+    'flex h-full shrink-0 items-center justify-center px-2 text-il-neutral-500 transition-colors ' +
+    'hover:bg-il-neutral-100 hover:text-il-neutral-700 active:bg-il-neutral-200 disabled:cursor-not-allowed disabled:opacity-40 ' +
+    'disabled:hover:bg-transparent dark:text-il-neutral-400 dark:hover:bg-white/5 dark:hover:text-il-neutral-200 dark:active:bg-white/15';
 
 /** The spin buttons of the native control would sit next to ours saying the same thing. */
 const STEP_INPUT =
     'h-full w-full min-w-0 border-0 bg-transparent px-1 text-center tabular-nums focus:outline-none ' +
-    'dark:text-gray-100 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none ' +
+    'dark:text-il-neutral-100 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none ' +
     '[&::-webkit-outer-spin-button]:appearance-none';
 
 function bump(direction) {
@@ -170,7 +170,7 @@ function onInput(event) {
     </span>
 
     <span v-else-if="affixed" class="il-number-field" data-variant="affixed" :data-disabled="disabled || undefined" :class="affixClasses">
-        <span v-if="prefix" class="il-number-field__affix pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-xs text-gray-500 dark:text-gray-400">
+        <span v-if="prefix" class="il-number-field__affix pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-xs text-il-neutral-500 dark:text-il-neutral-400">
             {{ prefix }}
         </span>
 
@@ -189,7 +189,7 @@ function onInput(event) {
             @input="$emit('update:modelValue', onInput($event))"
         />
 
-        <span v-if="suffix" class="il-number-field__affix pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-xs text-gray-500 dark:text-gray-400">
+        <span v-if="suffix" class="il-number-field__affix pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-xs text-il-neutral-500 dark:text-il-neutral-400">
             {{ suffix }}
         </span>
     </span>

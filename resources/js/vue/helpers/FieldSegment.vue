@@ -20,30 +20,30 @@ const props = defineProps({
 const { t } = useTranslations();
 
 const DOTS = {
-    ok: 'bg-emerald-500',
-    blocked: 'bg-amber-500',
-    critical: 'bg-red-500',
-    off: 'bg-gray-300 dark:bg-gray-600',
+    ok: 'bg-il-success-500',
+    blocked: 'bg-il-warning-500',
+    critical: 'bg-il-danger-500',
+    off: 'bg-il-neutral-300 dark:bg-il-neutral-600',
 };
 
 const ICONS = {
-    ok: { name: 's-check-circle', class: 'text-emerald-500 dark:text-emerald-400' },
-    blocked: { name: 's-exclamation-triangle', class: 'text-amber-500 dark:text-amber-400' },
-    critical: { name: 's-exclamation-triangle', class: 'text-red-500 dark:text-red-400' },
-    off: { name: 's-exclamation-circle', class: 'text-gray-300 dark:text-gray-600' },
+    ok: { name: 's-check-circle', class: 'text-il-success-500 dark:text-il-success-400' },
+    blocked: { name: 's-exclamation-triangle', class: 'text-il-warning-500 dark:text-il-warning-400' },
+    critical: { name: 's-exclamation-triangle', class: 'text-il-danger-500 dark:text-il-danger-400' },
+    off: { name: 's-exclamation-circle', class: 'text-il-neutral-300 dark:text-il-neutral-600' },
 };
 
 const VALUE_TONES = {
-    ok: 'text-emerald-700 dark:text-emerald-300',
-    blocked: 'text-amber-700 dark:text-amber-300',
-    critical: 'text-red-700 dark:text-red-300',
-    off: 'text-gray-500 dark:text-gray-400',
+    ok: 'text-il-success-700 dark:text-il-success-300',
+    blocked: 'text-il-warning-700 dark:text-il-warning-300',
+    critical: 'text-il-danger-700 dark:text-il-danger-300',
+    off: 'text-il-neutral-500 dark:text-il-neutral-400',
 };
 
 const useIcon = computed(() => props.indicator === 'icon');
 const iconMark = computed(() => (useIcon.value && ICONS[props.state]) || null);
 const dotClass = computed(() => (useIcon.value ? '' : DOTS[props.state] || ''));
-const valueClass = computed(() => (props.emphasize && VALUE_TONES[props.state]) || 'text-gray-900 dark:text-gray-100');
+const valueClass = computed(() => (props.emphasize && VALUE_TONES[props.state]) || 'text-il-neutral-900 dark:text-il-neutral-100');
 const filled = computed(() => props.value !== null && props.value !== '');
 
 const copied = ref(false);
@@ -80,7 +80,7 @@ onBeforeUnmount(() => clearTimeout(copyTimer));
         :data-error="error ? true : undefined"
     >
         <!-- Nothing here is ever cut off: the segment grows to its content instead. -->
-        <p class="il-field-segment__label whitespace-nowrap text-[10px] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ label }}</p>
+        <p class="il-field-segment__label whitespace-nowrap text-[10px] font-medium uppercase tracking-wide text-il-neutral-500 dark:text-il-neutral-400">{{ label }}</p>
 
         <p class="il-field-segment__value mt-0.5 flex items-center gap-1.5">
             <Icon
@@ -98,14 +98,14 @@ onBeforeUnmount(() => clearTimeout(copyTimer));
                 :class="dotClass"
             ></span>
 
-            <svg v-if="saving" class="h-3 w-3 shrink-0 animate-spin text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M12 3a9 9 0 1 0 9 9"/></svg>
+            <svg v-if="saving" class="h-3 w-3 shrink-0 animate-spin text-il-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M12 3a9 9 0 1 0 9 9"/></svg>
 
-            <span v-if="error" class="text-sm font-medium text-red-600 dark:text-red-400">{{ error }}</span>
+            <span v-if="error" class="text-sm font-medium text-il-danger-600 dark:text-il-danger-400">{{ error }}</span>
 
             <!-- The confirmation replaces the value instead of covering it — same spot, so the eye stays put. -->
             <span
                 v-else-if="copied"
-                class="whitespace-nowrap text-sm font-medium text-emerald-600 dark:text-emerald-400"
+                class="whitespace-nowrap text-sm font-medium text-il-success-600 dark:text-il-success-400"
             >{{ t('Copied!') }}</span>
 
             <span
@@ -114,7 +114,7 @@ onBeforeUnmount(() => clearTimeout(copyTimer));
                 :class="[valueClass, mono ? 'font-mono' : '']"
             >{{ value }}</span>
 
-            <span v-else class="flex items-baseline gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+            <span v-else class="flex items-baseline gap-1.5 text-sm text-il-neutral-500 dark:text-il-neutral-400">
                 –
                 <span v-if="interactive" class="text-xs underline decoration-dotted underline-offset-2">{{ t('Set') }}</span>
             </span>
@@ -124,14 +124,14 @@ onBeforeUnmount(() => clearTimeout(copyTimer));
             <template v-if="filled && !error && !copied">
                 <svg
                     v-if="affordance === 'menu'"
-                    class="h-3 w-3 shrink-0 text-gray-400 dark:text-gray-500"
+                    class="h-3 w-3 shrink-0 text-il-neutral-400 dark:text-il-neutral-500"
                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                 ><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/></svg>
 
                 <Icon
                     v-else-if="affordance === 'edit'"
                     name="o-pencil-square"
-                    class="h-3 w-3 shrink-0 text-gray-400 dark:text-gray-500"
+                    class="h-3 w-3 shrink-0 text-il-neutral-400 dark:text-il-neutral-500"
                 />
             </template>
         </p>

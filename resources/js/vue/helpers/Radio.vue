@@ -66,19 +66,19 @@ function pick() {
 
         <span
             aria-hidden="true"
-            class="il-radio__halo pointer-events-none absolute -inset-[11px] rounded-full opacity-0 transition-opacity duration-150 peer-hover:opacity-[0.08] peer-focus-visible:opacity-[0.14] peer-active:opacity-[0.18] peer-disabled:opacity-0"
-            :class="marked ? 'bg-primary-500' : 'bg-gray-500 dark:bg-gray-300'"
+            class="il-radio__halo pointer-events-none absolute -inset-[11px] rounded-full opacity-0 transition-opacity duration-[var(--il-duration-fast)] peer-hover:opacity-[0.08] peer-focus-visible:opacity-[0.14] peer-active:opacity-[0.18] peer-disabled:opacity-0"
+            :class="marked ? 'bg-il-primary-500' : 'bg-il-neutral-500 dark:bg-il-neutral-300'"
         ></span>
 
         <span
             aria-hidden="true"
-            class="il-radio__box pointer-events-none relative flex h-full w-full items-center justify-center rounded-full border-2 transition-colors duration-150"
+            class="il-radio__box pointer-events-none relative flex h-full w-full items-center justify-center rounded-full border-2 transition-colors duration-[var(--il-duration-fast)]"
             :class="marked
-                ? 'border-primary-600 bg-primary-600 dark:border-primary-500 dark:bg-primary-500'
-                : 'border-gray-400 bg-transparent dark:border-gray-500'"
+                ? 'border-il-primary-600 bg-il-primary-600 dark:border-il-primary-500 dark:bg-il-primary-500'
+                : 'border-il-neutral-400 bg-transparent dark:border-il-neutral-500'"
         >
             <span
-                class="il-radio__dot h-1.5 w-1.5 rounded-full bg-white transition-transform duration-150 ease-out"
+                class="il-radio__dot h-1.5 w-1.5 rounded-full bg-white transition-transform duration-[var(--il-duration-fast)] ease-out"
                 :class="marked ? 'scale-100' : 'scale-0'"
             ></span>
         </span>

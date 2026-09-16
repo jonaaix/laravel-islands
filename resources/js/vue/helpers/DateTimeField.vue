@@ -101,22 +101,22 @@ function publish(date) {
 /* ----- The frame, as NumberField draws it around its stepper ----- */
 
 const frame = computed(() => [
-    'inline-flex items-center overflow-hidden border bg-white dark:bg-gray-800 focus-within:ring-1',
+    'inline-flex items-center overflow-hidden border bg-white dark:bg-il-neutral-800 focus-within:ring-1',
     invalid.value
-        ? 'border-red-400 focus-within:border-red-500 focus-within:ring-red-500 dark:border-red-500/60'
-        : 'border-gray-200 focus-within:border-primary-500 focus-within:ring-primary-500 dark:border-white/10',
+        ? 'border-il-danger-400 focus-within:border-il-danger-500 focus-within:ring-il-danger-500 dark:border-il-danger-500/60'
+        : 'border-il-neutral-200 focus-within:border-il-primary-500 focus-within:ring-il-primary-500 dark:border-white/10',
     field.shapes[props.shape ?? field.shape] ?? field.shapes.rounded,
     field.sizes[props.size ?? field.size] ?? field.sizes.md,
     props.disabled ? 'cursor-not-allowed opacity-60' : '',
     attrs.class ?? '',
 ]);
 
-const FRAME_INPUT = 'h-full w-full min-w-0 border-0 bg-transparent px-2.5 tabular-nums focus:outline-none dark:text-gray-100';
+const FRAME_INPUT = 'h-full w-full min-w-0 border-0 bg-transparent px-2.5 tabular-nums focus:outline-none dark:text-il-neutral-100';
 
 const FRAME_BUTTON =
-    'flex h-full shrink-0 items-center justify-center px-2 text-gray-500 transition-colors ' +
-    'hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 ' +
-    'disabled:hover:bg-transparent dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200 dark:active:bg-white/15';
+    'flex h-full shrink-0 items-center justify-center px-2 text-il-neutral-500 transition-colors ' +
+    'hover:bg-il-neutral-100 hover:text-il-neutral-700 active:bg-il-neutral-200 disabled:cursor-not-allowed disabled:opacity-40 ' +
+    'disabled:hover:bg-transparent dark:text-il-neutral-400 dark:hover:bg-white/5 dark:hover:text-il-neutral-200 dark:active:bg-white/15';
 
 /* ----- Typing ----- */
 
@@ -306,7 +306,7 @@ function dayTone(cell) {
 
 function dayClass(cell) {
     if (sameDay(cell.date, draft.value)) return 'font-semibold';
-    if (sameDay(cell.date, today)) return 'ring-1 ring-inset ring-gray-200 dark:ring-white/10';
+    if (sameDay(cell.date, today)) return 'ring-1 ring-inset ring-il-neutral-200 dark:ring-white/10';
 
     return cell.inMonth ? '' : 'opacity-50';
 }
@@ -372,7 +372,7 @@ const pad = (n) => String(n).padStart(2, '0');
 
 const CLOCK_LIST =
     'slim-scrollbar absolute inset-y-0 w-1/2 overflow-y-auto px-2 py-2 ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500';
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-il-primary-500';
 
 const popoverWidth = computed(() => {
     // The clock alone still needs room for its footer.
@@ -431,7 +431,7 @@ const popoverWidth = computed(() => {
         </button>
 
         <Popover :anchor="anchor" :open="open" :width="popoverWidth" @close="close">
-            <div v-if="shortcuts.length" class="il-date-time-field__shortcuts flex flex-wrap gap-1.5 border-b border-gray-200 p-2 dark:border-white/10">
+            <div v-if="shortcuts.length" class="il-date-time-field__shortcuts flex flex-wrap gap-1.5 border-b border-il-neutral-200 p-2 dark:border-white/10">
                 <Button v-for="shortcut in shortcuts" :key="shortcut.label" size="sm" tone="secondary" @click="pickShortcut(shortcut)">{{ shortcut.label }}</Button>
             </div>
 
@@ -441,7 +441,7 @@ const popoverWidth = computed(() => {
                         <IconButton size="md" :label="navLabels[0]" :tooltip="false" @click="shiftView(-1)">
                             <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd"/></svg>
                         </IconButton>
-                        <Button size="sm" tone="ghost" :aria-label="WORDS.chooseMonth" class="font-semibold text-gray-900 dark:text-gray-100" @click="toggleHeading">
+                        <Button size="sm" tone="ghost" :aria-label="WORDS.chooseMonth" class="font-semibold text-il-neutral-900 dark:text-il-neutral-100" @click="toggleHeading">
                             {{ view === 'years' ? `${years[0]} – ${years[years.length - 1]}` : view === 'months' ? viewYear : heading }}
                         </Button>
                         <IconButton size="md" :label="navLabels[1]" :tooltip="false" @click="shiftView(1)">
@@ -470,7 +470,7 @@ const popoverWidth = computed(() => {
                         >{{ year }}</Button>
                     </div>
 
-                    <div v-if="view === 'days'" class="mt-2 grid grid-cols-7 text-center text-[10px] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    <div v-if="view === 'days'" class="mt-2 grid grid-cols-7 text-center text-[10px] font-medium uppercase tracking-wide text-il-neutral-500 dark:text-il-neutral-400">
                         <span v-for="name in weekdays" :key="name" class="py-1">{{ name }}</span>
                     </div>
 
@@ -499,7 +499,7 @@ const popoverWidth = computed(() => {
                 </div>
 
                 <!-- Absolutely placed inside a stretched box, so the columns take the calendar's height instead of dictating it. -->
-                <div v-if="hasClock" class="il-date-time-field__clock relative self-stretch border-gray-200 dark:border-white/10" :class="hasCalendar ? 'w-[136px] border-l' : 'h-72 w-full'">
+                <div v-if="hasClock" class="il-date-time-field__clock relative self-stretch border-il-neutral-200 dark:border-white/10" :class="hasCalendar ? 'w-[136px] border-l' : 'h-72 w-full'">
                     <div
                         ref="hourList"
                         role="listbox"
@@ -526,7 +526,7 @@ const popoverWidth = computed(() => {
                         role="listbox"
                         tabindex="0"
                         :aria-label="WORDS.minutes"
-                        :class="[CLOCK_LIST, 'right-0 border-l border-gray-200 dark:border-white/10']"
+                        :class="[CLOCK_LIST, 'right-0 border-l border-il-neutral-200 dark:border-white/10']"
                         @keydown="onClockKey($event, minutes, draftMinute, setMinute)"
                     >
                         <Button
@@ -545,10 +545,10 @@ const popoverWidth = computed(() => {
                 </div>
             </div>
 
-            <div class="il-date-time-field__footer flex items-center justify-between gap-2 border-t border-gray-200 p-2 dark:border-white/10">
+            <div class="il-date-time-field__footer flex items-center justify-between gap-2 border-t border-il-neutral-200 p-2 dark:border-white/10">
                 <Button size="sm" tone="ghost" @click="clear">{{ WORDS.clear }}</Button>
                 <div class="flex items-center gap-2">
-                    <span class="il-date-time-field__draft text-xs tabular-nums text-gray-500 dark:text-gray-400">{{ formatDisplay(draft, mode, locale) }}</span>
+                    <span class="il-date-time-field__draft text-xs tabular-nums text-il-neutral-500 dark:text-il-neutral-400">{{ formatDisplay(draft, mode, locale) }}</span>
                     <Button v-if="hasClock" size="sm" tone="cta" @click="apply">{{ WORDS.apply }}</Button>
                 </div>
             </div>

@@ -11,6 +11,7 @@
         "./vue": "./resources/js/vue/index.js",
         "./vue/helpers": "./resources/js/vue/helpers/index.js",
         "./vue/helpers/wysiwyg": "./resources/js/vue/helpers/wysiwyg.js",
+        "./css/theme.css": "./resources/css/theme.css",
         "./vite": "./vite.js"
     },
     "peerDependencies": {

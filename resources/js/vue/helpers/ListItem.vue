@@ -8,8 +8,8 @@ defineProps({
 });
 
 const TONES = {
-    muted: 'text-gray-500 dark:text-gray-400',
-    danger: 'text-red-600 dark:text-red-400',
+    muted: 'text-il-neutral-500 dark:text-il-neutral-400',
+    danger: 'text-il-danger-600 dark:text-il-danger-400',
 };
 </script>
 
@@ -21,14 +21,14 @@ const TONES = {
     -->
     <div class="il-list-item flex items-center justify-between gap-3 py-3">
         <div class="il-list-item__text min-w-0">
-            <p class="il-list-item__label text-sm font-medium text-gray-900 dark:text-gray-100">
+            <p class="il-list-item__label text-sm font-medium text-il-neutral-900 dark:text-il-neutral-100">
                 <slot name="label">{{ label }}</slot>
             </p>
             <p v-if="description || $slots.description" class="il-list-item__description text-xs" :class="TONES[descriptionTone] || TONES.muted" :data-tone="descriptionTone">
                 <slot name="description">{{ description }}</slot>
             </p>
         </div>
-        <div class="il-list-item__value min-w-0 text-right text-sm text-gray-700 dark:text-gray-300">
+        <div class="il-list-item__value min-w-0 text-right text-sm text-il-neutral-700 dark:text-il-neutral-300">
             <slot />
         </div>
     </div>

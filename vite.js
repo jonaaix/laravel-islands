@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { collectTranslationManifest, findIslandEntries, serializeManifest, writeManifest } from './vite/translations.js';
@@ -9,6 +9,9 @@ const REGISTRY_IMPORT = `${PACKAGE_NAME}/islands`;
 const REGISTRY_MODULE_ID = `\0${REGISTRY_IMPORT}`;
 const DEFAULT_ISLAND_PATH = 'app/Islands';
 const MANIFEST_FILE = 'islands-translations.json';
+const THEME_SOURCE = 'resources/css/theme.css';
+const DEFAULT_THEME_OUTPUT = 'resources/css/islands/theme.css';
+const THEME_HEADER = '/* Written by the @aaix/laravel-islands Vite plugin from the package\'s resources/css/theme.css. Do not edit; override its variables in your own stylesheet. */\n';
 
 const packageRoot = dirname(fileURLToPath(import.meta.url));
 
@@ -109,7 +112,35 @@ export default registry;
 `;
 }
 
-/** @param {{ path?: string, translations?: { manifest?: string } }} [options] */
+/**
+ * Copies the package's design tokens into the host project, where Tailwind's `@import` can
+ * reach them by a relative path — it does not know the Vite aliases. Returns the written path.
+ */
+export function writeThemeCss(root, source, output = DEFAULT_THEME_OUTPUT) {
+    const from = join(source, THEME_SOURCE);
+    const to = resolve(root, String(output));
+
+    if (!existsSync(from)) {
+        return null;
+    }
+
+    const content = THEME_HEADER + readFileSync(from, 'utf8');
+
+    if (existsSync(to) && readFileSync(to, 'utf8') === content) {
+        return to;
+    }
+
+    mkdirSync(dirname(to), { recursive: true });
+    writeFileSync(to, content);
+
+    return to;
+}
+
+/**
+ * @param {{ path?: string, translations?: { manifest?: string }, theme?: { output?: string | false } }} [options]
+ *        `theme.output` is where the design tokens land in the host (default
+ *        `resources/css/islands/theme.css`); `false` leaves them out.
+ */
 export default function islands(options = {}) {
     let root = process.cwd();
     let outDir = resolve(root, 'public/build');
@@ -117,9 +148,23 @@ export default function islands(options = {}) {
     let logger = console;
     let sources = new Set();
     let builtManifest = null;
+    let packageSource = packageRoot;
 
     const islandRoot = () => resolve(root, String(options.path ?? DEFAULT_ISLAND_PATH));
     const manifestPath = () => (options.translations?.manifest ? resolve(root, String(options.translations.manifest)) : join(outDir, MANIFEST_FILE));
+    const themeSourcePath = () => join(packageSource, THEME_SOURCE);
+
+    function syncTheme() {
+        if (options.theme?.output === false) {
+            return;
+        }
+
+        const written = writeThemeCss(root, packageSource, options.theme?.output ?? DEFAULT_THEME_OUTPUT);
+
+        if (written) {
+            logger.info(`[islands] design tokens: ${relative(root, written)}`);
+        }
+    }
 
     function report(manifest) {
         const keys = Object.values(manifest).reduce((sum, island) => sum + island.keys.length, 0);
@@ -158,6 +203,10 @@ export default function islands(options = {}) {
             outDir = resolve(config.root, config.build.outDir);
             command = config.command;
             logger = config.logger;
+            packageSource = resolvePackageSource(config.root);
+
+            // Before Tailwind reads the host's stylesheets, so their relative `@import` finds the tokens.
+            syncTheme();
         },
         async buildStart() {
             if (!existsSync(islandRoot())) {
@@ -210,8 +259,14 @@ export default function islands(options = {}) {
             };
             const concerns = (file) => sources.has(file) || file.startsWith(islandRoot());
 
+            server.watcher.add(themeSourcePath());
+
             for (const event of ['add', 'change', 'unlink']) {
                 server.watcher.on(event, (file) => {
+                    if (file === themeSourcePath()) {
+                        syncTheme();
+                    }
+
                     if (concerns(file)) {
                         refresh();
                     }

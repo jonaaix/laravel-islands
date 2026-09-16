@@ -17,7 +17,7 @@ const defaults = useButtonDefaults();
 
 const ENDS = {
     pill: '[&>*:first-child]:rounded-l-full [&>*:last-child]:rounded-r-full',
-    rounded: '[&>*:first-child]:rounded-l-md [&>*:last-child]:rounded-r-md',
+    rounded: '[&>*:first-child]:rounded-l-il-control [&>*:last-child]:rounded-r-il-control',
 };
 
 const ends = computed(() => ENDS[props.shape || defaults.shape] ?? ENDS.rounded);

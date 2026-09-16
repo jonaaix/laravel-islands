@@ -172,13 +172,13 @@ const ariaValue = computed(() => (stepped.value
             >
                 <span
                     aria-hidden="true"
-                    class="il-slider__rail pointer-events-none absolute inset-x-0 top-1/2 h-[2px] -translate-y-1/2 rounded-full bg-gray-300 dark:bg-gray-600"
+                    class="il-slider__rail pointer-events-none absolute inset-x-0 top-1/2 h-[2px] -translate-y-1/2 rounded-full bg-il-neutral-300 dark:bg-il-neutral-600"
                 ></span>
 
                 <span
                     v-if="marked"
                     aria-hidden="true"
-                    class="il-slider__fill pointer-events-none absolute left-0 top-1/2 h-[2px] -translate-y-1/2 rounded-full bg-primary-600 transition-[width] duration-150 dark:bg-primary-500"
+                    class="il-slider__fill pointer-events-none absolute left-0 top-1/2 h-[2px] -translate-y-1/2 rounded-full bg-il-primary-600 transition-[width] duration-[var(--il-duration-fast)] dark:bg-il-primary-500"
                     :style="{ width: positionPct + '%' }"
                 ></span>
 
@@ -187,10 +187,10 @@ const ariaValue = computed(() => (stepped.value
                         v-for="(opt, i) in options"
                         :key="'tick-' + opt.value"
                         aria-hidden="true"
-                        class="il-slider__tick pointer-events-none absolute top-1/2 h-[6px] w-[6px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-150"
+                        class="il-slider__tick pointer-events-none absolute top-1/2 h-[6px] w-[6px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-[var(--il-duration-fast)]"
                         :class="i <= currentIndex && marked
-                            ? 'bg-primary-600 dark:bg-primary-500'
-                            : 'bg-gray-400 dark:bg-gray-500'"
+                            ? 'bg-il-primary-600 dark:bg-il-primary-500'
+                            : 'bg-il-neutral-400 dark:bg-il-neutral-500'"
                         :style="{ left: (lastIndex === 0 ? 0 : (i / lastIndex) * 100) + '%' }"
                     ></span>
                 </template>
@@ -201,10 +201,10 @@ const ariaValue = computed(() => (stepped.value
                 >
                     <button
                         type="button"
-                        class="il-slider__handle handle focus-visible:ring-primary-500 peer relative z-10 flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full border-2 bg-white transition-colors duration-150 before:absolute before:-inset-[11px] before:rounded-full before:content-[''] focus-visible:outline-none focus-visible:ring-2 dark:bg-gray-900"
+                        class="il-slider__handle handle focus-visible:ring-il-primary-500 peer relative z-10 flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full border-2 bg-white transition-colors duration-[var(--il-duration-fast)] before:absolute before:-inset-[11px] before:rounded-full before:content-[''] focus-visible:outline-none focus-visible:ring-2 dark:bg-il-neutral-900"
                         :class="marked
-                            ? 'border-primary-600 bg-primary-600 dark:border-primary-500 dark:bg-primary-500'
-                            : 'border-gray-400 dark:border-gray-500'"
+                            ? 'border-il-primary-600 bg-il-primary-600 dark:border-il-primary-500 dark:bg-il-primary-500'
+                            : 'border-il-neutral-400 dark:border-il-neutral-500'"
                         style="pointer-events: auto"
                         role="slider"
                         tabindex="0"
@@ -220,8 +220,8 @@ const ariaValue = computed(() => (stepped.value
 
                     <span
                         aria-hidden="true"
-                        class="pointer-events-none absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 transition-opacity duration-150 peer-hover:opacity-[0.08] peer-focus-visible:opacity-[0.14] peer-active:opacity-[0.18] peer-disabled:opacity-0"
-                        :class="marked ? 'bg-primary-500' : 'bg-gray-500 dark:bg-gray-300'"
+                        class="pointer-events-none absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 transition-opacity duration-[var(--il-duration-fast)] peer-hover:opacity-[0.08] peer-focus-visible:opacity-[0.14] peer-active:opacity-[0.18] peer-disabled:opacity-0"
+                        :class="marked ? 'bg-il-primary-500' : 'bg-il-neutral-500 dark:bg-il-neutral-300'"
                     ></span>
                 </div>
             </div>
@@ -232,16 +232,16 @@ const ariaValue = computed(() => (stepped.value
                 <span
                     v-for="(opt, i) in options"
                     :key="'label-' + opt.value"
-                    class="absolute top-0 -translate-x-1/2 whitespace-nowrap transition-colors duration-150"
+                    class="absolute top-0 -translate-x-1/2 whitespace-nowrap transition-colors duration-[var(--il-duration-fast)]"
                     :class="i === currentIndex && marked
-                        ? 'font-semibold text-primary-700 dark:text-primary-300'
-                        : 'text-gray-500 dark:text-gray-400'"
+                        ? 'font-semibold text-il-primary-700 dark:text-il-primary-300'
+                        : 'text-il-neutral-500 dark:text-il-neutral-400'"
                     :style="{ left: (lastIndex === 0 ? 0 : (i / lastIndex) * 100) + '%' }"
                 >{{ opt.label }}</span>
             </div>
         </div>
 
-        <div v-else-if="minLabel || maxLabel" class="il-slider__labels mt-1.5 flex justify-between px-[9px] text-xs text-gray-500 dark:text-gray-400">
+        <div v-else-if="minLabel || maxLabel" class="il-slider__labels mt-1.5 flex justify-between px-[9px] text-xs text-il-neutral-500 dark:text-il-neutral-400">
             <span>{{ minLabel }}</span>
             <span>{{ maxLabel }}</span>
         </div>

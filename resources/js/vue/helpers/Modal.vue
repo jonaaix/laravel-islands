@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
         <Transition name="island-modal" @after-leave="releaseOverlay">
             <div
                 v-if="open"
-                class="il-modal fixed inset-0 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-[2px]"
+                class="il-modal fixed inset-0 flex items-center justify-center bg-il-neutral-900/50 p-4 backdrop-blur-[2px]"
                 :data-size="size"
                 :style="overlayStyle"
                 @click.self="onBackdrop"
@@ -131,14 +131,14 @@ onBeforeUnmount(() => {
                 tabindex="-1"
                 role="dialog"
                 aria-modal="true"
-                class="il-modal__panel island-modal-panel relative flex w-full flex-col overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none dark:bg-gray-900 dark:ring-white/10"
+                class="il-modal__panel island-modal-panel relative flex w-full flex-col overflow-hidden rounded-il-card bg-white shadow-2xl ring-1 ring-il-neutral-200 focus:outline-none dark:bg-il-neutral-900 dark:ring-white/10"
                 :class="[sizeClass, fills ? 'h-full' : 'max-h-full']"
             >
                 <!-- Without a title there is no bar to hang the close button in; it floats instead. -->
-                <div v-if="title || $slots.title" class="il-modal__header flex shrink-0 items-center gap-4 border-b border-gray-200 px-4 py-2 dark:border-white/10">
+                <div v-if="title || $slots.title" class="il-modal__header flex shrink-0 items-center gap-4 border-b border-il-neutral-200 px-4 py-2 dark:border-white/10">
                     <div class="min-w-0 flex-1">
                         <slot name="title">
-                            <p class="il-modal__title truncate text-sm font-semibold text-gray-900 dark:text-gray-100">{{ title }}</p>
+                            <p class="il-modal__title truncate text-sm font-semibold text-il-neutral-900 dark:text-il-neutral-100">{{ title }}</p>
                         </slot>
                     </div>
 
@@ -175,7 +175,7 @@ onBeforeUnmount(() => {
                     <slot />
                 </div>
 
-                <div v-if="$slots.footer" class="il-modal__footer flex shrink-0 justify-end gap-2 border-t border-gray-200 px-4 py-3 dark:border-white/10">
+                <div v-if="$slots.footer" class="il-modal__footer flex shrink-0 justify-end gap-2 border-t border-il-neutral-200 px-4 py-3 dark:border-white/10">
                     <slot name="footer" />
                 </div>
             </div>

@@ -13,12 +13,12 @@ const props = defineProps({
     height: { type: [String, Number], default: '1rem' },
     lines: { type: Number, default: 3 },
     /** The rounding of a block; a circle is always round. */
-    rounded: { type: String, default: 'rounded-md' },
+    rounded: { type: String, default: 'rounded-il-control' },
 });
 
 const px = (value) => (typeof value === 'number' ? `${value}px` : value);
 
-const SURFACE = 'animate-pulse bg-gray-200 dark:bg-white/10';
+const SURFACE = 'animate-pulse bg-il-neutral-200 dark:bg-white/10';
 
 const blockStyle = computed(() => ({ width: px(props.width), height: px(props.height) }));
 

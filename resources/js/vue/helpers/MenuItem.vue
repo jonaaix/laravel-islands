@@ -10,8 +10,8 @@ const props = defineProps({
 const emit = defineEmits(['click']);
 
 const TONES = {
-    default: 'text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-white/5',
-    danger: 'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10',
+    default: 'text-il-neutral-700 hover:bg-il-neutral-50 dark:text-il-neutral-200 dark:hover:bg-white/5',
+    danger: 'text-il-danger-600 hover:bg-il-danger-50 dark:text-il-danger-400 dark:hover:bg-il-danger-500/10',
 };
 
 const tag = computed(() => (props.href ? 'a' : 'button'));

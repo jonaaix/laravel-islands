@@ -124,7 +124,7 @@ function clear() {
                 <label
                     v-for="entry in entries"
                     :key="entry.value"
-                    class="il-multi-select__option flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-white/5"
+                    class="il-multi-select__option flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm text-il-neutral-700 transition-colors hover:bg-il-neutral-50 dark:text-il-neutral-200 dark:hover:bg-white/5"
                     :data-state="chosen.has(String(entry.value)) ? 'checked' : undefined"
                 >
                     <Checkbox :model-value="chosen.has(String(entry.value))" @update:model-value="toggle(entry.value)" />
@@ -133,7 +133,7 @@ function clear() {
                     </slot>
                 </label>
 
-                <p v-if="entries.length === 0" class="il-multi-select__empty px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+                <p v-if="entries.length === 0" class="il-multi-select__empty px-3 py-2 text-sm text-il-neutral-500 dark:text-il-neutral-400">
                     {{ emptyLabel }}
                 </p>
             </div>
@@ -142,7 +142,7 @@ function clear() {
                 v-if="count > 0"
                 type="button"
                 @click="clear"
-                class="il-multi-select__clear-option flex w-full items-center justify-center border-t border-gray-100 px-3 py-2 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 dark:border-white/10 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200"
+                class="il-multi-select__clear-option flex w-full items-center justify-center border-t border-il-neutral-100 px-3 py-2 text-xs font-medium text-il-neutral-500 transition-colors hover:bg-il-neutral-50 hover:text-il-neutral-700 dark:border-white/10 dark:text-il-neutral-400 dark:hover:bg-white/5 dark:hover:text-il-neutral-200"
             >{{ allLabel }}</button>
         </Popover>
     </div>

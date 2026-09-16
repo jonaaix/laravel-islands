@@ -10,10 +10,10 @@ defineProps({
     <component
         :is="href ? 'a' : 'div'"
         :href="href || undefined"
-        class="il-card card group flex flex-col overflow-hidden rounded-xl bg-white ring-1 ring-gray-200 transition-all dark:bg-gray-900 dark:ring-white/10"
+        class="il-card card group flex flex-col overflow-hidden rounded-il-card bg-white ring-1 ring-il-neutral-200 transition-all dark:bg-il-neutral-900 dark:ring-white/10"
         :class="[
-            interactive ? 'hover:ring-gray-300 dark:hover:ring-white/20' : '',
-            active ? 'ring-primary-500/40 dark:ring-primary-400/40 ring-2' : '',
+            interactive ? 'hover:ring-il-neutral-300 dark:hover:ring-white/20' : '',
+            active ? 'ring-il-primary-500/40 dark:ring-il-primary-400/40 ring-2' : '',
         ]"
         :data-state="active ? 'active' : undefined"
         :data-interactive="interactive || undefined"
@@ -30,7 +30,7 @@ defineProps({
 
         <div
             v-if="$slots.footer"
-            class="il-card__footer mt-auto border-t border-gray-100 px-4 py-2.5 dark:border-white/10"
+            class="il-card__footer mt-auto border-t border-il-neutral-100 px-4 py-2.5 dark:border-white/10"
         >
             <slot name="footer" />
         </div>

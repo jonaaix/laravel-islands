@@ -16,7 +16,7 @@ const initial = computed(() => props.name.trim().charAt(0));
         than as a value with something appended. Without a picture the initial keeps the shape,
         so a row of these never loses its rhythm over a missing image.
     -->
-    <span class="il-person-chip person-chip inline-flex items-center gap-1 rounded-full bg-gray-100 py-0.5 pl-0.5 pr-1.5 text-[10px] font-medium text-gray-600 dark:bg-white/10 dark:text-gray-300">
+    <span class="il-person-chip person-chip inline-flex items-center gap-1 rounded-full bg-il-neutral-100 py-0.5 pl-0.5 pr-1.5 text-[10px] font-medium text-il-neutral-600 dark:bg-white/10 dark:text-il-neutral-300">
         <img
             v-if="image"
             :src="image"
@@ -27,7 +27,7 @@ const initial = computed(() => props.name.trim().charAt(0));
         <span
             v-else
             aria-hidden="true"
-            class="il-person-chip__initial flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-gray-300 text-[8px] font-semibold uppercase text-white dark:bg-white/20"
+            class="il-person-chip__initial flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-il-neutral-300 text-[8px] font-semibold uppercase text-white dark:bg-white/20"
         >{{ initial }}</span>
 
         {{ name }}
