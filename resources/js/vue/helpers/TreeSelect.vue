@@ -38,7 +38,6 @@ const props = defineProps({
     emptyLabel: { type: String, default: '' },
     countLabelFor: { type: Function, default: null },
     hintLabel: { type: String, default: '' },
-    /** `field` is a plain form control; `filter` and `filter-card` colour a set value, as on Combobox. */
     variant: { type: String, default: 'field' },
 });
 
