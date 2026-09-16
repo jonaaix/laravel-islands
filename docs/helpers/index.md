@@ -78,7 +78,7 @@ as a yes.
 | Page | Components |
 | --- | --- |
 | [Buttons & Fields](/helpers/buttons-and-fields) | `Button`, `ButtonGroup`, `IconButton`, `EditButton`, `vRipple`, `TextField`, `NumberField`, `TextArea`, `SelectField`, `FileField`, `DateTimeField`, `Checkbox`, `Switch`, `Radio`, `RadioGroup`, `Slider`, `ColorPicker`, `FieldCaption`, `FieldGroup`; `WysiwygEditor` from `@aaix/laravel-islands/vue/helpers/wysiwyg` |
-| [Selects & Inline Editing](/helpers/selects-and-editing) | `Combobox`, `MultiSelect`, `TreeSelect`, `OptionStrip`, `InlineEdit`, `FieldSegment`, `EditSegment`, `ChoiceSegment` |
+| [Selects & Inline Editing](/helpers/selects-and-editing) | `Combobox`, `MultiCombobox`, `MultiSelect`, `TreeSelect`, `OptionStrip`, `InlineEdit`, `FieldSegment`, `EditSegment`, `ChoiceSegment` |
 | [Overlays & Display](/helpers/overlays-and-display) | `Modal`, `FormModal`, `ConfirmHost`, `ToastHost`, `Popover`, `Menu`, `MenuItem`, `Tooltip`, `Badge`, `PersonChip`, `Tabs`, `Card`, `CardMedia`, `List`, `ListItem`, `Table` |
 
 ## Icons

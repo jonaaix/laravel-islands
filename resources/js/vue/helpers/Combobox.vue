@@ -2,6 +2,8 @@
 import { computed, nextTick, ref, watch } from 'vue';
 import IconButton from './IconButton.vue';
 import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
+import { selectSkin } from './selectSkins.js';
+import { useOptionSearch } from '../composables/useOptionSearch.js';
 import { useTranslations } from '../composables/useTranslations.js';
 
 const props = defineProps({
@@ -44,15 +46,12 @@ const searchInput = ref(null);
 const highlighted = ref(0);
 const triggerEl = ref(null);
 const menuStyle = ref({});
-const remoteOptions = ref(null);
-const loadingOptions = ref(false);
 const picked = ref(null);
 const overlayId = ref(null);
 const backdropStyle = computed(() => overlayId.value !== null ? { zIndex: overlayZIndex(overlayId.value) } : {});
 const panelStyle = computed(() => overlayId.value !== null ? { zIndex: overlayZIndex(overlayId.value) + 1 } : {});
 
-let fetchId = 0;
-let fetchTimer = null;
+const { loadingOptions, known, filtered, reset } = useOptionSearch(props, query);
 
 function updatePosition() {
     const el = triggerEl.value;
@@ -68,47 +67,7 @@ function updatePosition() {
     menuStyle.value = { top: `${r.bottom + 4}px`, left: `${left}px`, width: `${props.menuWidth}px` };
 }
 
-/** A list may carry more than a value and a label — whatever it adds reaches the slot. */
-function normalize(raw) {
-    if (Array.isArray(raw)) {
-        return raw.map((option) => ({ ...option }));
-    }
-
-    return Object.entries(raw ?? {}).map(([value, label]) => ({ value, label }));
-}
-
-const normalizedOptions = computed(() => normalize(props.options));
-
-const FOCUS = 'focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500';
-
-const VARIANTS = {
-    field: {
-        base: `flex h-9 items-center rounded-md border pl-2.5 pr-1 text-sm transition-colors ${FOCUS}`,
-        on: 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50 dark:border-white/10 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-white/5',
-        off: 'border-gray-200 bg-white text-gray-400 hover:bg-gray-50 dark:border-white/10 dark:bg-gray-900 dark:text-gray-500 dark:hover:bg-white/5',
-        clear: 'hover:bg-gray-100 dark:hover:bg-white/10',
-    },
-    filter: {
-        base: `flex h-9 items-center rounded-md border pl-2.5 pr-1 text-sm transition-colors ${FOCUS}`,
-        on: 'border-primary-200 bg-primary-50 text-primary-800 dark:border-primary-500/30 dark:bg-primary-500/15 dark:text-primary-200',
-        off: 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-white/10 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-white/5',
-        clear: 'hover:bg-primary-200/60 dark:hover:bg-primary-500/25',
-    },
-    'filter-card': {
-        base: `flex h-9 items-center rounded-lg pl-3 pr-1.5 text-sm font-medium transition-colors ${FOCUS}`,
-        on: 'bg-primary-500/15 text-primary-800 dark:text-primary-200',
-        off: 'bg-gray-50 text-gray-700 hover:bg-gray-100 dark:bg-white/5 dark:text-gray-200 dark:hover:bg-white/10',
-        clear: 'hover:bg-primary-200/60 dark:hover:bg-primary-500/25',
-    },
-    'filter-pill': {
-        base: `flex h-8 items-center rounded-full pl-3 pr-1 text-xs font-medium ring-1 ring-inset transition-colors ${FOCUS}`,
-        on: 'bg-primary-500/10 text-primary-700 ring-primary-500/25 hover:bg-primary-500/15 dark:text-primary-300',
-        off: 'bg-transparent text-gray-500 ring-gray-200 hover:bg-gray-50 hover:text-gray-700 dark:text-gray-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-gray-200',
-        clear: 'hover:bg-primary-200/60 dark:hover:bg-primary-500/25',
-    },
-};
-
-const skin = computed(() => VARIANTS[props.variant] ?? VARIANTS.field);
+const skin = computed(() => selectSkin(props.variant, 'field'));
 
 const hasValue = computed(() => props.modelValue !== 0 && props.modelValue !== '' && props.modelValue != null);
 const selectedName = computed(() => {
@@ -119,133 +78,20 @@ const selectedName = computed(() => {
         return picked.value.label;
     }
 
-    const match = [...normalizedOptions.value, ...(remoteOptions.value ?? [])]
-        .find((option) => String(option.value) === target)?.label;
+    const match = known.value.find((option) => String(option.value) === target)?.label;
 
     return match ?? props.selectedLabel ?? '';
 });
 
-const filtered = computed(() => {
-    const q = query.value.trim().toLowerCase();
-    const cap = props.maxOptions > 0 ? props.maxOptions : Infinity;
-
-    // A remote source has already filtered server-side.
-    if (props.fetchOptions && q !== '') {
-        return (remoteOptions.value ?? []).slice(0, cap);
-    }
-
-    const hit = (option) => String(option.label).toLowerCase().includes(q)
-        || (props.searchValues && String(option.value).toLowerCase().includes(q));
-
-    if (!q) {
-        return normalizedOptions.value.slice(0, cap);
-    }
-
-    if (!props.keepAncestors) {
-        // Ranked before the cap, or an exact match past the last shown entry is cut off.
-        return normalizedOptions.value
-            .filter(hit)
-            .sort((a, b) => rank(a, q) - rank(b, q))
-            .slice(0, cap);
-    }
-
-    return withAncestors(normalizedOptions.value, hit).slice(0, cap);
-});
-
-// A bare substring hit ranks last, or a typed-out code sits below every name containing it.
-function rank(option, q) {
-    const value = String(option.value).toLowerCase();
-    const label = String(option.label).toLowerCase();
-
-    if (value === q) {
-        return 0;
-    }
-
-    if (label === q) {
-        return 1;
-    }
-
-    if (label.startsWith(q)) {
-        return 2;
-    }
-
-    return value.startsWith(q) ? 3 : 4;
-}
-
-/**
- * Every match, plus the entry each one sits under — found by walking back to the nearest
- * shallower entry, since a flat list in tree order is all the depth tells us.
- */
-function withAncestors(options, hit) {
-    const keep = new Set();
-
-    options.forEach((option, index) => {
-        if (!hit(option)) {
-            return;
-        }
-
-        keep.add(index);
-
-        let depth = Number(option.depth ?? 0);
-
-        for (let above = index - 1; above >= 0 && depth > 0; above--) {
-            const found = Number(options[above].depth ?? 0);
-
-            if (found < depth) {
-                keep.add(above);
-                depth = found;
-            }
-        }
-    });
-
-    return [...keep].sort((a, b) => a - b).map((index) => options[index]);
-}
-
-watch(query, (value) => {
+watch(query, () => {
     highlighted.value = 0;
-
-    if (!props.fetchOptions) {
-        return;
-    }
-
-    clearTimeout(fetchTimer);
-    const q = value.trim();
-
-    if (q === '') {
-        remoteOptions.value = null;
-        loadingOptions.value = false;
-
-        return;
-    }
-
-    loadingOptions.value = true;
-    fetchTimer = setTimeout(async () => {
-        const id = ++fetchId;
-
-        try {
-            const result = await props.fetchOptions(q);
-
-            if (id === fetchId) {
-                remoteOptions.value = normalize(result);
-            }
-        } catch (e) {
-            if (id === fetchId) {
-                remoteOptions.value = [];
-            }
-        } finally {
-            if (id === fetchId) {
-                loadingOptions.value = false;
-            }
-        }
-    }, props.fetchDelay);
 });
 
 function toggle() {
     open.value = !open.value;
     if (open.value) {
         query.value = '';
-        remoteOptions.value = null;
-        loadingOptions.value = false;
+        reset();
         highlighted.value = 0;
         overlayId.value = registerOverlay();
         updatePosition();

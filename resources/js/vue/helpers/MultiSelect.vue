@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import Checkbox from './Checkbox.vue';
 import IconButton from './IconButton.vue';
 import Popover from './Popover.vue';
+import { selectSkin } from './selectSkins.js';
 
 /**
  * Several answers to one question, where the Combobox takes exactly one.
@@ -37,30 +38,7 @@ const emit = defineEmits(['update:modelValue']);
 const open = ref(false);
 const triggerEl = ref(null);
 
-const FOCUS = 'focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500';
-
-const VARIANTS = {
-    field: {
-        base: `flex h-9 items-center rounded-md border pl-2.5 pr-1 text-sm transition-colors ${FOCUS}`,
-        on: 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50 dark:border-white/10 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-white/5',
-        off: 'border-gray-200 bg-white text-gray-400 hover:bg-gray-50 dark:border-white/10 dark:bg-gray-900 dark:text-gray-500 dark:hover:bg-white/5',
-        clear: 'hover:bg-gray-100 dark:hover:bg-white/10',
-    },
-    filter: {
-        base: `flex h-9 items-center rounded-md border pl-2.5 pr-1 text-sm transition-colors ${FOCUS}`,
-        on: 'border-primary-200 bg-primary-50 text-primary-800 dark:border-primary-500/30 dark:bg-primary-500/15 dark:text-primary-200',
-        off: 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-white/10 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-white/5',
-        clear: 'hover:bg-primary-200/60 dark:hover:bg-primary-500/25',
-    },
-    'filter-card': {
-        base: `flex h-9 items-center rounded-lg pl-3 pr-1.5 text-sm font-medium transition-colors ${FOCUS}`,
-        on: 'bg-primary-500/15 text-primary-800 dark:text-primary-200',
-        off: 'bg-gray-50 text-gray-700 hover:bg-gray-100 dark:bg-white/5 dark:text-gray-200 dark:hover:bg-white/10',
-        clear: 'hover:bg-primary-200/60 dark:hover:bg-primary-500/25',
-    },
-};
-
-const skin = computed(() => VARIANTS[props.variant] ?? VARIANTS.filter);
+const skin = computed(() => selectSkin(props.variant, 'filter'));
 
 const entries = computed(() => (Array.isArray(props.options)
     ? props.options.map((option) => ({ value: option.value, label: String(option.label ?? option.value) }))

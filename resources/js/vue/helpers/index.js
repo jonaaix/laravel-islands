@@ -8,6 +8,8 @@ export { default as Slider } from './Slider.vue';
 export { default as Card } from './Card.vue';
 export { default as CardMedia } from './CardMedia.vue';
 export { default as MultiSelect } from './MultiSelect.vue';
+export { default as MultiCombobox } from './MultiCombobox.vue';
+export { SELECT_SKINS, selectSkin } from './selectSkins.js';
 export { default as OptionStrip } from './OptionStrip.vue';
 export { default as TreeSelect } from './TreeSelect.vue';
 export { nextRadioGroupName, RADIO_GROUP_KEY } from './radioGroup.js';

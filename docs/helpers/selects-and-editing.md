@@ -32,9 +32,48 @@ A searchable single select; the list filters as you type and can be fed from the
 
 Slots: `#selected` (`{ keyValue, label }`), `#option` (`{ keyValue, label, option }`).
 
+## `MultiCombobox`
+
+Several values from a searchable list: the `Combobox`'s search, ranking, tree and server
+fetching, with checkboxes. The list stays open while picking; the trigger names the first
+few picks, then trails off.
+
+```vue
+<MultiCombobox
+    v-model="state.machines"
+    :options="props.machines"
+    :placeholder="t('Machine')"
+    :search-placeholder="t('Search machines…')"
+    :all-label="t('All machines')"
+    :empty-label="t('No match')"
+    variant="filter"
+/>
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `options` | `{}` | As for `Combobox`: a map, or `{ value, label, depth?, disabled? }[]`. A `disabled` entry is a heading; `depth` indents. |
+| `placeholder`, `searchPlaceholder` | `'Select…'`, `'Search…'` | |
+| `allLabel`, `emptyLabel`, `loadingLabel` | `'All'`, `'No match'`, `''` | `allLabel` names the clear control and the row under the list. |
+| `clearOption` | `true` | The row under the list that lets go of every pick. |
+| `searchValues`, `maxOptions`, `keepAncestors` | `false`, `60`, `false` | As for `Combobox`. |
+| `fetchOptions(query)`, `fetchDelay` | `null`, `150` | As for `Combobox`. A pick from a fetched list keeps its label after the list is gone. |
+| `previewLimit`, `previewChars` | `3`, `14` | How many picks the trigger names, and how long each may be. |
+| `variant` | `'field'` | `field`, `filter`, `filter-card` or `filter-pill`. |
+| `menuWidth`, `menuHeight` | `288`, `240` | |
+
+The model is an array; picks keep the order they were made in, the trigger names them in the
+order the options are offered. Events: `update:modelValue`, `open`, `close`. Slots:
+`#option` (`{ keyValue, label, option, checked }`), `#selected` (`{ values, labels, count }`).
+Exposes `show()` and `close()`. Arrow keys move, Enter ticks, Escape closes.
+
+All three selects draw their trigger from `selectSkin(variant)` in `selectSkins.js`, and the
+searchable ones share `useOptionSearch(props, query)` — a custom picker can reuse both.
+
 ## `MultiSelect`
 
-Several values from one list; the trigger names the first few picks, then trails off.
+Several values from one short list without a search field; for a list worth searching, take
+`MultiCombobox`. The trigger names the first few picks, then trails off.
 
 | Prop | Default | Purpose |
 | --- | --- | --- |

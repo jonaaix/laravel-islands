@@ -106,7 +106,9 @@ table but not the other is a bug in waiting.
 | --- | --- |
 | `SearchInput` | the search field bound to `state.q` via `onSearchInput` / `clearSearch` |
 | `Combobox` | single-value select with search; `variant` = `field` · `filter` · `filter-card`; supports async `fetchOptions`; an option with `depth` nests under the row above, one with `disabled: true` is a heading that cannot be picked |
-| `MultiSelect` | several values from one list |
+| `MultiCombobox` | several values from a searchable list — the `Combobox`'s search, `fetchOptions`, `depth` and headings, with checkboxes; the model is an array, the trigger names the first `previewLimit` picks |
+| `MultiSelect` | several values from one short list, no search field |
+| `useOptionSearch(props, query)` / `selectSkin(variant)` | what the selects are built from — the filtered, ranked, server-fetched option list and the trigger skins — for a picker of your own |
 | `TreeSelect` | a hierarchy with a searchable path, cached per URL |
 | `OptionStrip` | micro switcher — `variant` = `pills` (row of switches) or `segmented` (one question, n answers); `size` = `md` beside fields, `sm` in a dense toolbar beside `Button size="sm"` |
 | `FilterPanel` | the panel beside the table, docking with the toolbar |

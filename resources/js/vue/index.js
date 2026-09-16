@@ -73,6 +73,7 @@ export { useIsland } from './composables/useIsland.js';
 export { useIslandState } from './composables/useIslandState.js';
 export { useEcho } from './composables/useEcho.js';
 export { useModel } from './composables/useModel.js';
+export { useOptionSearch } from './composables/useOptionSearch.js';
 export { useSortableTiles } from './composables/useSortableTiles.js';
 export { useTranslations } from './composables/useTranslations.js';
 export { useViewWidth, VIEW_BASE_WIDTH, VIEW_TOOLBAR_HEIGHT } from './composables/useViewWidth.js';
