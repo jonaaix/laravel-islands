@@ -195,6 +195,41 @@ years, so a far-off date is three clicks away.
 `formatDateTime`, `parseTypedDateTime`, `toDateTimeModel` and `parseDateTimeModel` are exported
 alongside for a view that wants the same wording or parsing elsewhere.
 
+### `DateRangeField`
+
+A span of days. Two months side by side: the first click starts the span, the second ends
+it, the footer applies it; shortcuts beside the calendar apply at once. The `field` variant
+also understands a typed span (`8.9. – 16.9.2026`, `2026-09-08 - 2026-09-16`, a single day).
+The model is `{ from, to }` as `YYYY-MM-DD` strings, `null` while empty, in the browser's
+local time.
+
+```vue
+<DateRangeField
+    v-model="state.created"
+    variant="filter"
+    :placeholder="t('Created')"
+    :shortcuts="[
+        { label: t('Today'), from: today(), to: today() },
+        { label: t('Last 7 days'), range: () => lastDays(7) },
+        { label: t('This month'), range: thisMonth },
+    ]"
+    :labels="{ clear: t('Clear'), apply: t('Apply') }"
+/>
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `variant` | `'field'` | `field` is a form control with a typed input; `filter`, `filter-card` and `filter-pill` are toolbar triggers that colour a set span, as the selects do. |
+| `months` | `2` | How many months the calendar shows side by side. |
+| `min`, `max` | `null` | Bounds as `YYYY-MM-DD`; days outside cannot be picked. |
+| `shortcuts` | `[]` | `{ label, from, to }` rows beside the calendar, or `{ label, range }` with `range()` returning `{ from, to }`; model strings or Dates. The active one carries the primary tint. |
+| `weekStart`, `locale` | `1`, browser | As for `DateTimeField`. |
+| `shape`, `size`, `disabled`, `placeholder` | | As for the other fields. |
+| `labels` | `{}` | `open`, `previousMonth`, `nextMonth`, `clear`, `apply`. |
+
+Arrow keys move through the days, Enter picks, Escape closes. `formatDayRange(from, to, locale)`
+is exported alongside: `8 – 16 Sep 2026`, or the single day when both are the same.
+
 ### `Checkbox`
 
 Props: `indeterminate`, `ariaLabel` (required when no visible label sits beside it).

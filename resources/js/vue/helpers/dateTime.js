@@ -48,6 +48,18 @@ export function formatDisplay(date, mode, locale) {
     return `${new Intl.DateTimeFormat(locale, day).format(date)} · ${new Intl.DateTimeFormat(locale, clock).format(date)}`;
 }
 
+/** Two days as one phrase — `8 – 16 Sep 2026` — or the single day when both are the same. */
+export function formatDayRange(from, to, locale) {
+    const formatter = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' });
+
+    if (!from && !to) return '';
+    if (!from || !to || sameDay(from, to)) return formatter.format(from ?? to);
+
+    return typeof formatter.formatRange === 'function'
+        ? formatter.formatRange(from, to)
+        : `${formatter.format(from)} – ${formatter.format(to)}`;
+}
+
 /**
  * What a person types: `8.9.2026 14:00`, `8.9. 14:00`, `08.09.26`, `2026-09-08 14:00`,
  * `2026-09-08T14:00`, or just `14:00`, which keeps the day the field already holds.

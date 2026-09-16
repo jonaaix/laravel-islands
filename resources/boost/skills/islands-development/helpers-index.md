@@ -45,6 +45,7 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 | --- | --- |
 | `TextField`, `NumberField`, `TextArea`, `SelectField`, `FileField` | standard form fields on the shared 36 px control-height frame — `NumberField` takes `prefix`/`suffix` for a unit and `stepper` for a minus/plus pair |
 | `DateTimeField` | a moment, a day or a time (`mode`) — typed input in the common shapes plus a calendar with two clock columns (`minuteStep`, default 5); `min`/`max`, `shortcuts` rows the application supplies, 24-hour clock, browser local time; model is ISO · `YYYY-MM-DD` · `HH:MM`; wording via `labels`. Never the browser's native date input |
+| `DateRangeField` | a span of days — two months side by side, first click starts, second ends, footer applies; `shortcuts` rows the application supplies apply at once; `variant` = `field` (typed input) · `filter` · `filter-card` · `filter-pill` (toolbar trigger); model `{ from, to }` as `YYYY-MM-DD`. Replaces two native date inputs for from/until |
 | `ColorPicker` | hex field plus swatch that opens a picker — saturation/value plane, hue rail, optional `alpha` rail, `presets` palette (a curated default ships), format switch hex · rgb · hsl · hsv with a copy button; model is a hex string; wording via `labels` |
 | `Checkbox`, `Switch`, `Radio`, `RadioGroup`, `Slider` | boolean and choice controls — `Slider` takes `options` for named stops or `min`/`max`/`step` for a number, and emits `commit` when the pointer lets go |
 | `ChoiceSegment`, `EditSegment` | segmented controls for inline choice / edit rows |
@@ -57,6 +58,7 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 | Import | Purpose |
 | --- | --- |
 | `Badge` | one-line status word — `tone`, `icon`, `numeric` |
+| `Skeleton` | the shape of content not yet loaded — `variant` = `block` · `text` (`lines`) · `circle`; sized with `width`/`height`; a loading view is the finished view in grey, never a spinner on an empty page |
 | `PersonChip` | avatar with a name-based fallback |
 | `List`, `ListItem` | hairline-divided list; item takes `label`, `description`, `descriptionTone` |
 | `Table` | thin frame over a native `<table>` — uniform header typography, no silent truncation |

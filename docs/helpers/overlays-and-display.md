@@ -151,6 +151,24 @@ is not clipped. `IconButton` and `EditButton` wrap themselves in one.
 Props: `tone` (`gray` · `emerald` · `amber` · `red` · `blue` · `violet` · `primary`),
 `icon` (a name from your set), `numeric` (tabular figures for a count).
 
+## `Skeleton`
+
+The shape of content that has not arrived. It reserves the room, so nothing jumps when the
+data lands — a loading view is the finished view drawn in grey, never a spinner on an empty page.
+
+```vue
+<Skeleton :height="36" class="mb-3" />
+<Skeleton variant="text" :lines="3" width="24rem" />
+<Skeleton variant="circle" :width="40" />
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `variant` | `'block'` | `block` · `text` · `circle`. |
+| `width`, `height` | `'100%'`, `'1rem'` | CSS lengths; a number is pixels. A circle takes `width` for both. |
+| `lines` | `3` | Rows of a `text` skeleton; the last one stops short like a paragraph. |
+| `rounded` | `'rounded-md'` | The rounding of a block. |
+
 ## `PersonChip`
 
 An avatar with the name beside it; without a picture the initial keeps the shape.
