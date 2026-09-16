@@ -2,6 +2,8 @@
 import { computed, nextTick, ref, watch } from 'vue';
 import IconButton from './IconButton.vue';
 import Popover from './Popover.vue';
+import { selectSkin } from './selectSkins.js';
+import { useTheme } from './theme.js';
 
 async function fetchOptions(url) {
     const response = await fetch(url, {
@@ -36,6 +38,8 @@ const props = defineProps({
     emptyLabel: { type: String, default: '' },
     countLabelFor: { type: Function, default: null },
     hintLabel: { type: String, default: '' },
+    /** `field` is a plain form control; `filter` and `filter-card` colour a set value, as on Combobox. */
+    variant: { type: String, default: 'field' },
 });
 
 const emit = defineEmits(['update:modelValue', 'open', 'close']);
@@ -66,6 +70,8 @@ const picked = computed(
 );
 
 const path = computed(() => picked.value?.path ?? props.selectedPath ?? '');
+
+const skin = computed(() => selectSkin(props.variant, 'field', useTheme('select').skins));
 
 // Not `picked`: the options arrive with the first open, so until then a selection is known
 // only from the outside, and the clear button would be missing.
@@ -270,49 +276,50 @@ defineExpose({ show, close, loadOptions, refresh });
     <div class="il-tree-select tree-select" :data-state="open ? 'open' : 'closed'" :data-disabled="disabled || undefined">
         <div ref="trigger" class="relative">
             <slot name="trigger" :open="show" :path="path" :segments="segments" :picked="picked">
-                <button
-                    type="button"
+                <div
+                    :class="['il-tree-select__trigger', skin.base, hasValue ? skin.on : skin.off, disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer']"
+                    :data-variant="variant"
                     @click.stop="show()"
-                    :disabled="disabled"
-                    :aria-expanded="open"
-                    class="il-tree-select__trigger flex h-il-control w-full items-center gap-1 rounded-il-control border border-il-neutral-200 bg-white pl-2.5 text-left text-sm transition-colors hover:bg-il-neutral-50 focus:border-il-primary-500 focus:outline-none focus:ring-1 focus:ring-il-primary-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/10 dark:bg-il-neutral-900 dark:hover:bg-white/5"
-                    :class="clearable && hasValue ? 'pr-8' : 'pr-2'"
                 >
-                    <span v-if="segments.length" class="flex min-w-0 flex-1 items-center gap-x-1 overflow-hidden">
-                        <span
-                            v-if="segments.length > 1"
-                            class="flex min-w-0 shrink items-center gap-x-1 overflow-hidden text-il-neutral-500 dark:text-il-neutral-400"
-                        >
-                            <template v-for="(segment, i) in segments.slice(0, -1)" :key="i">
-                                <span class="truncate">{{ segment }}</span>
-                                <svg class="h-3 w-3 shrink-0 text-il-neutral-300 dark:text-il-neutral-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>
-                            </template>
+                    <button
+                        type="button"
+                        :disabled="disabled"
+                        :aria-expanded="open"
+                        class="flex min-w-0 flex-1 items-center gap-1 text-left focus:outline-none disabled:cursor-not-allowed"
+                    >
+                        <span v-if="segments.length" class="flex min-w-0 flex-1 items-center gap-x-1 overflow-hidden">
+                            <span v-if="segments.length > 1" class="flex min-w-0 shrink items-center gap-x-1 overflow-hidden opacity-60">
+                                <template v-for="(segment, i) in segments.slice(0, -1)" :key="i">
+                                    <span class="truncate">{{ segment }}</span>
+                                    <svg class="h-3 w-3 shrink-0 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>
+                                </template>
+                            </span>
+
+                            <span class="max-w-full shrink-0 truncate">{{ segments[segments.length - 1] }}</span>
                         </span>
+                        <span v-else class="min-w-0 flex-1 truncate">{{ placeholder }}</span>
+                    </button>
 
-                        <span class="max-w-full shrink-0 truncate text-il-neutral-900 dark:text-il-neutral-100">{{ segments[segments.length - 1] }}</span>
-                    </span>
-                    <span v-else class="min-w-0 flex-1 truncate text-il-neutral-400 dark:text-il-neutral-500">{{ placeholder }}</span>
-
-                    <svg v-if="!clearable || !hasValue" class="h-4 w-4 shrink-0 opacity-50 transition-transform" :class="open ? 'rotate-180' : ''" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                    </svg>
-                </button>
-
-                <!-- The wrapper carries the position: a class handed to IconButton lands on
-                     the button inside its tooltip span, not on what the layout sees. -->
-                <span v-if="clearable && hasValue" class="il-tree-select__clear absolute inset-y-0 right-1.5 flex items-center">
                     <IconButton
+                        v-if="clearable && hasValue"
                         :label="clearLabel"
                         size="xs"
-                        tone="quiet"
+                        tone="plain"
                         :tooltip="false"
+                        class="il-tree-select__clear ml-1"
+                        :class="skin.clear"
                         @click.stop="clear()"
                     >
                         <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
                         </svg>
                     </IconButton>
-                </span>
+                    <span v-else class="ml-1 flex h-6 w-6 shrink-0 items-center justify-center" aria-hidden="true">
+                        <svg class="h-4 w-4 opacity-50 transition-transform" :class="open ? 'rotate-180' : ''" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </div>
             </slot>
         </div>
 

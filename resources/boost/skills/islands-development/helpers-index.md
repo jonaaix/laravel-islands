@@ -111,7 +111,7 @@ table but not the other is a bug in waiting.
 | `MultiCombobox` | several values from a searchable list — the `Combobox`'s search, `fetchOptions`, `depth` and headings, with checkboxes; the model is an array, the trigger names the first `previewLimit` picks |
 | `MultiSelect` | several values from one short list, no search field |
 | `useOptionSearch(props, query)` / `selectSkin(variant)` | what the selects are built from — the filtered, ranked, server-fetched option list and the trigger skins — for a picker of your own |
-| `TreeSelect` | a hierarchy with a searchable path, cached per URL |
+| `TreeSelect` | a hierarchy with a searchable path, cached per URL; `variant` = `field` · `filter` · `filter-card`, the same skins as Combobox |
 | `OptionStrip` | micro switcher — `variant` = `pills` (row of switches) or `segmented` (one question, n answers); `size` = `md` beside fields, `sm` in a dense toolbar beside `Button size="sm"` |
 | `FilterPanel` | the panel beside the table, docking with the toolbar |
 | `useFilterPanelDock(storageKey, { baseWidth })` | `useViewWidth` plus a docking panel: the same `root` + `rootStyle`, widened while the panel is docked, overlaid when there is no room |
