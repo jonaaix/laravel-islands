@@ -1,5 +1,8 @@
 <script setup>
-defineProps({
+import { computed } from 'vue';
+import { useTheme } from './theme.js';
+
+const props = defineProps({
     label: { type: String, default: '' },
     /** A second, quieter line under the label — an explanation or an error. */
     description: { type: String, default: '' },
@@ -7,10 +10,9 @@ defineProps({
     descriptionTone: { type: String, default: 'muted' },
 });
 
-const TONES = {
-    muted: 'text-il-neutral-500 dark:text-il-neutral-400',
-    danger: 'text-il-danger-600 dark:text-il-danger-400',
-};
+const theme = useTheme('listItem');
+
+const descriptionClass = computed(() => theme.tones[props.descriptionTone] ?? theme.tones.muted);
 </script>
 
 <template>
@@ -24,7 +26,7 @@ const TONES = {
             <p class="il-list-item__label text-sm font-medium text-il-neutral-900 dark:text-il-neutral-100">
                 <slot name="label">{{ label }}</slot>
             </p>
-            <p v-if="description || $slots.description" class="il-list-item__description text-xs" :class="TONES[descriptionTone] || TONES.muted" :data-tone="descriptionTone">
+            <p v-if="description || $slots.description" class="il-list-item__description text-xs" :class="descriptionClass" :data-tone="descriptionTone">
                 <slot name="description">{{ description }}</slot>
             </p>
         </div>

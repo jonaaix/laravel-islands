@@ -1,16 +1,21 @@
 <script setup>
+import { computed } from 'vue';
 import Tooltip from './Tooltip.vue';
+import { useTheme } from './theme.js';
 
-defineProps({
+const props = defineProps({
     /** Says what will be edited — the tooltip and the accessible name in one. */
     label: { type: String, required: true },
-    /** Matches the value it sits beside; `sm` is the default everywhere. */
-    size: { type: String, default: 'sm' },
+    /** Matches the value it sits beside; the theme decides when unset (`sm`). */
+    size: { type: String, default: null },
 });
 
 const emit = defineEmits(['click']);
 
-const SIZES = { sm: 'h-3.5 w-3.5', md: 'h-4 w-4' };
+const theme = useTheme('editButton');
+
+const resolvedSize = computed(() => props.size ?? theme.size ?? 'sm');
+const glyphClass = computed(() => theme.sizes[resolvedSize.value] ?? theme.sizes.sm);
 </script>
 
 <template>
@@ -24,12 +29,12 @@ const SIZES = { sm: 'h-3.5 w-3.5', md: 'h-4 w-4' };
             type="button"
             @click="emit('click', $event)"
             :aria-label="label"
-            :data-size="size"
+            :data-size="resolvedSize"
             class="il-edit-button rounded p-0.5 text-il-neutral-400 opacity-0 transition-opacity duration-[var(--il-duration-hover)] hover:text-il-neutral-700 focus-visible:opacity-100 group-hover/edit:opacity-100 dark:text-il-neutral-500 dark:hover:text-il-neutral-300"
         >
             <svg
                 class="il-edit-button__glyph"
-                :class="SIZES[size] || SIZES.sm"
+                :class="glyphClass"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"

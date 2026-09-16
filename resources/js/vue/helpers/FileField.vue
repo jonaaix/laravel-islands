@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { FIELD_SHAPES } from './fieldStyles.js';
+import { useTheme } from './theme.js';
 
 defineOptions({ inheritAttrs: false });
 
@@ -16,7 +16,8 @@ const props = defineProps({
     label: { type: String, default: '' },
     /** Optional caption below the label ("Max 10 MB" …). */
     hint: { type: String, default: '' },
-    shape: { type: String, default: 'rounded' },
+    /** The theme decides when unset. */
+    shape: { type: String, default: null },
 });
 
 const emit = defineEmits(['update:modelValue', 'change']);
@@ -30,7 +31,9 @@ const dragging = ref(false);
  */
 const internal = ref(null);
 
-const shape = computed(() => FIELD_SHAPES[props.shape] ?? FIELD_SHAPES.rounded);
+const field = useTheme('field');
+
+const shape = computed(() => field.shapes[props.shape ?? field.shape] ?? field.shapes.rounded);
 
 const displayed = computed(() => {
     const v = props.modelValue ?? internal.value;

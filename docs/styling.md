@@ -1,9 +1,9 @@
 # Layout & Styling
 
-The package ships no stylesheet. Islands are styled with Tailwind utility classes like
-the rest of a Laravel application, and the [UI helpers](/helpers/) follow the same
-conventions. This page collects what an island root should do so that several islands
-feel like one application.
+Islands are styled with Tailwind utility classes like the rest of a Laravel application, and
+the [UI helpers](/helpers/) follow the same conventions. The only stylesheet the package ships
+is its [design tokens](/theming), which the helpers draw from. This page collects what an
+island root should do so that several islands feel like one application.
 
 ## The Root Element
 

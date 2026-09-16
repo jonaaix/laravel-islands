@@ -197,8 +197,8 @@ Props: `items` (`{ key, label, icon?, count?, disabled?, mark?: { icon, text? } 
 ```
 
 `Card` takes `href` (renders an `<a>`), `active`, `interactive` (`true`); slots `#media`,
-`#header`, default, `#footer`. `CardMedia` takes `ratio`, falling back to
-`provideCardDefaults({ mediaRatio })`.
+`#header`, default, `#footer`. `CardMedia` takes `ratio`, falling back to the theme's
+`card.mediaRatio` (see [Theming](/theming)); `provideCardDefaults({ mediaRatio })` still works.
 
 ## `List` and `ListItem`
 

@@ -2,11 +2,13 @@
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import IconButton from './IconButton.vue';
 import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
+import { useTheme } from './theme.js';
 
 const props = defineProps({
     open: { type: Boolean, default: false },
     title: { type: String, default: '' },
-    size: { type: String, default: 'md' },
+    /** `sm` … `full`; the theme decides when unset. */
+    size: { type: String, default: null },
     closable: { type: Boolean, default: true },
     closeOnBackdrop: { type: Boolean, default: true },
     closeOnEscape: { type: Boolean, default: true },
@@ -15,23 +17,18 @@ const props = defineProps({
 
 const emit = defineEmits(['close']);
 
-const SIZES = {
-    sm: 'max-w-md',
-    md: 'max-w-2xl',
-    lg: 'max-w-5xl',
-    xl: 'max-w-[1800px]',
-    full: 'max-w-none',
-};
+const theme = useTheme('modal');
 
 const panel = ref(null);
 
 // Where focus came from, so closing puts it back on the control that opened the modal.
 let returnFocusTo = null;
 
-const sizeClass = computed(() => SIZES[props.size] ?? SIZES.md);
+const resolvedSize = computed(() => props.size ?? theme.size ?? 'md');
+const sizeClass = computed(() => theme.sizes[resolvedSize.value] ?? theme.sizes.md);
 
 /** Fills the screen: the panel takes the height it is given rather than its content's. */
-const fills = computed(() => props.size === 'xl' || props.size === 'full');
+const fills = computed(() => resolvedSize.value === 'xl' || resolvedSize.value === 'full');
 
 function close() {
     if (props.closable) {
@@ -121,7 +118,7 @@ onBeforeUnmount(() => {
             <div
                 v-if="open"
                 class="il-modal fixed inset-0 flex items-center justify-center bg-il-neutral-900/50 p-4 backdrop-blur-[2px]"
-                :data-size="size"
+                :data-size="resolvedSize"
                 :style="overlayStyle"
                 @click.self="onBackdrop"
                 @keydown="onKeydown"

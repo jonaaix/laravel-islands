@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
-import { FieldCaption } from '@aaix/laravel-islands/vue/helpers';
+import FieldCaption from './FieldCaption.vue';
+import { useTheme } from './theme.js';
 
 const props = defineProps({
     label: { type: String, default: '' },
@@ -8,21 +9,14 @@ const props = defineProps({
     tone: { type: String, default: '' },
 });
 
-const TONES = {
-    ok: 'bg-il-success-50 ring-il-success-200 divide-il-success-200 dark:bg-il-success-500/10 dark:ring-il-success-500/30 dark:divide-il-success-500/30',
-    blocked: 'bg-il-warning-50 ring-il-warning-200 divide-il-warning-200 dark:bg-il-warning-500/10 dark:ring-il-warning-500/30 dark:divide-il-warning-500/30',
-    critical: 'bg-il-danger-50 ring-il-danger-200 divide-il-danger-200 dark:bg-il-danger-500/10 dark:ring-il-danger-500/30 dark:divide-il-danger-500/30',
-    off: 'bg-il-neutral-50 ring-il-neutral-200 divide-il-neutral-200 dark:bg-white/5 dark:ring-white/10 dark:divide-white/10',
-};
+const theme = useTheme('fieldGroup');
 
 const surfaceClass = computed(() => {
-    if (props.tone && TONES[props.tone]) {
-        return TONES[props.tone];
+    if (props.tone && theme.tones[props.tone]) {
+        return theme.tones[props.tone];
     }
 
-    return props.muted
-        ? 'bg-il-neutral-50 ring-il-neutral-200 divide-il-neutral-100 dark:bg-white/5 dark:ring-white/10 dark:divide-white/10'
-        : 'bg-white ring-il-neutral-200 divide-il-neutral-100 dark:bg-il-neutral-900 dark:ring-white/10 dark:divide-white/10';
+    return props.muted ? theme.surfaces.muted : theme.surfaces.plain;
 });
 </script>
 

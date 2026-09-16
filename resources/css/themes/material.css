@@ -1,0 +1,13 @@
+/*
+ * The token side of the Material preset: rounder corners and a touch more height. Load it
+ * after the package tokens, alongside `materialTheme` from `@aaix/laravel-islands/vue/themes`.
+ */
+:root {
+    --radius-il-control: 9999px;
+    --radius-il-menu: 1rem;
+    --radius-il-card: 1.5rem;
+    --spacing-il-control-sm: 2.25rem;
+    --spacing-il-control: 2.5rem;
+    --spacing-il-control-lg: 3rem;
+    --il-duration-fast: 200ms;
+}

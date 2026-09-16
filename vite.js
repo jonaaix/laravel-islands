@@ -9,9 +9,10 @@ const REGISTRY_IMPORT = `${PACKAGE_NAME}/islands`;
 const REGISTRY_MODULE_ID = `\0${REGISTRY_IMPORT}`;
 const DEFAULT_ISLAND_PATH = 'app/Islands';
 const MANIFEST_FILE = 'islands-translations.json';
-const THEME_SOURCE = 'resources/css/theme.css';
-const DEFAULT_THEME_OUTPUT = 'resources/css/islands/theme.css';
-const THEME_HEADER = '/* Written by the @aaix/laravel-islands Vite plugin from the package\'s resources/css/theme.css. Do not edit; override its variables in your own stylesheet. */\n';
+const THEME_SOURCE = 'resources/css';
+const THEME_FILES = ['theme.css', 'themes/material.css'];
+const DEFAULT_THEME_OUTPUT = 'resources/css/islands';
+const THEME_HEADER = '/* Written by the @aaix/laravel-islands Vite plugin from the package\'s resources/css. Do not edit; override its variables in your own stylesheet. */\n';
 
 const packageRoot = dirname(fileURLToPath(import.meta.url));
 
@@ -113,33 +114,43 @@ export default registry;
 }
 
 /**
- * Copies the package's design tokens into the host project, where Tailwind's `@import` can
- * reach them by a relative path — it does not know the Vite aliases. Returns the written path.
+ * Copies the package's design tokens and theme presets into the host project, where Tailwind's
+ * `@import` can reach them by a relative path — it does not know the Vite aliases. Returns the
+ * directory written to, or null when the package ships no stylesheets.
  */
 export function writeThemeCss(root, source, output = DEFAULT_THEME_OUTPUT) {
-    const from = join(source, THEME_SOURCE);
-    const to = resolve(root, String(output));
+    const fromDir = join(source, THEME_SOURCE);
+    const toDir = resolve(root, String(output));
 
-    if (!existsSync(from)) {
+    if (!existsSync(fromDir)) {
         return null;
     }
 
-    const content = THEME_HEADER + readFileSync(from, 'utf8');
+    for (const file of THEME_FILES) {
+        const from = join(fromDir, file);
 
-    if (existsSync(to) && readFileSync(to, 'utf8') === content) {
-        return to;
+        if (!existsSync(from)) {
+            continue;
+        }
+
+        const to = join(toDir, file);
+        const content = THEME_HEADER + readFileSync(from, 'utf8');
+
+        if (existsSync(to) && readFileSync(to, 'utf8') === content) {
+            continue;
+        }
+
+        mkdirSync(dirname(to), { recursive: true });
+        writeFileSync(to, content);
     }
 
-    mkdirSync(dirname(to), { recursive: true });
-    writeFileSync(to, content);
-
-    return to;
+    return toDir;
 }
 
 /**
  * @param {{ path?: string, translations?: { manifest?: string }, theme?: { output?: string | false } }} [options]
- *        `theme.output` is where the design tokens land in the host (default
- *        `resources/css/islands/theme.css`); `false` leaves them out.
+ *        `theme.output` is the directory the design tokens and presets land in (default
+ *        `resources/css/islands`); `false` leaves them out.
  */
 export default function islands(options = {}) {
     let root = process.cwd();
@@ -152,7 +163,7 @@ export default function islands(options = {}) {
 
     const islandRoot = () => resolve(root, String(options.path ?? DEFAULT_ISLAND_PATH));
     const manifestPath = () => (options.translations?.manifest ? resolve(root, String(options.translations.manifest)) : join(outDir, MANIFEST_FILE));
-    const themeSourcePath = () => join(packageSource, THEME_SOURCE);
+    const themeSourcePaths = () => THEME_FILES.map((file) => join(packageSource, THEME_SOURCE, file));
 
     function syncTheme() {
         if (options.theme?.output === false) {
@@ -162,7 +173,7 @@ export default function islands(options = {}) {
         const written = writeThemeCss(root, packageSource, options.theme?.output ?? DEFAULT_THEME_OUTPUT);
 
         if (written) {
-            logger.info(`[islands] design tokens: ${relative(root, written)}`);
+            logger.info(`[islands] design tokens: ${relative(root, written)}/`);
         }
     }
 
@@ -259,11 +270,11 @@ export default function islands(options = {}) {
             };
             const concerns = (file) => sources.has(file) || file.startsWith(islandRoot());
 
-            server.watcher.add(themeSourcePath());
+            server.watcher.add(themeSourcePaths());
 
             for (const event of ['add', 'change', 'unlink']) {
                 server.watcher.on(event, (file) => {
-                    if (file === themeSourcePath()) {
+                    if (themeSourcePaths().includes(file)) {
                         syncTheme();
                     }
 

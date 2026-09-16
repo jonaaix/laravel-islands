@@ -30,6 +30,7 @@ export { provideButtonDefaults, useButtonDefaults, BUTTON_DEFAULTS_KEY } from '.
 export { provideCardDefaults, useCardDefaults, CARD_DEFAULTS_KEY } from './cardDefaults.js';
 export { defaultTheme, defineTheme, mergeTheme, provideTheme, resolveTheme, useTheme, THEME_KEY } from './theme.js';
 export { BADGE_TONES, BUTTON_SHAPES, BUTTON_SIZES, BUTTON_SPLIT, BUTTON_TONES, ICON_BUTTON_BOXES, ICON_BUTTON_GLYPHS, ICON_BUTTON_TONES } from './buttonStyles.js';
+export { EDIT_BUTTON_SIZES, FIELD_GROUP_SURFACES, FIELD_GROUP_TONES, LIST_ITEM_TONES, MENU_ITEM_TONES, MODAL_SIZES, OPTION_STRIP_FRAMES, OPTION_STRIP_SIZES, OPTION_STRIP_SKINS, SWITCH_TONES, TOAST_SURFACE, TOAST_TONES } from './surfaceStyles.js';
 export { default as EditButton } from './EditButton.vue';
 export { default as FieldCaption } from './FieldCaption.vue';
 export { default as FieldGroup } from './FieldGroup.vue';

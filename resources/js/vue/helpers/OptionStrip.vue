@@ -1,6 +1,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import Tooltip from './Tooltip.vue';
+import { useTheme } from './theme.js';
 
 const props = defineProps({
     /**
@@ -18,9 +19,9 @@ const props = defineProps({
      * `pills` gives every option its own outline — a row of switches beside other controls.
      * `segmented` puts them in one frame, which reads as one question with n answers.
      */
-    variant: { type: String, default: 'pills' },
-    /** `md` stands beside 36px fields; `sm` sits in a dense toolbar beside small buttons. */
-    size: { type: String, default: 'md' },
+    variant: { type: String, default: null },
+    /** `md` stands beside 36px fields; `sm` sits in a dense toolbar beside small buttons. The theme decides when unset. */
+    size: { type: String, default: null },
     /** A dot marks what is taken. Off where the tint alone is enough. */
     marker: { type: Boolean, default: true },
     disabled: { type: Boolean, default: false },
@@ -59,36 +60,13 @@ function pick(value) {
     emit('update:modelValue', props.clearable && isTaken(value) ? null : value);
 }
 
-const FRAME = {
-    pills: 'inline-flex items-center gap-2',
-    // One pixel all round, so the surface meets the frame's own ring instead of floating inside it.
-    segmented: 'inline-flex items-center gap-0.5 rounded-full p-px ring-1 ring-inset ring-il-neutral-200 dark:ring-white/10',
-};
+const theme = useTheme('optionStrip');
 
-// The frame is one pixel taller than its options on either side, so the surface never touches the ring.
-const SIZES = {
-    md: { frame: 'h-8', option: 'h-7 px-2.5', iconOnly: 'px-2', glyph: 'h-4 w-4' },
-    sm: { frame: 'h-7', option: 'h-6 px-2', iconOnly: 'px-1.5', glyph: 'h-3.5 w-3.5' },
-};
-
-const OPTION = {
-    pills: {
-        base: 'inline-flex items-center gap-1.5 rounded-full text-xs font-medium ring-1 ring-inset transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-il-primary-500',
-        on: 'bg-il-primary-500/10 text-il-primary-700 ring-il-primary-500/25 hover:bg-il-primary-500/15 dark:text-il-primary-300',
-        off: 'bg-transparent text-il-neutral-500 ring-il-neutral-200 hover:bg-il-neutral-50 hover:text-il-neutral-700 dark:text-il-neutral-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-il-neutral-200',
-    },
-    segmented: {
-        // Inset like the pills variant: drawn outward the ring lands exactly on the frame's own edge.
-        base: 'relative z-10 inline-flex items-center gap-1.5 rounded-full text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-il-primary-500',
-        on: 'text-il-neutral-900 dark:text-white',
-        off: 'text-il-neutral-500 hover:text-il-neutral-700 dark:text-il-neutral-400 dark:hover:text-il-neutral-200',
-        surface: 'bg-white shadow-sm ring-1 ring-il-neutral-200 dark:bg-il-neutral-800 dark:ring-white/10',
-    },
-};
-
-const skin = computed(() => OPTION[props.variant] ?? OPTION.pills);
-const scale = computed(() => SIZES[props.size] ?? SIZES.md);
-const frame = computed(() => [FRAME[props.variant] ?? FRAME.pills, props.variant === 'segmented' ? scale.value.frame : '']);
+const variant = computed(() => props.variant ?? theme.variant ?? 'pills');
+const size = computed(() => props.size ?? theme.size ?? 'md');
+const skin = computed(() => theme.skins[variant.value] ?? theme.skins.pills);
+const scale = computed(() => theme.sizes[size.value] ?? theme.sizes.md);
+const frame = computed(() => [theme.frames[variant.value] ?? theme.frames.pills, variant.value === 'segmented' ? scale.value.frame : '']);
 
 /*
  * One frame, one answer: rather than lighting up a different segment, the surface travels to it.
@@ -98,7 +76,7 @@ const frame = computed(() => [FRAME[props.variant] ?? FRAME.pills, props.variant
  * Only where a single answer is picked; with several switches on at once there is nothing for one
  * surface to point at, so those keep their own.
  */
-const slides = computed(() => props.variant === 'segmented' && !props.multiple);
+const slides = computed(() => variant.value === 'segmented' && !props.multiple);
 
 const stripEl = ref(null);
 const surface = ref({ x: 0, width: 0, shown: false, still: true, moving: false });
@@ -164,7 +142,7 @@ onBeforeUnmount(() => {
     window.clearTimeout(settle);
 });
 
-watch(() => [props.modelValue, props.options, props.variant], remeasure, { deep: true });
+watch(() => [props.modelValue, props.options, variant.value], remeasure, { deep: true });
 </script>
 
 <template>

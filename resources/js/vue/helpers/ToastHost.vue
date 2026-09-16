@@ -1,5 +1,6 @@
 <script setup>
 import { useToast } from './toasts.js';
+import { useTheme } from './theme.js';
 
 const props = defineProps({
     /** `Close` in the app's own words; the package never ships wording. */
@@ -7,19 +8,9 @@ const props = defineProps({
 });
 
 const toasts = useToast();
+const theme = useTheme('toast');
 
-const SURFACE = 'bg-white ring-il-neutral-200 dark:bg-il-neutral-900 dark:ring-white/10';
-
-/**
- * The status colour appears twice and only twice: in the rail down the left edge and in the
- * icon. Tinting the surface as well would drown the message it is meant to mark.
- */
-const TONES = {
-    info: { rail: 'bg-il-neutral-400 dark:bg-il-neutral-500', accent: 'text-il-neutral-400 dark:text-il-neutral-500' },
-    success: { rail: 'bg-il-success-500', accent: 'text-il-success-500' },
-    warning: { rail: 'bg-il-warning-500', accent: 'text-il-warning-500' },
-    danger: { rail: 'bg-il-danger-500', accent: 'text-il-danger-500' },
-};
+const SURFACE = theme.surface;
 
 const PATHS = {
     info: 'M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z',
@@ -29,7 +20,7 @@ const PATHS = {
 };
 
 function tone(name) {
-    return TONES[name] ?? TONES.info;
+    return theme.tones[name] ?? theme.tones.info;
 }
 </script>
 

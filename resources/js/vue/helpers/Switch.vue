@@ -1,32 +1,22 @@
 <script setup>
-defineProps({
+import { computed } from 'vue';
+import { useTheme } from './theme.js';
+
+const props = defineProps({
     modelValue: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
     /** Required when no visible label sits beside the switch. */
     ariaLabel: { type: String, default: '' },
-    /** What being on means: ordinary business, or something to be careful about. */
-    tone: { type: String, default: 'primary' },
+    /** What being on means: ordinary business, or something to be careful about. The theme decides when unset. */
+    tone: { type: String, default: null },
 });
 
 const emit = defineEmits(['update:modelValue']);
 
-const TRACKS = {
-    primary: 'bg-il-primary-600 dark:bg-il-primary-500',
-    danger: 'bg-il-danger-500',
-    success: 'bg-il-success-500',
-};
+const theme = useTheme('switch');
 
-const ICONS = {
-    primary: 'text-il-primary-600 dark:text-il-primary-500',
-    danger: 'text-il-danger-500',
-    success: 'text-il-success-500',
-};
-
-const LAYERS = {
-    primary: 'bg-il-primary-500',
-    danger: 'bg-il-danger-500',
-    success: 'bg-il-success-500',
-};
+const resolvedTone = computed(() => props.tone ?? theme.tone ?? 'primary');
+const skin = computed(() => theme.tones[resolvedTone.value] ?? theme.tones.primary);
 </script>
 
 <template>
@@ -39,7 +29,7 @@ const LAYERS = {
         class="il-switch relative inline-flex h-7 w-11 shrink-0 items-center"
         :class="disabled ? 'opacity-50' : ''"
         :data-state="modelValue ? 'on' : 'off'"
-        :data-tone="tone"
+        :data-tone="resolvedTone"
         :data-disabled="disabled || undefined"
     >
         <input
@@ -57,7 +47,7 @@ const LAYERS = {
             aria-hidden="true"
             class="il-switch__track pointer-events-none absolute inset-0 rounded-full transition-colors duration-[var(--il-duration-fast)]"
             :class="modelValue
-                ? (TRACKS[tone] || TRACKS.primary)
+                ? skin.track
                 : 'bg-il-neutral-200 ring-2 ring-inset ring-il-neutral-400 dark:bg-il-neutral-700 dark:ring-il-neutral-500'"
         ></span>
 
@@ -67,7 +57,7 @@ const LAYERS = {
             class="il-switch__halo pointer-events-none absolute left-0 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full opacity-0 transition-[opacity,transform] duration-[var(--il-duration-fast)] ease-out peer-hover:opacity-[0.08] peer-focus-visible:opacity-[0.14] peer-active:opacity-[0.18] peer-disabled:opacity-0"
             :class="[
                 modelValue ? 'translate-x-2.5' : '-translate-x-1.5',
-                modelValue ? (LAYERS[tone] || LAYERS.primary) : 'bg-il-neutral-500 dark:bg-il-neutral-300',
+                modelValue ? skin.halo : 'bg-il-neutral-500 dark:bg-il-neutral-300',
             ]"
         ></span>
 
@@ -82,7 +72,7 @@ const LAYERS = {
             <svg
                 v-if="modelValue"
                 class="h-3.5 w-3.5"
-                :class="ICONS[tone] || ICONS.primary"
+                :class="skin.icon"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"

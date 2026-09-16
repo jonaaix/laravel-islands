@@ -35,7 +35,7 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 | --- | --- |
 | `Button` | tone/size/shape/loading + `icon`/default/`iconRight`/`menu` slots — the split-button lives here |
 | `ButtonGroup` | joins the outlined Buttons placed directly inside it into one strip with shared seams; keep hidden inputs and wrappers outside |
-| `provideButtonDefaults({ shape?, size?, tone? })` / `BUTTON_DEFAULTS_KEY` | app-wide button defaults (see the SKILL) |
+| `startVueIslands(registry, { theme })` / `provideTheme(theme)` / `useTheme(section)` | the look of every helper from one object: per family (`button`, `iconButton`, `field`, `select`, `badge`, `card`, `modal`, `toast`, `optionStrip`, `switch`, `fieldGroup`, `listItem`, `menuItem`, `editButton`) the defaults an unset prop falls back to and the class tables (`tones`, `sizes`, `shapes`, `skins`) it picks from; merged key by key over the package defaults. `provideButtonDefaults` / `BUTTON_DEFAULTS_KEY` still work. Tokens (`--color-il-*`, `--radius-il-*`, `--spacing-il-control*`) and `il-<component>__<part>` class hooks with `data-state` are documented in docs/theming.md |
 | `IconButton` | icon-only, `label` doubles as aria-label and tooltip; `tone` shares `Button`'s `secondary`/`primary`/`outlined` surfaces so it can sit in a row of them; `href` makes it a link |
 | `EditButton` | the quiet pencil beside an editable value |
 

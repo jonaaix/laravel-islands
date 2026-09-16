@@ -2,6 +2,20 @@ import { inject, provide } from 'vue';
 import { BADGE_TONES, BUTTON_SHAPES, BUTTON_SIZES, BUTTON_SPLIT, BUTTON_TONES, ICON_BUTTON_BOXES, ICON_BUTTON_GLYPHS, ICON_BUTTON_TONES } from './buttonStyles.js';
 import { FIELD_SHAPES, FIELD_SIZES, TEXTAREA_SIZES } from './fieldStyles.js';
 import { SELECT_SKINS } from './selectSkins.js';
+import {
+    EDIT_BUTTON_SIZES,
+    FIELD_GROUP_SURFACES,
+    FIELD_GROUP_TONES,
+    LIST_ITEM_TONES,
+    MENU_ITEM_TONES,
+    MODAL_SIZES,
+    OPTION_STRIP_FRAMES,
+    OPTION_STRIP_SIZES,
+    OPTION_STRIP_SKINS,
+    SWITCH_TONES,
+    TOAST_SURFACE,
+    TOAST_TONES,
+} from './surfaceStyles.js';
 
 export const THEME_KEY = Symbol.for('aaix.laravel-islands.theme');
 
@@ -47,6 +61,40 @@ export const defaultTheme = {
     card: {
         /** The shape pictures are shown in — a house decision, so it has no value until an application names one. */
         mediaRatio: '',
+    },
+    modal: {
+        size: 'md',
+        sizes: MODAL_SIZES,
+    },
+    toast: {
+        surface: TOAST_SURFACE,
+        tones: TOAST_TONES,
+    },
+    optionStrip: {
+        variant: 'pills',
+        size: 'md',
+        frames: OPTION_STRIP_FRAMES,
+        sizes: OPTION_STRIP_SIZES,
+        skins: OPTION_STRIP_SKINS,
+    },
+    switch: {
+        tone: 'primary',
+        tones: SWITCH_TONES,
+    },
+    fieldGroup: {
+        surfaces: FIELD_GROUP_SURFACES,
+        tones: FIELD_GROUP_TONES,
+    },
+    listItem: {
+        tones: LIST_ITEM_TONES,
+    },
+    menuItem: {
+        tone: 'default',
+        tones: MENU_ITEM_TONES,
+    },
+    editButton: {
+        size: 'sm',
+        sizes: EDIT_BUTTON_SIZES,
     },
 };
 

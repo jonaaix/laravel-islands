@@ -140,18 +140,18 @@ application-wide provides must be registered per app. `startVueIslands()` accept
 ```js
 // resources/js/app.js
 import { startVueIslands } from '@aaix/laravel-islands/vue';
-import { BUTTON_DEFAULTS_KEY } from '@aaix/laravel-islands/vue/helpers';
 
 startVueIslands(registry, {
+    theme: { button: { shape: 'pill' } },
     setup(app, payload) {
-        app.provide(BUTTON_DEFAULTS_KEY, { shape: 'pill' });
         app.config.errorHandler = (error) => reportToSentry(error, payload);
     },
 });
 ```
 
 `app` is the Vue application instance, `payload` the parsed island payload. Whatever a
-Vue plugin would normally do in `main.js` belongs here.
+Vue plugin would normally do in `main.js` belongs here. The look of the helpers is not a
+plugin but a `theme` — see [Theming](/theming).
 
 ## Other Frameworks
 

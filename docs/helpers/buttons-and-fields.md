@@ -29,17 +29,14 @@ Events: `click`, `menu-open`, `menu-close`. Slots: default, `#icon`, `#iconRight
 ### Application-Wide Defaults
 
 ```js
-import { BUTTON_DEFAULTS_KEY } from '@aaix/laravel-islands/vue/helpers';
-
 startVueIslands(registry, {
-    setup(app) {
-        app.provide(BUTTON_DEFAULTS_KEY, { shape: 'pill' });
-    },
+    theme: { button: { shape: 'pill', size: 'md', tone: 'primary' } },
 });
 ```
 
-`provideButtonDefaults({ shape: 'pill' })` does the same for a subtree. An explicit prop
-always wins.
+`provideTheme({ button: { shape: 'pill' } })` does the same for a subtree, and the theme's
+`button.tones` table takes new tones. An explicit prop always wins. The whole picture is on
+[Theming](/theming); `provideButtonDefaults()` and `BUTTON_DEFAULTS_KEY` from before keep working.
 
 ## `ButtonGroup`
 

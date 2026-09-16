@@ -44,6 +44,7 @@ export default defineConfig({
             items: [
                { text: 'Composables', link: '/composables' },
                { text: 'Layout & Styling', link: '/styling' },
+               { text: 'Theming', link: '/theming' },
             ],
          },
          {

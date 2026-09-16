@@ -1,6 +1,6 @@
 {
     "name": "@aaix/laravel-islands",
-    "version": "1.0.81",
+    "version": "1.0.82",
     "description": "Elegant frontend islands for Laravel: framework-agnostic core with a Vue adapter (React planned).",
     "type": "module",
     "license": "MIT",
@@ -11,7 +11,9 @@
         "./vue": "./resources/js/vue/index.js",
         "./vue/helpers": "./resources/js/vue/helpers/index.js",
         "./vue/helpers/wysiwyg": "./resources/js/vue/helpers/wysiwyg.js",
+        "./vue/themes": "./resources/js/vue/themes/index.js",
         "./css/theme.css": "./resources/css/theme.css",
+        "./css/themes/material.css": "./resources/css/themes/material.css",
         "./vite": "./vite.js"
     },
     "peerDependencies": {
