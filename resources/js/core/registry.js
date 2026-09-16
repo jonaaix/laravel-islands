@@ -14,7 +14,7 @@ const pageStates = new Map();
 let currentPath = typeof window === 'undefined' ? '' : window.location.pathname;
 
 // On a back or forward step the address already names the destination when the page is left.
-let currentUrl = typeof window === 'undefined' ? '' : window.location.pathname + window.location.search;
+let currentUrl = typeof window === 'undefined' ? '' : window.location.pathname;
 
 let historyMove = false;
 
@@ -31,8 +31,9 @@ function parsePayload(el) {
     }
 }
 
+// The path alone: a list writes its own parameters into the query, and its state must come back whether the visitor arrives with or without them.
 function pageKey() {
-    return window.location.pathname + window.location.search;
+    return window.location.pathname;
 }
 
 function normalizeMountResult(result) {
@@ -126,10 +127,17 @@ function readStoredPages() {
 }
 
 function storePages() {
-    try {
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify([...pageStates]));
-    } catch {
-        return;
+    const pages = [...pageStates];
+
+    // A full store drops the oldest pages until the rest fits; the memory copy keeps serving this tab either way.
+    while (pages.length > 0) {
+        try {
+            window.localStorage.setItem(STORAGE_KEY, JSON.stringify(pages));
+
+            return;
+        } catch {
+            pages.shift();
+        }
     }
 }
 

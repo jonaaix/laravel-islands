@@ -38,8 +38,9 @@ placeholders. See [Translations](/translations).
 ## `useIslandState(key, provide)`
 
 State that outlives a page swap under `wire:navigate`. When the page is left, the runtime
-calls `provide()` and keeps the result together with the URL; the next mount of the island
-at that URL gets it back as the return value.
+calls `provide()` and keeps the result under the page's path; the next mount of the island
+on that path gets it back as the return value, whatever the query string says — an island
+whose state depends on a parameter keys what it provides by that parameter itself.
 
 ```js
 const remembered = useIslandState('chart', () => ({ range: range.value, series: series.value }));
