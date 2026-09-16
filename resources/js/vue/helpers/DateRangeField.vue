@@ -272,14 +272,16 @@ function isBetween(date) {
     return Boolean(start && end) && date.getTime() > start.getTime() && date.getTime() < end.getTime();
 }
 
-// The ends carry the primary tint, the days between a light wash, today only a ring, the rest stay ghosts.
+// The ends are solid and the days between a clear tint, stronger than a single date: a span has to read as one block. Today only a ring, the rest stay ghosts.
 function dayTone(cell) {
-    return isEnd(cell.date) ? 'primary' : 'ghost';
+    if (isEnd(cell.date)) return 'cta';
+
+    return isBetween(cell.date) ? 'primary' : 'ghost';
 }
 
 function dayClass(cell) {
     if (isEnd(cell.date)) return 'font-semibold';
-    if (isBetween(cell.date)) return 'bg-il-primary-50 text-il-primary-800 dark:bg-il-primary-500/10 dark:text-il-primary-200';
+    if (isBetween(cell.date)) return '';
     if (sameDay(cell.date, today)) return 'ring-1 ring-inset ring-il-neutral-200 dark:ring-white/10';
 
     return cell.inMonth ? '' : 'opacity-50';
