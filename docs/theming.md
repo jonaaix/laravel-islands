@@ -192,7 +192,7 @@ and win over the theme where both are set.
 ## Skins as data
 
 The class tables live in the same sections: `button.tones`, `button.sizes`, `button.shapes`,
-`button.split`, `iconButton.tones|boxes|glyphs`, `field.shapes|sizes|textareaSizes`,
+`button.split`, `iconButton.tones|boxes|glyphs`, `field.base|shapes|sizes|textareaSizes`,
 `select.skins`, `badge.tones`, `modal.sizes`, `toast.surface|tones`,
 `optionStrip.frames|sizes|skins`, `switch.tones`, `fieldGroup.surfaces|tones`,
 `listItem.tones`, `menuItem.tones`, `editButton.sizes`. The merge is key by key, so a theme
@@ -237,5 +237,11 @@ startVueIslands(islands, { theme: materialTheme });
 ```
 
 `materialTheme` sets pill buttons and fields, ripples, a raised CTA and segmented option
-strips; `material.css` rounds the radius tokens and raises the control heights. `defaultTheme`
-is exported beside it, for a theme that starts from the package's tables.
+strips; `material.css` rounds the radius tokens and raises the control heights.
+
+`softTheme` with `themes/soft.css` is the quieter one: fields and select triggers are filled
+rather than framed, actions are tinted rather than saturated, corners are generous
+(`0.75rem` controls, `1.25rem` cards) and the neutral is Tailwind's cooler slate. It replaces
+`field.base` — the box every input draws — which is the knob for any filled-field look.
+
+`defaultTheme` is exported beside them, for a theme that starts from the package's tables.

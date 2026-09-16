@@ -29,6 +29,7 @@ const classes = computed(() =>
     fieldClasses({
         shape: props.shape ?? field.shape,
         size: props.size ?? field.size,
+        base: field.base,
         shapes: field.shapes,
         sizes: field.sizes,
         extra: (attrs.class ?? '') + ' pr-8 appearance-none bg-no-repeat',

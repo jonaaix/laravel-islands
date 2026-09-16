@@ -27,6 +27,7 @@ const classes = computed(() =>
     textareaClasses({
         shape: props.shape ?? field.shape,
         size: props.size ?? field.size,
+        base: field.base,
         shapes: field.shapes,
         sizes: field.textareaSizes,
         mono: props.mono,
