@@ -193,7 +193,7 @@ and win over the theme where both are set.
 ## Skins as data
 
 The class tables live in the same sections: `button.tones`, `button.sizes`, `button.shapes`,
-`button.split`, `iconButton.tones|boxes|glyphs`, `field.base|shapes|sizes|textareaSizes`,
+`button.split`, `iconButton.tones|boxes|glyphs`, `field.base|frame|frameInvalid|shapes|sizes|textareaSizes`,
 `select.skins`, `badge.tones`, `modal.sizes`, `toast.surface|tones`,
 `optionStrip.frames|sizes|skins`, `tabs.skins`, `switch.tones`, `fieldGroup.surfaces|tones`,
 `listItem.tones`, `menuItem.tones`, `editButton.sizes`. The merge is key by key, so a theme
@@ -244,7 +244,8 @@ strips; `material.css` rounds the radius tokens and raises the control heights.
 rather than framed, actions are tinted rather than saturated, tabs sit as pills in a filled
 track, corners are generous (`0.75rem` controls, `1.25rem` cards) and the neutral is
 Tailwind's cooler slate. It replaces `field.base` — the box every input draws — which is the
-knob for any filled-field look.
+knob for any filled-field look — together with `field.frame` and `field.frameInvalid`, the box of
+the fields that hold a button beside the text (DateTimeField, DateRangeField).
 
 `themes/soft-filament.css` carries the same look into the Filament panel around the islands:
 sidebar, topbar, global search, tabs and badges, drawn with the same tokens through Filament's

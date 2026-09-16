@@ -101,10 +101,8 @@ function publish(date) {
 /* ----- The frame, as NumberField draws it around its stepper ----- */
 
 const frame = computed(() => [
-    'inline-flex items-center overflow-hidden border bg-white dark:bg-il-neutral-800 focus-within:ring-1',
-    invalid.value
-        ? 'border-il-danger-400 focus-within:border-il-danger-500 focus-within:ring-il-danger-500 dark:border-il-danger-500/60'
-        : 'border-il-neutral-200 focus-within:border-il-primary-500 focus-within:ring-il-primary-500 dark:border-white/10',
+    'inline-flex items-center overflow-hidden',
+    (invalid.value ? field.frameInvalid : field.frame) ?? '',
     field.shapes[props.shape ?? field.shape] ?? field.shapes.rounded,
     field.sizes[props.size ?? field.size] ?? field.sizes.md,
     props.disabled ? 'cursor-not-allowed opacity-60' : '',

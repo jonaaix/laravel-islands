@@ -23,6 +23,12 @@ export const softTheme = defineTheme({
         base: 'block w-full border border-transparent bg-il-neutral-100 px-3 '
             + 'focus:border-transparent focus:bg-white focus:outline-none focus:ring-2 focus:ring-il-primary-500/40 '
             + 'dark:bg-white/10 dark:text-il-neutral-100 dark:focus:bg-il-neutral-800',
+        frame: 'border border-transparent bg-il-neutral-100 '
+            + 'focus-within:bg-white focus-within:ring-2 focus-within:ring-il-primary-500/40 '
+            + 'dark:bg-white/10 dark:focus-within:bg-il-neutral-800',
+        frameInvalid: 'border border-il-danger-400 bg-il-neutral-100 '
+            + 'focus-within:bg-white focus-within:ring-2 focus-within:ring-il-danger-500/40 '
+            + 'dark:border-il-danger-500/60 dark:bg-white/10 dark:focus-within:bg-il-neutral-800',
     },
     select: {
         skins: {

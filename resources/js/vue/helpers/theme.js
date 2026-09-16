@@ -1,6 +1,6 @@
 import { inject, provide } from 'vue';
 import { BADGE_TONES, BUTTON_SHAPES, BUTTON_SIZES, BUTTON_SPLIT, BUTTON_TONES, ICON_BUTTON_BOXES, ICON_BUTTON_GLYPHS, ICON_BUTTON_TONES } from './buttonStyles.js';
-import { FIELD_BASE, FIELD_SHAPES, FIELD_SIZES, TEXTAREA_SIZES } from './fieldStyles.js';
+import { FIELD_BASE, FIELD_FRAME, FIELD_FRAME_INVALID, FIELD_SHAPES, FIELD_SIZES, TEXTAREA_SIZES } from './fieldStyles.js';
 import { SELECT_SKINS } from './selectSkins.js';
 import {
     EDIT_BUTTON_SIZES,
@@ -49,6 +49,8 @@ export const defaultTheme = {
         shape: 'rounded',
         size: 'md',
         base: FIELD_BASE,
+        frame: FIELD_FRAME,
+        frameInvalid: FIELD_FRAME_INVALID,
         shapes: FIELD_SHAPES,
         sizes: FIELD_SIZES,
         textareaSizes: TEXTAREA_SIZES,
