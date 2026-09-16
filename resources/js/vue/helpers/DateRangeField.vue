@@ -493,7 +493,7 @@ const footerText = computed(() => formatDayRange(painted.value[0], painted.value
 
             <div class="il-date-range-field__footer flex items-center justify-between gap-2 border-t border-il-neutral-200 p-2 dark:border-white/10">
                 <Button size="sm" tone="ghost" @click="clear">{{ WORDS.clear }}</Button>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-4">
                     <span class="il-date-range-field__draft text-xs tabular-nums text-il-neutral-500 dark:text-il-neutral-400">{{ footerText }}</span>
                     <Button size="sm" tone="cta" :disabled="!draftFrom" @click="apply">{{ WORDS.apply }}</Button>
                 </div>
