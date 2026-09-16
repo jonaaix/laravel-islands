@@ -1,6 +1,7 @@
 <script setup>
 import { computed, useAttrs } from 'vue';
 import { fieldClasses } from './fieldStyles.js';
+import { useTheme } from './theme.js';
 
 defineOptions({ inheritAttrs: false });
 
@@ -11,8 +12,9 @@ const props = defineProps({
      * @type {import('vue').PropType<Array<{ value: any, label: string }>>}
      */
     options: { type: Array, default: () => [] },
-    shape: { type: String, default: 'rounded' },
-    size: { type: String, default: 'md' },
+    /** The theme decides when unset. */
+    shape: { type: String, default: null },
+    size: { type: String, default: null },
     disabled: { type: Boolean, default: false },
     required: { type: Boolean, default: false },
     placeholder: { type: String, default: '' },
@@ -21,11 +23,14 @@ const props = defineProps({
 defineEmits(['update:modelValue']);
 
 const attrs = useAttrs();
+const field = useTheme('field');
 
 const classes = computed(() =>
     fieldClasses({
-        shape: props.shape,
-        size: props.size,
+        shape: props.shape ?? field.shape,
+        size: props.size ?? field.size,
+        shapes: field.shapes,
+        sizes: field.sizes,
         extra: (attrs.class ?? '') + ' pr-8 appearance-none bg-no-repeat',
     }),
 );
@@ -41,7 +46,9 @@ const chevron = "url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www
         :value="modelValue"
         :disabled="disabled"
         :required="required"
-        :class="classes"
+        :class="['il-select-field', classes]"
+        :data-size="size ?? field.size"
+        :data-shape="shape ?? field.shape"
         :style="{ backgroundImage: chevron, backgroundPosition: 'right 0.5rem center', backgroundSize: '1rem' }"
         v-bind="{ ...attrs, class: undefined }"
         @change="$emit('update:modelValue', $event.target.value)"

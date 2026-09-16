@@ -4,6 +4,7 @@ import Checkbox from './Checkbox.vue';
 import IconButton from './IconButton.vue';
 import Popover from './Popover.vue';
 import { selectSkin } from './selectSkins.js';
+import { useTheme } from './theme.js';
 import { useOptionSearch } from '../composables/useOptionSearch.js';
 import { useTranslations } from '../composables/useTranslations.js';
 
@@ -57,7 +58,7 @@ const search = useOptionSearch(props, query);
 /** A lazy list forgets its options on close, so every pick remembers its own label here. */
 const picked = ref(new Map());
 
-const skin = computed(() => selectSkin(props.variant, 'field'));
+const skin = computed(() => selectSkin(props.variant, 'field', useTheme('select').skins));
 
 const chosen = computed(() => new Set(props.modelValue.map((value) => String(value))));
 
@@ -201,7 +202,7 @@ defineExpose({ show, close });
 </script>
 
 <template>
-    <div class="relative">
+    <div class="il-multi-combobox relative" :data-variant="variant" :data-state="open ? 'open' : (count > 0 ? 'set' : 'empty')" :data-count="count">
         <!--
             The whole surface opens the list, not just the words on it. The button inside stays
             the control a keyboard reaches, and its click arrives here just the same.
@@ -209,7 +210,7 @@ defineExpose({ show, close });
         <div
             ref="triggerEl"
             @click="toggleOpen"
-            :class="[skin.base, 'cursor-pointer', count > 0 ? skin.on : skin.off]"
+            :class="['il-multi-combobox__trigger', skin.base, 'cursor-pointer', count > 0 ? skin.on : skin.off]"
         >
             <button
                 type="button"
@@ -244,7 +245,7 @@ defineExpose({ show, close });
         </div>
 
         <Popover :anchor="triggerEl" :open="open" :width="menuWidth" @close="close">
-            <div class="relative border-b border-gray-100 p-2 dark:border-white/10">
+            <div class="il-multi-combobox__search relative border-b border-gray-100 p-2 dark:border-white/10">
                 <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-gray-400">
                     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd"/></svg>
                 </span>
@@ -258,8 +259,8 @@ defineExpose({ show, close });
                 />
             </div>
 
-            <ul role="listbox" aria-multiselectable="true" class="slim-scrollbar overflow-y-auto py-1" :style="{ maxHeight: `${menuHeight}px` }">
-                <li v-if="search.loadingOptions.value" class="flex items-center justify-center gap-2 py-6 text-sm text-gray-400">
+            <ul role="listbox" aria-multiselectable="true" class="il-multi-combobox__list slim-scrollbar overflow-y-auto py-1" :style="{ maxHeight: `${menuHeight}px` }">
+                <li v-if="search.loadingOptions.value" class="il-multi-combobox__loading flex items-center justify-center gap-2 py-6 text-sm text-gray-400">
                     <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" />
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v3a5 5 0 0 0-5 5H4Z" />
@@ -276,7 +277,7 @@ defineExpose({ show, close });
                     >
                         <p
                             v-if="option.disabled"
-                            class="px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400"
+                            class="il-multi-combobox__heading px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400"
                             :style="indent(option)"
                         >
                             <slot name="option" :key-value="option.value" :label="option.label" :option="option" :checked="false">
@@ -285,7 +286,8 @@ defineExpose({ show, close });
                         </p>
                         <label
                             v-else
-                            class="flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm transition-colors"
+                            class="il-multi-combobox__option flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm transition-colors"
+                            :data-state="isChecked(option) ? 'checked' : (i === highlighted ? 'highlighted' : undefined)"
                             :class="[
                                 i === highlighted ? 'bg-gray-50 dark:bg-white/5' : 'hover:bg-gray-50 dark:hover:bg-white/5',
                                 isChecked(option) ? 'font-medium text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-200',
@@ -299,7 +301,7 @@ defineExpose({ show, close });
                             </slot>
                         </label>
                     </li>
-                    <li v-if="!search.filtered.value.length" class="py-6 text-center text-sm text-gray-400">{{ emptyLabel }}</li>
+                    <li v-if="!search.filtered.value.length" class="il-multi-combobox__empty py-6 text-center text-sm text-gray-400">{{ emptyLabel }}</li>
                 </template>
             </ul>
 
@@ -307,7 +309,7 @@ defineExpose({ show, close });
                 v-if="count > 0 && clearOption"
                 type="button"
                 @click="clear"
-                class="flex w-full items-center justify-center border-t border-gray-100 px-3 py-2 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 dark:border-white/10 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200"
+                class="il-multi-combobox__clear-option flex w-full items-center justify-center border-t border-gray-100 px-3 py-2 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 dark:border-white/10 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200"
             >{{ allLabel }}</button>
         </Popover>
     </div>

@@ -28,6 +28,8 @@ export { default as Button } from './Button.vue';
 export { default as ButtonGroup } from './ButtonGroup.vue';
 export { provideButtonDefaults, useButtonDefaults, BUTTON_DEFAULTS_KEY } from './buttonDefaults.js';
 export { provideCardDefaults, useCardDefaults, CARD_DEFAULTS_KEY } from './cardDefaults.js';
+export { defaultTheme, defineTheme, mergeTheme, provideTheme, resolveTheme, useTheme, THEME_KEY } from './theme.js';
+export { BADGE_TONES, BUTTON_SHAPES, BUTTON_SIZES, BUTTON_SPLIT, BUTTON_TONES, ICON_BUTTON_BOXES, ICON_BUTTON_GLYPHS, ICON_BUTTON_TONES } from './buttonStyles.js';
 export { default as EditButton } from './EditButton.vue';
 export { default as FieldCaption } from './FieldCaption.vue';
 export { default as FieldGroup } from './FieldGroup.vue';

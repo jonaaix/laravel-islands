@@ -3,8 +3,8 @@ import { computed, nextTick, ref, useAttrs, watch } from 'vue';
 import Button from './Button.vue';
 import IconButton from './IconButton.vue';
 import Popover from './Popover.vue';
-import { FIELD_SHAPES, FIELD_SIZES } from './fieldStyles.js';
 import { selectSkin } from './selectSkins.js';
+import { useTheme } from './theme.js';
 import {
     formatDayRange,
     formatDisplay,
@@ -43,8 +43,9 @@ const props = defineProps({
     locale: { type: String, default: undefined },
     /** `field` is a form control with a typed input; `filter`, `filter-card` and `filter-pill` are toolbar triggers that colour a set span. */
     variant: { type: String, default: 'field' },
-    shape: { type: String, default: 'rounded' },
-    size: { type: String, default: 'md' },
+    /** The theme decides when unset. */
+    shape: { type: String, default: null },
+    size: { type: String, default: null },
     disabled: { type: Boolean, default: false },
     placeholder: { type: String, default: '' },
     /** The words the picker needs — the application owns them. */
@@ -54,6 +55,8 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const attrs = useAttrs();
+const field = useTheme('field');
+const selectTheme = useTheme('select');
 
 const WORDS = computed(() => ({
     open: 'Pick a span of days',
@@ -113,8 +116,8 @@ const frame = computed(() => [
     invalid.value
         ? 'border-red-400 focus-within:border-red-500 focus-within:ring-red-500 dark:border-red-500/60'
         : 'border-gray-200 focus-within:border-primary-500 focus-within:ring-primary-500 dark:border-white/10',
-    FIELD_SHAPES[props.shape] ?? FIELD_SHAPES.rounded,
-    FIELD_SIZES[props.size] ?? FIELD_SIZES.md,
+    field.shapes[props.shape ?? field.shape] ?? field.shapes.rounded,
+    field.sizes[props.size ?? field.size] ?? field.sizes.md,
     props.disabled ? 'cursor-not-allowed opacity-60' : '',
     attrs.class ?? '',
 ]);
@@ -126,7 +129,7 @@ const FRAME_BUTTON =
     'hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 ' +
     'disabled:hover:bg-transparent dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200 dark:active:bg-white/15';
 
-const skin = computed(() => selectSkin(props.variant, 'filter'));
+const skin = computed(() => selectSkin(props.variant, 'filter', selectTheme.skins));
 
 /* ----- Typing ----- */
 
@@ -350,12 +353,18 @@ const footerText = computed(() => formatDayRange(painted.value[0], painted.value
 </script>
 
 <template>
-    <span ref="anchor" :class="isField ? frame : 'inline-flex'">
+    <span
+        ref="anchor"
+        :class="['il-date-range-field', ...(isField ? frame : ['inline-flex'])]"
+        :data-variant="variant"
+        :data-state="open ? 'open' : (invalid ? 'invalid' : (hasValue ? 'set' : 'empty'))"
+        :data-disabled="disabled || undefined"
+    >
         <template v-if="isField">
             <input
                 type="text"
                 :value="text"
-                :class="FRAME_INPUT"
+                :class="['il-date-range-field__input', FRAME_INPUT]"
                 :disabled="disabled"
                 :placeholder="placeholder"
                 :aria-invalid="invalid ? 'true' : 'false'"
@@ -367,7 +376,7 @@ const footerText = computed(() => formatDayRange(painted.value[0], painted.value
             />
             <button
                 type="button"
-                :class="FRAME_BUTTON"
+                :class="['il-date-range-field__open', FRAME_BUTTON]"
                 :disabled="disabled"
                 :aria-label="WORDS.open"
                 :aria-expanded="open ? 'true' : 'false'"
@@ -381,7 +390,7 @@ const footerText = computed(() => formatDayRange(painted.value[0], painted.value
         <div
             v-else
             v-bind="{ ...attrs, class: undefined }"
-            :class="[skin.base, 'cursor-pointer', hasValue ? skin.on : skin.off, disabled ? 'cursor-not-allowed opacity-60' : '', attrs.class ?? '']"
+            :class="['il-date-range-field__trigger', skin.base, 'cursor-pointer', hasValue ? skin.on : skin.off, disabled ? 'cursor-not-allowed opacity-60' : '', attrs.class ?? '']"
             @click="disabled ? null : (open ? close() : show())"
         >
             <button
@@ -416,8 +425,8 @@ const footerText = computed(() => formatDayRange(painted.value[0], painted.value
         </div>
 
         <Popover :anchor="anchor" :open="open" :width="popoverWidth" @close="close">
-            <div class="flex flex-wrap">
-                <div v-if="shortcuts.length" class="flex w-40 flex-col gap-0.5 border-r border-gray-200 p-2 dark:border-white/10">
+            <div class="il-date-range-field__picker flex flex-wrap">
+                <div v-if="shortcuts.length" class="il-date-range-field__shortcuts flex w-40 flex-col gap-0.5 border-r border-gray-200 p-2 dark:border-white/10">
                     <Button
                         v-for="shortcut in shortcuts"
                         :key="shortcut.label"
@@ -428,8 +437,8 @@ const footerText = computed(() => formatDayRange(painted.value[0], painted.value
                     >{{ shortcut.label }}</Button>
                 </div>
 
-                <div class="flex flex-1 flex-wrap" @mouseleave="hovered = null">
-                    <div v-for="(page, index) in pages" :key="`${page.year}-${page.month}`" class="w-72 p-3">
+                <div class="il-date-range-field__months flex flex-1 flex-wrap" @mouseleave="hovered = null">
+                    <div v-for="(page, index) in pages" :key="`${page.year}-${page.month}`" class="il-date-range-field__calendar w-72 p-3">
                         <div class="flex items-center justify-between">
                             <IconButton v-if="index === 0" size="md" :label="WORDS.previousMonth" :tooltip="false" @click="shiftMonth(-1)">
                                 <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd"/></svg>
@@ -446,7 +455,7 @@ const footerText = computed(() => formatDayRange(painted.value[0], painted.value
                             <span v-for="name in weekdays" :key="name" class="py-1">{{ name }}</span>
                         </div>
 
-                        <div role="grid" class="grid grid-cols-7 gap-y-0.5" @keydown="onGridKey">
+                        <div role="grid" class="il-date-range-field__days grid grid-cols-7 gap-y-0.5" @keydown="onGridKey">
                             <Button
                                 v-for="cell in page.grid"
                                 :id="dayId(cell.date)"
@@ -469,10 +478,10 @@ const footerText = computed(() => formatDayRange(painted.value[0], painted.value
                 </div>
             </div>
 
-            <div class="flex items-center justify-between gap-2 border-t border-gray-200 p-2 dark:border-white/10">
+            <div class="il-date-range-field__footer flex items-center justify-between gap-2 border-t border-gray-200 p-2 dark:border-white/10">
                 <Button size="sm" tone="ghost" @click="clear">{{ WORDS.clear }}</Button>
                 <div class="flex items-center gap-2">
-                    <span class="text-xs tabular-nums text-gray-500 dark:text-gray-400">{{ footerText }}</span>
+                    <span class="il-date-range-field__draft text-xs tabular-nums text-gray-500 dark:text-gray-400">{{ footerText }}</span>
                     <Button size="sm" tone="cta" :disabled="!draftFrom" @click="apply">{{ WORDS.apply }}</Button>
                 </div>
             </div>

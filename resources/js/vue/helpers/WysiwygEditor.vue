@@ -43,14 +43,15 @@ const TOOLS = [
 </script>
 
 <template>
-    <div class="wysiwyg overflow-hidden rounded-lg ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-primary-500 dark:ring-gray-600">
-        <div v-if="editor" class="flex flex-wrap items-center gap-1 border-b border-gray-200 bg-gray-50 px-2 py-1.5 dark:border-white/10 dark:bg-gray-800">
+    <div class="il-wysiwyg wysiwyg overflow-hidden rounded-lg ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-primary-500 dark:ring-gray-600">
+        <div v-if="editor" class="il-wysiwyg__toolbar flex flex-wrap items-center gap-1 border-b border-gray-200 bg-gray-50 px-2 py-1.5 dark:border-white/10 dark:bg-gray-800">
             <button
                 v-for="tool in TOOLS"
                 :key="tool.key"
                 type="button"
+                :data-state="tool.active(editor) ? 'active' : undefined"
                 @click="tool.run(editor)"
-                class="rounded px-2 py-1 text-xs transition"
+                class="il-wysiwyg__tool rounded px-2 py-1 text-xs transition"
                 :class="[
                     tool.class,
                     tool.active(editor)
@@ -63,7 +64,7 @@ const TOOLS = [
 
             <slot name="tools" :editor="editor" />
         </div>
-        <EditorContent :editor="editor" class="bg-white text-sm text-gray-900 dark:bg-gray-900 dark:text-gray-100" />
+        <EditorContent :editor="editor" class="il-wysiwyg__content bg-white text-sm text-gray-900 dark:bg-gray-900 dark:text-gray-100" />
     </div>
 </template>
 

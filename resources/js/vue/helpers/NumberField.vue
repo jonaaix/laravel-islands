@@ -1,13 +1,15 @@
 <script setup>
 import { computed, useAttrs } from 'vue';
-import { fieldClasses, FIELD_SHAPES, FIELD_SIZES } from './fieldStyles.js';
+import { fieldClasses } from './fieldStyles.js';
+import { useTheme } from './theme.js';
 
 defineOptions({ inheritAttrs: false });
 
 const props = defineProps({
     modelValue: { type: [Number, String, null], default: null },
-    shape: { type: String, default: 'rounded' },
-    size: { type: String, default: 'md' },
+    /** The theme decides when unset. */
+    shape: { type: String, default: null },
+    size: { type: String, default: null },
     /** Number fields default to right-aligned, tabular figures. */
     align: { type: String, default: 'right' },
     tabular: { type: Boolean, default: true },
@@ -32,12 +34,18 @@ const emit = defineEmits(['update:modelValue']);
 
 const attrs = useAttrs();
 
+const field = useTheme('field');
+const shapeClass = computed(() => field.shapes[props.shape ?? field.shape] ?? field.shapes.rounded);
+const sizeClass = computed(() => field.sizes[props.size ?? field.size] ?? field.sizes.md);
+
 const affixed = computed(() => Boolean(props.prefix || props.suffix));
 
 const classes = computed(() =>
     fieldClasses({
-        shape: props.shape,
-        size: props.size,
+        shape: props.shape ?? field.shape,
+        size: props.size ?? field.size,
+        shapes: field.shapes,
+        sizes: field.sizes,
         align: props.align,
         tabular: props.tabular,
         // With a unit in the field the caller's class dresses the frame around it, so the
@@ -48,7 +56,7 @@ const classes = computed(() =>
 
 const affixClasses = computed(() => [
     'relative block',
-    FIELD_SHAPES[props.shape] ?? FIELD_SHAPES.rounded,
+    shapeClass.value,
     attrs.class ?? '',
 ]);
 
@@ -74,8 +82,8 @@ const atUpper = computed(() => upper.value !== null && current.value >= upper.va
 
 const stepperFrame = computed(() => [
     'inline-flex items-center overflow-hidden border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-800',
-    FIELD_SHAPES[props.shape] ?? FIELD_SHAPES.rounded,
-    FIELD_SIZES[props.size] ?? FIELD_SIZES.md,
+    shapeClass.value,
+    sizeClass.value,
     props.disabled ? 'cursor-not-allowed opacity-60' : '',
     attrs.class ?? '',
 ]);
@@ -120,10 +128,10 @@ function onInput(event) {
 </script>
 
 <template>
-    <span v-if="stepper" :class="stepperFrame">
+    <span v-if="stepper" class="il-number-field" data-variant="stepper" :data-disabled="disabled || undefined" :class="stepperFrame">
         <button
             type="button"
-            :class="STEP_BUTTON"
+            :class="['il-number-field__step', STEP_BUTTON]"
             :disabled="disabled || readonly || atLower"
             :aria-label="decreaseLabel || undefined"
             @click="bump(-1)"
@@ -150,7 +158,7 @@ function onInput(event) {
 
         <button
             type="button"
-            :class="STEP_BUTTON"
+            :class="['il-number-field__step', STEP_BUTTON]"
             :disabled="disabled || readonly || atUpper"
             :aria-label="increaseLabel || undefined"
             @click="bump(1)"
@@ -161,8 +169,8 @@ function onInput(event) {
         </button>
     </span>
 
-    <span v-else-if="affixed" :class="affixClasses">
-        <span v-if="prefix" class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-xs text-gray-500 dark:text-gray-400">
+    <span v-else-if="affixed" class="il-number-field" data-variant="affixed" :data-disabled="disabled || undefined" :class="affixClasses">
+        <span v-if="prefix" class="il-number-field__affix pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-xs text-gray-500 dark:text-gray-400">
             {{ prefix }}
         </span>
 
@@ -181,7 +189,7 @@ function onInput(event) {
             @input="$emit('update:modelValue', onInput($event))"
         />
 
-        <span v-if="suffix" class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-xs text-gray-500 dark:text-gray-400">
+        <span v-if="suffix" class="il-number-field__affix pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-xs text-gray-500 dark:text-gray-400">
             {{ suffix }}
         </span>
     </span>
@@ -197,7 +205,9 @@ function onInput(event) {
         :readonly="readonly"
         :required="required"
         :placeholder="placeholder"
-        :class="classes"
+        :class="['il-number-field', classes]"
+        :data-size="size ?? field.size"
+        :data-shape="shape ?? field.shape"
         v-bind="{ ...attrs, class: undefined }"
         @input="$emit('update:modelValue', onInput($event))"
     />

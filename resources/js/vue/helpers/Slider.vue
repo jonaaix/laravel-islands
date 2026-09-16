@@ -160,11 +160,11 @@ const ariaValue = computed(() => (stepped.value
 </script>
 
 <template>
-    <div class="slider inline-flex w-full flex-col select-none" :class="disabled ? 'opacity-50' : ''">
+    <div class="il-slider slider inline-flex w-full flex-col select-none" :class="disabled ? 'opacity-50' : ''" :data-disabled="disabled || undefined" :data-state="marked ? 'set' : 'unset'">
         <div class="relative h-[18px] px-[9px]">
             <div
                 ref="trackRef"
-                class="relative h-full w-full touch-none"
+                class="il-slider__track relative h-full w-full touch-none"
                 @pointerdown="onPointerDown"
                 @pointermove="onPointerMove"
                 @pointerup="onPointerUp"
@@ -172,13 +172,13 @@ const ariaValue = computed(() => (stepped.value
             >
                 <span
                     aria-hidden="true"
-                    class="pointer-events-none absolute inset-x-0 top-1/2 h-[2px] -translate-y-1/2 rounded-full bg-gray-300 dark:bg-gray-600"
+                    class="il-slider__rail pointer-events-none absolute inset-x-0 top-1/2 h-[2px] -translate-y-1/2 rounded-full bg-gray-300 dark:bg-gray-600"
                 ></span>
 
                 <span
                     v-if="marked"
                     aria-hidden="true"
-                    class="pointer-events-none absolute left-0 top-1/2 h-[2px] -translate-y-1/2 rounded-full bg-primary-600 transition-[width] duration-150 dark:bg-primary-500"
+                    class="il-slider__fill pointer-events-none absolute left-0 top-1/2 h-[2px] -translate-y-1/2 rounded-full bg-primary-600 transition-[width] duration-150 dark:bg-primary-500"
                     :style="{ width: positionPct + '%' }"
                 ></span>
 
@@ -187,7 +187,7 @@ const ariaValue = computed(() => (stepped.value
                         v-for="(opt, i) in options"
                         :key="'tick-' + opt.value"
                         aria-hidden="true"
-                        class="pointer-events-none absolute top-1/2 h-[6px] w-[6px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-150"
+                        class="il-slider__tick pointer-events-none absolute top-1/2 h-[6px] w-[6px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-150"
                         :class="i <= currentIndex && marked
                             ? 'bg-primary-600 dark:bg-primary-500'
                             : 'bg-gray-400 dark:bg-gray-500'"
@@ -201,7 +201,7 @@ const ariaValue = computed(() => (stepped.value
                 >
                     <button
                         type="button"
-                        class="handle focus-visible:ring-primary-500 peer relative z-10 flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full border-2 bg-white transition-colors duration-150 before:absolute before:-inset-[11px] before:rounded-full before:content-[''] focus-visible:outline-none focus-visible:ring-2 dark:bg-gray-900"
+                        class="il-slider__handle handle focus-visible:ring-primary-500 peer relative z-10 flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full border-2 bg-white transition-colors duration-150 before:absolute before:-inset-[11px] before:rounded-full before:content-[''] focus-visible:outline-none focus-visible:ring-2 dark:bg-gray-900"
                         :class="marked
                             ? 'border-primary-600 bg-primary-600 dark:border-primary-500 dark:bg-primary-500'
                             : 'border-gray-400 dark:border-gray-500'"
@@ -227,7 +227,7 @@ const ariaValue = computed(() => (stepped.value
             </div>
         </div>
 
-        <div v-if="stepped" class="relative mt-1.5 h-4 px-[9px] text-xs tabular-nums">
+        <div v-if="stepped" class="il-slider__labels relative mt-1.5 h-4 px-[9px] text-xs tabular-nums">
             <div class="relative h-full w-full">
                 <span
                     v-for="(opt, i) in options"
@@ -241,7 +241,7 @@ const ariaValue = computed(() => (stepped.value
             </div>
         </div>
 
-        <div v-else-if="minLabel || maxLabel" class="mt-1.5 flex justify-between px-[9px] text-xs text-gray-500 dark:text-gray-400">
+        <div v-else-if="minLabel || maxLabel" class="il-slider__labels mt-1.5 flex justify-between px-[9px] text-xs text-gray-500 dark:text-gray-400">
             <span>{{ minLabel }}</span>
             <span>{{ maxLabel }}</span>
         </div>

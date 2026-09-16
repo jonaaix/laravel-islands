@@ -134,11 +134,17 @@ watch(
 </script>
 
 <template>
-    <div class="group flex flex-wrap items-center gap-x-2 gap-y-1" :class="multiline && editing ? 'w-full' : ''">
+    <div
+        class="il-inline-edit group flex flex-wrap items-center gap-x-2 gap-y-1"
+        :class="multiline && editing ? 'w-full' : ''"
+        :data-state="saving ? 'saving' : (editing ? 'editing' : 'idle')"
+        :data-size="size"
+        :data-error="error ? true : undefined"
+    >
         <template v-if="!editing">
             <slot name="display" :value="value" :filled="filled">
                 <span
-                    class="tabular-nums"
+                    class="il-inline-edit__display tabular-nums"
                     :class="[
                         size === 'lg' ? 'font-accent text-xl font-semibold tracking-tight' : 'text-sm',
                         filled ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400',
@@ -151,7 +157,7 @@ watch(
                 type="button"
                 @click.stop="start()"
                 :aria-label="label || t('Edit')"
-                class="flex shrink-0 items-center justify-center rounded-md text-gray-300 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500 group-hover:text-gray-500 dark:text-gray-700 dark:hover:bg-white/10 dark:group-hover:text-gray-400"
+                class="il-inline-edit__pencil flex shrink-0 items-center justify-center rounded-md text-gray-300 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500 group-hover:text-gray-500 dark:text-gray-700 dark:hover:bg-white/10 dark:group-hover:text-gray-400"
                 :class="size === 'lg' ? 'h-6 w-6' : 'h-5 w-5'"
             >
                 <svg :class="size === 'lg' ? 'h-3.5 w-3.5' : 'h-3 w-3'" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 1 1 2.828 2.828l-.793.793-2.828-2.828.793-.793ZM11.379 5.793 3 14.172V17h2.828l8.38-8.379-2.83-2.828Z"/></svg>
@@ -178,7 +184,7 @@ watch(
                             @keydown.enter.meta.prevent="commit()"
                             :disabled="saving"
                             :placeholder="part.placeholder || ''"
-                            class="slim-scrollbar w-full rounded-md border border-gray-200 bg-white px-2 py-1.5 text-sm text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 disabled:opacity-60 dark:border-white/10 dark:bg-gray-900 dark:text-white"
+                            class="il-inline-edit__input slim-scrollbar w-full rounded-md border border-gray-200 bg-white px-2 py-1.5 text-sm text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 disabled:opacity-60 dark:border-white/10 dark:bg-gray-900 dark:text-white"
                         ></textarea>
 
                         <div v-else class="relative">
@@ -193,7 +199,7 @@ watch(
                                 :disabled="saving"
                                 :placeholder="part.placeholder || ''"
                                 :aria-label="part.label || label"
-                                class="rounded-md border border-gray-200 bg-white px-2 text-gray-900 tabular-nums focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 disabled:opacity-60 dark:border-white/10 dark:bg-gray-900 dark:text-white"
+                                class="il-inline-edit__input rounded-md border border-gray-200 bg-white px-2 text-gray-900 tabular-nums focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 disabled:opacity-60 dark:border-white/10 dark:bg-gray-900 dark:text-white"
                                 :class="[
                                     size === 'lg' ? 'h-8 font-accent text-base' : 'h-7 text-sm',
                                     index === 0 && prefix ? 'pl-6' : '',
@@ -212,7 +218,7 @@ watch(
                         @click.stop="commit()"
                         :disabled="saving"
                         :aria-label="t('Save')"
-                        class="flex items-center justify-center rounded-md bg-primary-600 text-white transition-colors hover:bg-primary-500 disabled:opacity-60"
+                        class="il-inline-edit__save flex items-center justify-center rounded-md bg-primary-600 text-white transition-colors hover:bg-primary-500 disabled:opacity-60"
                         :class="size === 'lg' ? 'h-8 w-8' : 'h-7 w-7'"
                     >
                         <svg v-if="!saving" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/></svg>
@@ -222,7 +228,7 @@ watch(
                         type="button"
                         @click.stop="cancel()"
                         :aria-label="t('Cancel')"
-                        class="flex items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-white/10 dark:hover:text-gray-200"
+                        class="il-inline-edit__cancel flex items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-white/10 dark:hover:text-gray-200"
                         :class="size === 'lg' ? 'h-8 w-8' : 'h-7 w-7'"
                     >
                         <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"/></svg>
@@ -230,9 +236,9 @@ watch(
                 </div>
             </div>
 
-            <span class="whitespace-nowrap text-xs text-gray-400 dark:text-gray-500">{{ multiline ? t(':key+Enter to save · Esc to cancel', { key: modifierKey }) : t('Enter to save · Esc to cancel') }}</span>
+            <span class="il-inline-edit__hint whitespace-nowrap text-xs text-gray-400 dark:text-gray-500">{{ multiline ? t(':key+Enter to save · Esc to cancel', { key: modifierKey }) : t('Enter to save · Esc to cancel') }}</span>
         </template>
 
-        <span v-if="error" class="text-xs font-medium text-red-600 dark:text-red-400">{{ error }}</span>
+        <span v-if="error" class="il-inline-edit__error text-xs font-medium text-red-600 dark:text-red-400">{{ error }}</span>
     </div>
 </template>

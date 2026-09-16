@@ -20,12 +20,12 @@ function close() {
 </script>
 
 <template>
-    <span ref="anchor" class="inline-flex">
+    <span ref="anchor" class="il-menu inline-flex" :data-state="open ? 'open' : 'closed'">
         <slot name="trigger" :toggle="toggle" :open="open" />
     </span>
 
     <Popover :anchor="anchor" :open="open" :width="width" :z-index="zIndex" @close="close">
-        <div class="py-1">
+        <div class="il-menu__panel py-1">
             <slot :close="close" />
         </div>
     </Popover>

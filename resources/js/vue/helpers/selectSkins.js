@@ -32,6 +32,7 @@ export const SELECT_SKINS = {
     },
 };
 
-export function selectSkin(variant, fallback = 'field') {
-    return SELECT_SKINS[variant] ?? SELECT_SKINS[fallback];
+/** `skins` is the theme's table; the package's own applies when a caller passes none. */
+export function selectSkin(variant, fallback = 'field', skins = SELECT_SKINS) {
+    return skins[variant] ?? skins[fallback] ?? SELECT_SKINS[fallback];
 }

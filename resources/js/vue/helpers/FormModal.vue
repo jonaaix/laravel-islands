@@ -35,10 +35,10 @@ const submitEnabled = computed(() => !props.busy && !props.submitDisabled);
             <slot name="title" />
         </template>
 
-        <form class="flex flex-col gap-4" @submit.prevent="emit('submit')">
+        <form class="il-form-modal flex flex-col gap-4" :data-state="busy ? 'busy' : undefined" @submit.prevent="emit('submit')">
             <slot />
 
-            <div class="flex items-center justify-end gap-2 border-t border-gray-200 pt-4 dark:border-white/10">
+            <div class="il-form-modal__footer flex items-center justify-end gap-2 border-t border-gray-200 pt-4 dark:border-white/10">
                 <slot name="footer">
                     <Button
                         type="button"

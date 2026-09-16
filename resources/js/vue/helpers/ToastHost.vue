@@ -35,7 +35,7 @@ function tone(name) {
 
 <template>
     <Teleport to="body">
-        <div class="pointer-events-none fixed inset-x-0 top-4 z-[80] flex flex-col items-end gap-2 px-4 sm:left-auto sm:right-4 sm:px-0">
+        <div class="il-toasts pointer-events-none fixed inset-x-0 top-4 z-[80] flex flex-col items-end gap-2 px-4 sm:left-auto sm:right-4 sm:px-0">
             <TransitionGroup
                 enter-active-class="transition duration-[180ms] ease-out"
                 enter-from-class="translate-x-4 opacity-0"
@@ -46,8 +46,9 @@ function tone(name) {
                 <div
                     v-for="toast in toasts.items.value"
                     :key="toast.id"
-                    class="pointer-events-auto relative w-full max-w-sm overflow-hidden rounded-lg py-3 pl-5 pr-3 shadow-lg ring-1"
+                    class="il-toast pointer-events-auto relative w-full max-w-sm overflow-hidden rounded-lg py-3 pl-5 pr-3 shadow-lg ring-1"
                     :class="SURFACE"
+                    :data-tone="toast.tone"
                     role="status"
                     aria-live="polite"
                 >
@@ -56,11 +57,11 @@ function tone(name) {
                         card it sits in, square on the inside, so it reads as a marked edge rather
                         than a border.
                     -->
-                    <span class="absolute inset-y-0 left-0 w-1" :class="tone(toast.tone).rail"></span>
+                    <span class="il-toast__rail absolute inset-y-0 left-0 w-1" :class="tone(toast.tone).rail"></span>
 
                     <div class="flex items-start gap-2.5">
                         <svg
-                            class="h-5 w-5 shrink-0"
+                            class="il-toast__icon h-5 w-5 shrink-0"
                             :class="tone(toast.tone).accent"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -72,14 +73,14 @@ function tone(name) {
                         </svg>
 
                         <div class="min-w-0 flex-1">
-                            <p v-if="toast.title" class="text-sm font-semibold leading-5 text-gray-900 dark:text-white">{{ toast.title }}</p>
-                            <p class="text-sm leading-5 text-gray-700 dark:text-gray-300">{{ toast.message }}</p>
+                            <p v-if="toast.title" class="il-toast__title text-sm font-semibold leading-5 text-gray-900 dark:text-white">{{ toast.title }}</p>
+                            <p class="il-toast__message text-sm leading-5 text-gray-700 dark:text-gray-300">{{ toast.message }}</p>
                         </div>
 
                         <button
                             type="button"
                             :aria-label="closeLabel"
-                            class="flex h-5 w-5 shrink-0 items-center justify-center text-gray-400 transition hover:text-gray-600 dark:hover:text-gray-200"
+                            class="il-toast__close flex h-5 w-5 shrink-0 items-center justify-center text-gray-400 transition hover:text-gray-600 dark:hover:text-gray-200"
                             @click="toasts.dismiss(toast.id)"
                         >
                             <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -91,7 +92,7 @@ function tone(name) {
                     <!-- How much of its time is left, quietly, so a message that goes is no surprise. -->
                     <span
                         v-if="toast.duration > 0"
-                        class="toast-timer absolute inset-x-0 bottom-0 h-px origin-left bg-gray-300 dark:bg-white/20"
+                        class="il-toast__timer toast-timer absolute inset-x-0 bottom-0 h-px origin-left bg-gray-300 dark:bg-white/20"
                         :style="{ animationDuration: `${toast.duration}ms` }"
                     ></span>
                 </div>

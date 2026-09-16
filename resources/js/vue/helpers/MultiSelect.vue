@@ -4,6 +4,7 @@ import Checkbox from './Checkbox.vue';
 import IconButton from './IconButton.vue';
 import Popover from './Popover.vue';
 import { selectSkin } from './selectSkins.js';
+import { useTheme } from './theme.js';
 
 /**
  * Several answers to one question, where the Combobox takes exactly one.
@@ -38,7 +39,7 @@ const emit = defineEmits(['update:modelValue']);
 const open = ref(false);
 const triggerEl = ref(null);
 
-const skin = computed(() => selectSkin(props.variant, 'filter'));
+const skin = computed(() => selectSkin(props.variant, 'filter', useTheme('select').skins));
 
 const entries = computed(() => (Array.isArray(props.options)
     ? props.options.map((option) => ({ value: option.value, label: String(option.label ?? option.value) }))
@@ -83,11 +84,11 @@ function clear() {
 </script>
 
 <template>
-    <div class="relative">
+    <div class="il-multi-select relative" :data-variant="variant" :data-state="open ? 'open' : (count > 0 ? 'set' : 'empty')" :data-count="count">
         <div
             ref="triggerEl"
             @click="open = !open"
-            :class="[skin.base, 'cursor-pointer', count > 0 ? skin.on : skin.off]"
+            :class="['il-multi-select__trigger', skin.base, 'cursor-pointer', count > 0 ? skin.on : skin.off]"
         >
             <button
                 type="button"
@@ -119,11 +120,12 @@ function clear() {
         </div>
 
         <Popover :anchor="triggerEl" :open="open" :width="menuWidth" @close="open = false">
-            <div class="slim-scrollbar overflow-y-auto py-1" :style="{ maxHeight: `${menuHeight}px` }">
+            <div class="il-multi-select__list slim-scrollbar overflow-y-auto py-1" :style="{ maxHeight: `${menuHeight}px` }">
                 <label
                     v-for="entry in entries"
                     :key="entry.value"
-                    class="flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-white/5"
+                    class="il-multi-select__option flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-white/5"
+                    :data-state="chosen.has(String(entry.value)) ? 'checked' : undefined"
                 >
                     <Checkbox :model-value="chosen.has(String(entry.value))" @update:model-value="toggle(entry.value)" />
                     <slot name="option" :option="entry" :label="entry.label">
@@ -131,7 +133,7 @@ function clear() {
                     </slot>
                 </label>
 
-                <p v-if="entries.length === 0" class="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+                <p v-if="entries.length === 0" class="il-multi-select__empty px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
                     {{ emptyLabel }}
                 </p>
             </div>
@@ -140,7 +142,7 @@ function clear() {
                 v-if="count > 0"
                 type="button"
                 @click="clear"
-                class="flex w-full items-center justify-center border-t border-gray-100 px-3 py-2 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 dark:border-white/10 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200"
+                class="il-multi-select__clear-option flex w-full items-center justify-center border-t border-gray-100 px-3 py-2 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 dark:border-white/10 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200"
             >{{ allLabel }}</button>
         </Popover>
     </div>

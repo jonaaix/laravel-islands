@@ -170,15 +170,18 @@ watch(() => [props.modelValue, props.options, props.variant], remeasure, { deep:
 <template>
     <div
         ref="stripEl"
-        class="option-strip"
+        class="il-option-strip option-strip"
         :class="[frame, slides ? 'relative' : '']"
         :role="multiple ? 'group' : 'radiogroup'"
         :aria-label="ariaLabel || undefined"
+        :data-variant="variant"
+        :data-size="size"
+        :data-disabled="disabled || undefined"
     >
         <span
             v-if="slides && surface.shown"
             aria-hidden="true"
-            class="absolute inset-y-px origin-center rounded-full motion-reduce:transition-none motion-reduce:scale-100"
+            class="il-option-strip__surface absolute inset-y-px origin-center rounded-full motion-reduce:transition-none motion-reduce:scale-100"
             :class="[
                 skin.surface,
                 surface.still ? '' : 'transition-[transform,width] duration-[260ms] [transition-timing-function:cubic-bezier(0.34,1.32,0.64,1)]',
@@ -199,7 +202,8 @@ watch(() => [props.modelValue, props.options, props.variant], remeasure, { deep:
                     :aria-checked="multiple ? undefined : (isTaken(option.value) ? 'true' : 'false')"
                     :aria-label="option.label"
                     :role="multiple ? undefined : 'radio'"
-                    :class="[skin.base, option.icon ? scale.iconOnly : scale.option, isTaken(option.value) ? skin.on : skin.off, !slides && isTaken(option.value) ? skin.surface ?? '' : '', closed(option) ? 'cursor-not-allowed opacity-50' : '']"
+                    :data-state="isTaken(option.value) ? 'on' : 'off'"
+                    :class="['il-option-strip__option', skin.base, option.icon ? scale.iconOnly : scale.option, isTaken(option.value) ? skin.on : skin.off, !slides && isTaken(option.value) ? skin.surface ?? '' : '', closed(option) ? 'cursor-not-allowed opacity-50' : '']"
                     @click="pick(option.value)"
                 >
                     <component :is="option.icon" v-if="option.icon" class="shrink-0" :class="scale.glyph" />
@@ -214,12 +218,13 @@ watch(() => [props.modelValue, props.options, props.variant], remeasure, { deep:
                 :aria-pressed="multiple ? (isTaken(option.value) ? 'true' : 'false') : undefined"
                 :aria-checked="multiple ? undefined : (isTaken(option.value) ? 'true' : 'false')"
                 :role="multiple ? undefined : 'radio'"
-                :class="[skin.base, scale.option, isTaken(option.value) ? skin.on : skin.off, !slides && isTaken(option.value) ? skin.surface ?? '' : '', closed(option) ? 'cursor-not-allowed opacity-50' : '']"
+                :data-state="isTaken(option.value) ? 'on' : 'off'"
+                :class="['il-option-strip__option', skin.base, scale.option, isTaken(option.value) ? skin.on : skin.off, !slides && isTaken(option.value) ? skin.surface ?? '' : '', closed(option) ? 'cursor-not-allowed opacity-50' : '']"
                 @click="pick(option.value)"
             >
                 <span
                     v-if="marker && variant === 'pills' && isTaken(option.value)"
-                    class="h-1.5 w-1.5 shrink-0 rounded-full bg-primary-600 dark:bg-primary-400"
+                    class="il-option-strip__marker h-1.5 w-1.5 shrink-0 rounded-full bg-primary-600 dark:bg-primary-400"
                 ></span>
                 <component :is="option.icon" v-if="option.icon" class="shrink-0" :class="scale.glyph" />
                 {{ option.label }}

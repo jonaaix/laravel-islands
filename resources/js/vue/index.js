@@ -2,6 +2,7 @@ import { createApp, defineAsyncComponent } from 'vue';
 import { registerAdapter, startIslands } from '../core/registry.js';
 import { resolveTranslations } from '../core/translations.js';
 import { ISLAND_KEY, ISLAND_STATE_KEY } from './context.js';
+import { resolveTheme, THEME_KEY } from './helpers/theme.js';
 
 function createIslandState(payload) {
     const providers = new Map();
@@ -29,9 +30,13 @@ function createIslandState(payload) {
  *        Result of import.meta.glob('./islands/**\/*.island.vue') — with `{ eager: true }`
  *        every island is part of the entry bundle, without it each one is fetched when a
  *        page actually mounts it.
- * @param {{ setup?: (app: import('vue').App, payload: object) => void }} [options]
+ * @param {{ setup?: (app: import('vue').App, payload: object) => void, theme?: object }} [options]
+ *        `theme` is layered over the package's defaults and reaches every helper in every island;
+ *        see the theming guide for its shape.
  */
 export function startVueIslands(registry, options = {}) {
+    const theme = resolveTheme(options.theme);
+
     const resolve = (name) => {
         const entry = registry[`./islands/${name}.island.vue`] ?? registry[`./${name}.island.vue`];
 
@@ -60,6 +65,7 @@ export function startVueIslands(registry, options = {}) {
         const app = createApp(component, payload.props ?? {});
         app.provide(ISLAND_KEY, payload);
         app.provide(ISLAND_STATE_KEY, islandState.context);
+        app.provide(THEME_KEY, theme);
         options.setup?.(app, payload);
         app.mount(el);
 
@@ -77,3 +83,4 @@ export { useOptionSearch } from './composables/useOptionSearch.js';
 export { useSortableTiles } from './composables/useSortableTiles.js';
 export { useTranslations } from './composables/useTranslations.js';
 export { useViewWidth, VIEW_BASE_WIDTH, VIEW_TOOLBAR_HEIGHT } from './composables/useViewWidth.js';
+export { defaultTheme, defineTheme, mergeTheme, provideTheme, useTheme, THEME_KEY } from './helpers/theme.js';

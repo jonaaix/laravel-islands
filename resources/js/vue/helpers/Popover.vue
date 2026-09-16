@@ -134,12 +134,12 @@ defineExpose({ position });
 <template>
     <Teleport to="body">
         <!-- A click beside the panel means no, the same as Escape. -->
-        <div v-if="open" class="fixed inset-0" :style="{ zIndex: layer }" @click="emit('close')"></div>
+        <div v-if="open" class="il-popover__backdrop fixed inset-0" :style="{ zIndex: layer }" @click="emit('close')"></div>
 
         <div
             v-if="open"
             ref="panel"
-            class="fixed overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10"
+            class="il-popover fixed overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10"
             :style="{ ...style, zIndex: layer + 1, ...(placed ? {} : unplacedStyle) }"
             @keydown.esc.stop="emit('close')"
             @click.stop

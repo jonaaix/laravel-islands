@@ -27,11 +27,11 @@ const surfaceClass = computed(() => {
 </script>
 
 <template>
-    <div>
-        <p v-if="label" class="mb-1"><FieldCaption>{{ label }}</FieldCaption></p>
+    <div class="il-field-group" :data-tone="tone || undefined" :data-muted="muted || undefined">
+        <p v-if="label" class="il-field-group__label mb-1"><FieldCaption>{{ label }}</FieldCaption></p>
 
         <div
-            class="flex w-fit divide-x overflow-hidden rounded-lg ring-1"
+            class="il-field-group__frame flex w-fit divide-x overflow-hidden rounded-lg ring-1"
             :class="surfaceClass"
         >
             <slot />

@@ -19,16 +19,16 @@ const TONES = {
         side takes a value or a control alike, so a panel of settings and a panel of figures
         keep the same rhythm.
     -->
-    <div class="flex items-center justify-between gap-3 py-3">
-        <div class="min-w-0">
-            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
+    <div class="il-list-item flex items-center justify-between gap-3 py-3">
+        <div class="il-list-item__text min-w-0">
+            <p class="il-list-item__label text-sm font-medium text-gray-900 dark:text-gray-100">
                 <slot name="label">{{ label }}</slot>
             </p>
-            <p v-if="description || $slots.description" class="text-xs" :class="TONES[descriptionTone] || TONES.muted">
+            <p v-if="description || $slots.description" class="il-list-item__description text-xs" :class="TONES[descriptionTone] || TONES.muted" :data-tone="descriptionTone">
                 <slot name="description">{{ description }}</slot>
             </p>
         </div>
-        <div class="min-w-0 text-right text-sm text-gray-700 dark:text-gray-300">
+        <div class="il-list-item__value min-w-0 text-right text-sm text-gray-700 dark:text-gray-300">
             <slot />
         </div>
     </div>

@@ -24,8 +24,8 @@ const props = defineProps({
     rel: { type: String, default: null },
     /** `pill` is full-rounded (Material-style), `rounded` a soft-corner rectangle. */
     shape: { type: String, default: null },
-    /** Material-style ripple on press. Skipped when the button is disabled or loading. */
-    ripple: { type: Boolean, default: true },
+    /** Material-style ripple on press. Skipped when the button is disabled or loading; the theme decides when unset. */
+    ripple: { type: Boolean, default: null },
     /** Accessible label of the chevron half when the `menu` slot turns this into a split button. */
     menuLabel: { type: String, default: 'Open menu' },
     /** Width of the popover in pixels — passed through to `Popover`. */
@@ -39,88 +39,21 @@ const emit = defineEmits(['click', 'menu-open', 'menu-close']);
 const attrs = useAttrs();
 const slots = useSlots();
 
-const SIZES = {
-    sm: {
-        box: 'h-7 gap-1.5 px-3 text-xs',
-        splitAction: 'h-7 gap-1.5 pl-3 pr-2 text-xs',
-        splitMenu: 'h-7 w-6 text-xs',
-        glyph: 'h-3.5 w-3.5',
-        chevron: 'h-3 w-3',
-    },
-    md: {
-        box: 'h-9 gap-1.5 px-3.5 text-sm',
-        splitAction: 'h-9 gap-1.5 pl-3.5 pr-2.5 text-sm',
-        splitMenu: 'h-9 w-7 text-sm',
-        glyph: 'h-4 w-4',
-        chevron: 'h-3.5 w-3.5',
-    },
-    lg: {
-        box: 'h-10 gap-2 px-5 text-sm',
-        splitAction: 'h-10 gap-2 pl-5 pr-3 text-sm',
-        splitMenu: 'h-10 w-8 text-sm',
-        glyph: 'h-4 w-4',
-        chevron: 'h-4 w-4',
-    },
-};
+const resolvedTone = computed(() => props.tone ?? defaults.tone ?? 'primary');
+const resolvedSize = computed(() => props.size ?? defaults.size ?? 'md');
+const resolvedShape = computed(() => props.shape ?? defaults.shape ?? 'rounded');
 
-const SHAPES = {
-    pill: 'rounded-full',
-    rounded: 'rounded-md',
-};
-
-const PACKAGE_DEFAULTS = { shape: 'rounded', size: 'md', tone: 'primary' };
-
-const TONES = {
-    cta: 'bg-primary-600 text-white font-medium shadow-sm hover:bg-primary-500 focus-visible:ring-primary-500',
-    primary: 'bg-primary-100 text-primary-800 font-medium hover:bg-primary-200 focus-visible:ring-primary-500 dark:bg-primary-500/15 dark:text-primary-200 dark:hover:bg-primary-500/25',
-    secondary: 'bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 focus-visible:ring-gray-500 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700',
-    outlined: 'bg-transparent text-gray-700 font-medium ring-1 ring-gray-200 hover:bg-gray-100 focus-visible:ring-gray-500 dark:text-gray-200 dark:ring-white/10 dark:hover:bg-white/5',
-    ghost: 'bg-transparent text-gray-600 font-medium hover:bg-gray-100 hover:text-gray-900 focus-visible:ring-gray-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-100',
-    danger: 'bg-red-600 text-white font-medium shadow-sm hover:bg-red-500 focus-visible:ring-red-500',
-};
-
-const SPLIT_FRAME = {
-    cta: 'shadow-sm',
-    primary: '',
-    secondary: '',
-    outlined: 'ring-1 ring-gray-200 dark:ring-white/10',
-    ghost: '',
-    danger: 'shadow-sm',
-};
-
-const SPLIT_HALF = {
-    cta: 'bg-primary-600 text-white font-medium hover:bg-primary-500 focus-visible:ring-primary-500',
-    primary: 'bg-primary-100 text-primary-800 font-medium hover:bg-primary-200 focus-visible:ring-primary-500 dark:bg-primary-500/15 dark:text-primary-200 dark:hover:bg-primary-500/25',
-    secondary: 'bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 focus-visible:ring-gray-500 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700',
-    outlined: 'bg-transparent text-gray-700 font-medium hover:bg-gray-100 focus-visible:ring-gray-500 dark:text-gray-200 dark:hover:bg-white/5',
-    ghost: 'bg-transparent text-gray-600 font-medium hover:bg-gray-100 hover:text-gray-900 focus-visible:ring-gray-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-100',
-    danger: 'bg-red-600 text-white font-medium hover:bg-red-500 focus-visible:ring-red-500',
-};
-
-const SPLIT_DIVIDER = {
-    cta: 'bg-white/15',
-    primary: 'bg-primary-800/10 dark:bg-primary-200/10',
-    secondary: 'bg-gray-300/60 dark:bg-white/5',
-    outlined: 'bg-gray-200/70 dark:bg-white/5',
-    ghost: 'bg-gray-200/70 dark:bg-white/5',
-    danger: 'bg-white/15',
-};
-
-const resolvedTone = computed(() => props.tone ?? defaults.tone ?? PACKAGE_DEFAULTS.tone);
-const resolvedSize = computed(() => props.size ?? defaults.size ?? PACKAGE_DEFAULTS.size);
-const resolvedShape = computed(() => props.shape ?? defaults.shape ?? PACKAGE_DEFAULTS.shape);
-
-const size = computed(() => SIZES[resolvedSize.value] ?? SIZES.md);
-const toneClass = computed(() => TONES[resolvedTone.value] ?? TONES.primary);
-const shapeClass = computed(() => SHAPES[resolvedShape.value] ?? SHAPES.rounded);
-const splitFrameClass = computed(() => SPLIT_FRAME[resolvedTone.value] ?? '');
-const splitHalfClass = computed(() => SPLIT_HALF[resolvedTone.value] ?? SPLIT_HALF.primary);
-const splitDividerClass = computed(() => SPLIT_DIVIDER[resolvedTone.value] ?? SPLIT_DIVIDER.secondary);
+const size = computed(() => defaults.sizes[resolvedSize.value] ?? defaults.sizes.md);
+const toneClass = computed(() => defaults.tones[resolvedTone.value] ?? defaults.tones.primary);
+const shapeClass = computed(() => defaults.shapes[resolvedShape.value] ?? defaults.shapes.rounded);
+const splitFrameClass = computed(() => defaults.split.frame[resolvedTone.value] ?? '');
+const splitHalfClass = computed(() => defaults.split.half[resolvedTone.value] ?? defaults.split.half.primary);
+const splitDividerClass = computed(() => defaults.split.divider[resolvedTone.value] ?? defaults.split.divider.secondary);
 
 const isDisabled = computed(() => props.disabled || props.loading);
 const hasMenu = computed(() => Boolean(slots.menu));
 
-const rippleOn = computed(() => props.ripple && !isDisabled.value);
+const rippleOn = computed(() => (props.ripple ?? defaults.ripple ?? true) && !isDisabled.value);
 
 function onActionClick(event) {
     if (isDisabled.value) {
@@ -164,8 +97,12 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
         :rel="isAnchor ? resolvedRel : null"
         :disabled="isAnchor ? null : isDisabled"
         :aria-disabled="isAnchor && isDisabled ? 'true' : null"
+        :data-tone="resolvedTone"
+        :data-size="resolvedSize"
+        :data-shape="resolvedShape"
+        :data-state="loading ? 'loading' : (isDisabled ? 'disabled' : undefined)"
         :class="[
-            'relative inline-flex shrink-0 items-center justify-center overflow-hidden whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60',
+            'il-button relative inline-flex shrink-0 items-center justify-center overflow-hidden whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60',
             isAnchor && isDisabled ? 'cursor-not-allowed opacity-60' : '',
             size.box,
             shapeClass,
@@ -175,25 +112,25 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
         v-ripple="rippleOn"
         @click="onActionClick"
     >
-        <span v-if="loading" :class="[size.glyph, 'flex items-center justify-center']">
+        <span v-if="loading" :class="[size.glyph, 'il-button__spinner flex items-center justify-center']">
             <svg class="animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" d="M12 3a9 9 0 1 0 9 9" />
             </svg>
         </span>
         <span
             v-else-if="$slots.icon"
-            :class="[size.glyph, 'flex items-center justify-center [&>svg]:h-full [&>svg]:w-full']"
+            :class="[size.glyph, 'il-button__icon flex items-center justify-center [&>svg]:h-full [&>svg]:w-full']"
         >
             <slot name="icon" />
         </span>
 
-        <span v-if="$slots.default || label"><slot>{{ label }}</slot></span>
+        <span v-if="$slots.default || label" class="il-button__label"><slot>{{ label }}</slot></span>
 
-        <span v-if="$slots.chip" class="flex items-center"><slot name="chip" /></span>
+        <span v-if="$slots.chip" class="il-button__chip flex items-center"><slot name="chip" /></span>
 
         <span
             v-if="$slots.iconRight && !loading"
-            :class="[size.glyph, 'flex items-center justify-center [&>svg]:h-full [&>svg]:w-full']"
+            :class="[size.glyph, 'il-button__icon flex items-center justify-center [&>svg]:h-full [&>svg]:w-full']"
         >
             <slot name="iconRight" />
         </span>
@@ -202,8 +139,13 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
     <span
         v-else
         ref="rootEl"
+        :data-tone="resolvedTone"
+        :data-size="resolvedSize"
+        :data-shape="resolvedShape"
+        :data-split="true"
+        :data-state="loading ? 'loading' : (isDisabled ? 'disabled' : (menuOpen ? 'open' : undefined))"
         :class="[
-            'relative isolate inline-flex shrink-0 overflow-hidden whitespace-nowrap align-middle disabled:cursor-not-allowed disabled:opacity-60',
+            'il-button relative isolate inline-flex shrink-0 overflow-hidden whitespace-nowrap align-middle disabled:cursor-not-allowed disabled:opacity-60',
             shapeClass,
             splitFrameClass,
             fullWidth ? 'w-full' : '',
@@ -219,7 +161,7 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
             :disabled="isAnchor ? null : isDisabled"
             :aria-disabled="isAnchor && isDisabled ? 'true' : null"
             :class="[
-                'relative inline-flex flex-1 items-center justify-center overflow-hidden transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset',
+                'il-button__action relative inline-flex flex-1 items-center justify-center overflow-hidden transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset',
                 isAnchor && isDisabled ? 'cursor-not-allowed opacity-60' : '',
                 size.splitAction,
                 splitHalfClass,
@@ -227,21 +169,21 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
             v-ripple="rippleOn"
             @click="onActionClick"
         >
-                <span v-if="loading" :class="[size.glyph, 'flex items-center justify-center']">
+                <span v-if="loading" :class="[size.glyph, 'il-button__spinner flex items-center justify-center']">
                 <svg class="animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" d="M12 3a9 9 0 1 0 9 9" />
                 </svg>
             </span>
-            <span v-else-if="$slots.icon" :class="[size.glyph, 'flex items-center justify-center [&>svg]:h-full [&>svg]:w-full']">
+            <span v-else-if="$slots.icon" :class="[size.glyph, 'il-button__icon flex items-center justify-center [&>svg]:h-full [&>svg]:w-full']">
                 <slot name="icon" />
             </span>
 
-            <span v-if="$slots.default || label"><slot>{{ label }}</slot></span>
+            <span v-if="$slots.default || label" class="il-button__label"><slot>{{ label }}</slot></span>
 
-            <span v-if="$slots.chip" class="flex items-center"><slot name="chip" /></span>
+            <span v-if="$slots.chip" class="il-button__chip flex items-center"><slot name="chip" /></span>
         </component>
 
-        <span aria-hidden="true" :class="['w-px self-stretch', splitDividerClass]"></span>
+        <span aria-hidden="true" :class="['il-button__divider w-px self-stretch', splitDividerClass]"></span>
 
         <button
             type="button"
@@ -250,14 +192,14 @@ const resolvedRel = computed(() => props.rel ?? (props.target === '_blank' ? 'no
             :aria-expanded="menuOpen ? 'true' : 'false'"
             :aria-haspopup="'menu'"
             :class="[
-                'relative inline-flex shrink-0 items-center justify-center overflow-hidden transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset',
+                'il-button__menu relative inline-flex shrink-0 items-center justify-center overflow-hidden transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset',
                 size.splitMenu,
                 splitHalfClass,
             ]"
             v-ripple="rippleOn"
             @click="onMenuClick"
         >
-            <svg :class="[size.chevron, 'transition-transform']" :style="{ transform: menuOpen ? 'rotate(180deg)' : 'none' }" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <svg :class="[size.chevron, 'il-button__chevron transition-transform']" :style="{ transform: menuOpen ? 'rotate(180deg)' : 'none' }" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.25a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08Z" clip-rule="evenodd" />
             </svg>
         </button>

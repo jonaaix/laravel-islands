@@ -24,10 +24,15 @@ const TICK_LENGTH = 20;
         hard to hit, so the pointer is answered before it arrives. Wrap this in a <label> and
         the words become part of the same target.
     -->
-    <span class="relative inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center" :class="disabled ? 'opacity-50' : ''">
+    <span
+        class="il-checkbox relative inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center"
+        :class="disabled ? 'opacity-50' : ''"
+        :data-state="indeterminate ? 'indeterminate' : (modelValue ? 'checked' : 'unchecked')"
+        :data-disabled="disabled || undefined"
+    >
         <input
             type="checkbox"
-            class="peer absolute -inset-[11px] z-10 m-0 cursor-pointer appearance-none rounded-full opacity-0 disabled:cursor-not-allowed"
+            class="il-checkbox__input peer absolute -inset-[11px] z-10 m-0 cursor-pointer appearance-none rounded-full opacity-0 disabled:cursor-not-allowed"
             :checked="modelValue"
             :indeterminate="indeterminate"
             :disabled="disabled"
@@ -41,13 +46,13 @@ const TICK_LENGTH = 20;
         -->
         <span
             aria-hidden="true"
-            class="pointer-events-none absolute -inset-[11px] rounded-full opacity-0 transition-opacity duration-150 peer-hover:opacity-[0.08] peer-focus-visible:opacity-[0.14] peer-active:opacity-[0.18] peer-disabled:opacity-0"
+            class="il-checkbox__halo pointer-events-none absolute -inset-[11px] rounded-full opacity-0 transition-opacity duration-150 peer-hover:opacity-[0.08] peer-focus-visible:opacity-[0.14] peer-active:opacity-[0.18] peer-disabled:opacity-0"
             :class="marked ? 'bg-primary-500' : 'bg-gray-500 dark:bg-gray-300'"
         ></span>
 
         <span
             aria-hidden="true"
-            class="pointer-events-none relative flex h-full w-full items-center justify-center rounded-[4px] border-2 transition-colors duration-150"
+            class="il-checkbox__box pointer-events-none relative flex h-full w-full items-center justify-center rounded-[4px] border-2 transition-colors duration-150"
             :class="marked
                 ? 'border-primary-600 bg-primary-600 dark:border-primary-500 dark:bg-primary-500'
                 : 'border-gray-400 bg-transparent dark:border-gray-500'"

@@ -21,7 +21,7 @@ const shape = computed(() => props.ratio || defaults.mediaRatio || '');
 
 <template>
     <div
-        class="card-media relative w-full overflow-hidden bg-gray-100 dark:bg-white/5"
+        class="il-card-media card-media relative w-full overflow-hidden bg-gray-100 dark:bg-white/5"
         :style="shape ? { aspectRatio: shape } : {}"
     >
         <slot />

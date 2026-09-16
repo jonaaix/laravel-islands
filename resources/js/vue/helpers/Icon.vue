@@ -13,6 +13,8 @@ const def = computed(() => icons[props.name] ?? null);
 <template>
     <svg
         v-if="def"
+        class="il-icon"
+        :data-icon="name"
         :viewBox="def.box"
         :fill="def.stroke ? 'none' : 'currentColor'"
         :stroke="def.stroke ? 'currentColor' : undefined"

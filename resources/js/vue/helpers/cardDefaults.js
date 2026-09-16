@@ -1,26 +1,25 @@
-import { inject, provide } from 'vue';
+import { inject } from 'vue';
+import { provideTheme, useTheme } from './theme.js';
 
+/** The pre-theme way of seeding the Card helpers: still honoured, and it wins over the theme where both are set. */
 export const CARD_DEFAULTS_KEY = Symbol('islands-card-defaults');
 
 /**
- * Hand the Card helpers a set of application-wide defaults.
- *
- * `mediaRatio` is the shape pictures are shown in — a house decision, not the package's, so it
- * has no value here until an application names one.
- *
- * For a global default across every island, call at boot time via
- * `app.provide(CARD_DEFAULTS_KEY, { mediaRatio: '3 / 2' })` inside the
- * `startVueIslands({ setup(app) { … } })` hook.
+ * Hand the Card helpers a set of application-wide defaults. The same as
+ * `provideTheme({ card: defaults })`; kept for callers written before the theme existed.
  *
  * @param {{ mediaRatio?: string }} defaults
  */
 export function provideCardDefaults(defaults) {
-    provide(CARD_DEFAULTS_KEY, defaults ?? {});
+    provideTheme({ card: defaults ?? {} });
 }
 
 /**
  * @returns {{ mediaRatio?: string }}
  */
 export function useCardDefaults() {
-    return inject(CARD_DEFAULTS_KEY, {});
+    const theme = useTheme('card');
+    const legacy = inject(CARD_DEFAULTS_KEY, null);
+
+    return legacy ? { ...theme, ...legacy } : theme;
 }

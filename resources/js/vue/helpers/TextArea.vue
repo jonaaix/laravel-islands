@@ -1,14 +1,16 @@
 <script setup>
 import { computed, useAttrs } from 'vue';
 import { textareaClasses } from './fieldStyles.js';
+import { useTheme } from './theme.js';
 
 defineOptions({ inheritAttrs: false });
 
 const props = defineProps({
     modelValue: { type: [String, null], default: '' },
     rows: { type: [Number, String], default: 4 },
-    shape: { type: String, default: 'rounded' },
-    size: { type: String, default: 'md' },
+    /** The theme decides when unset. */
+    shape: { type: String, default: null },
+    size: { type: String, default: null },
     mono: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
     readonly: { type: Boolean, default: false },
@@ -19,11 +21,14 @@ const props = defineProps({
 defineEmits(['update:modelValue']);
 
 const attrs = useAttrs();
+const field = useTheme('field');
 
 const classes = computed(() =>
     textareaClasses({
-        shape: props.shape,
-        size: props.size,
+        shape: props.shape ?? field.shape,
+        size: props.size ?? field.size,
+        shapes: field.shapes,
+        sizes: field.textareaSizes,
         mono: props.mono,
         extra: attrs.class ?? '',
     }),
@@ -38,7 +43,9 @@ const classes = computed(() =>
         :readonly="readonly"
         :required="required"
         :placeholder="placeholder"
-        :class="classes"
+        :class="['il-text-area', classes]"
+        :data-size="size ?? field.size"
+        :data-shape="shape ?? field.shape"
         v-bind="{ ...attrs, class: undefined }"
         @input="$emit('update:modelValue', $event.target.value)"
     ></textarea>

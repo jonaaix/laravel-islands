@@ -27,7 +27,8 @@ const ends = computed(() => ENDS[props.shape || defaults.shape] ?? ENDS.rounded)
     <div
         role="group"
         :aria-label="ariaLabel || undefined"
-        class="inline-flex items-center [&>*]:rounded-none [&>*+*]:ml-px [&>*:focus-visible]:relative [&>*:focus-visible]:z-10 [&>*:hover]:relative [&>*:hover]:z-10"
+        class="il-button-group inline-flex items-center [&>*]:rounded-none [&>*+*]:ml-px [&>*:focus-visible]:relative [&>*:focus-visible]:z-10 [&>*:hover]:relative [&>*:hover]:z-10"
+        :data-shape="shape || defaults.shape || 'rounded'"
         :class="ends"
     >
         <slot />

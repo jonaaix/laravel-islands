@@ -120,7 +120,8 @@ onBeforeUnmount(() => {
         <Transition name="island-modal" @after-leave="releaseOverlay">
             <div
                 v-if="open"
-                class="fixed inset-0 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-[2px]"
+                class="il-modal fixed inset-0 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-[2px]"
+                :data-size="size"
                 :style="overlayStyle"
                 @click.self="onBackdrop"
                 @keydown="onKeydown"
@@ -130,19 +131,19 @@ onBeforeUnmount(() => {
                 tabindex="-1"
                 role="dialog"
                 aria-modal="true"
-                class="island-modal-panel relative flex w-full flex-col overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none dark:bg-gray-900 dark:ring-white/10"
+                class="il-modal__panel island-modal-panel relative flex w-full flex-col overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none dark:bg-gray-900 dark:ring-white/10"
                 :class="[sizeClass, fills ? 'h-full' : 'max-h-full']"
             >
                 <!-- Without a title there is no bar to hang the close button in; it floats instead. -->
-                <div v-if="title || $slots.title" class="flex shrink-0 items-center gap-4 border-b border-gray-200 px-4 py-2 dark:border-white/10">
+                <div v-if="title || $slots.title" class="il-modal__header flex shrink-0 items-center gap-4 border-b border-gray-200 px-4 py-2 dark:border-white/10">
                     <div class="min-w-0 flex-1">
                         <slot name="title">
-                            <p class="truncate text-sm font-semibold text-gray-900 dark:text-gray-100">{{ title }}</p>
+                            <p class="il-modal__title truncate text-sm font-semibold text-gray-900 dark:text-gray-100">{{ title }}</p>
                         </slot>
                     </div>
 
                     <!-- The bar has the room, so what acts on the content sits beside its name. -->
-                    <div v-if="$slots.actions" class="flex shrink-0 items-center gap-2">
+                    <div v-if="$slots.actions" class="il-modal__actions flex shrink-0 items-center gap-2">
                         <slot name="actions" />
                     </div>
 
@@ -158,7 +159,7 @@ onBeforeUnmount(() => {
                     </IconButton>
                 </div>
 
-                <span v-else-if="closable" class="absolute right-2 top-2 z-10">
+                <span v-else-if="closable" class="il-modal__close absolute right-2 top-2 z-10">
                     <IconButton
                         size="sm"
                         tone="quiet"
@@ -170,11 +171,11 @@ onBeforeUnmount(() => {
                     </IconButton>
                 </span>
 
-                <div class="min-h-0 flex-1" :class="fills ? 'overflow-hidden' : 'overflow-y-auto p-5'">
+                <div class="il-modal__body min-h-0 flex-1" :class="fills ? 'overflow-hidden' : 'overflow-y-auto p-5'">
                     <slot />
                 </div>
 
-                <div v-if="$slots.footer" class="flex shrink-0 justify-end gap-2 border-t border-gray-200 px-4 py-3 dark:border-white/10">
+                <div v-if="$slots.footer" class="il-modal__footer flex shrink-0 justify-end gap-2 border-t border-gray-200 px-4 py-3 dark:border-white/10">
                     <slot name="footer" />
                 </div>
             </div>

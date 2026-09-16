@@ -1,5 +1,5 @@
 <template>
-    <table>
+    <table class="il-table">
         <slot />
     </table>
 </template>

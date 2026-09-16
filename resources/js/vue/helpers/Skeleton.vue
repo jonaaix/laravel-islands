@@ -27,11 +27,11 @@ const lineWidths = computed(() => Array.from({ length: Math.max(1, props.lines) 
 </script>
 
 <template>
-    <span v-if="variant === 'circle'" :class="[SURFACE, 'inline-block rounded-full']" :style="{ width: px(width), height: px(width) }" aria-hidden="true"></span>
+    <span v-if="variant === 'circle'" :class="['il-skeleton', SURFACE, 'inline-block rounded-full']" data-variant="circle" :style="{ width: px(width), height: px(width) }" aria-hidden="true"></span>
 
-    <span v-else-if="variant === 'text'" class="flex flex-col gap-2" :style="{ width: px(width) }" aria-hidden="true">
-        <span v-for="(lineWidth, i) in lineWidths" :key="i" :class="[SURFACE, 'block h-3 rounded']" :style="{ width: lineWidth }"></span>
+    <span v-else-if="variant === 'text'" class="il-skeleton flex flex-col gap-2" data-variant="text" :style="{ width: px(width) }" aria-hidden="true">
+        <span v-for="(lineWidth, i) in lineWidths" :key="i" :class="['il-skeleton__line', SURFACE, 'block h-3 rounded']" :style="{ width: lineWidth }"></span>
     </span>
 
-    <span v-else :class="[SURFACE, 'block', rounded]" :style="blockStyle" aria-hidden="true"></span>
+    <span v-else :class="['il-skeleton', SURFACE, 'block', rounded]" data-variant="block" :style="blockStyle" aria-hidden="true"></span>
 </template>

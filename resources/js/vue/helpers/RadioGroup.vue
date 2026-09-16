@@ -26,7 +26,9 @@ provide(RADIO_GROUP_KEY, {
     <div
         role="radiogroup"
         :aria-label="ariaLabel || undefined"
-        class="flex"
+        class="il-radio-group flex"
+        :data-orientation="orientation"
+        :data-disabled="disabled || undefined"
         :class="orientation === 'horizontal' ? 'flex-row flex-wrap items-center gap-x-5 gap-y-2' : 'flex-col gap-2'"
     >
         <slot />

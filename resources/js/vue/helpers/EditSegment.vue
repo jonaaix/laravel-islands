@@ -40,7 +40,7 @@ watch(
 </script>
 
 <template>
-    <div ref="trigger" @click.stop="toggle()">
+    <div ref="trigger" class="il-edit-segment" :data-state="open ? 'open' : 'closed'" @click.stop="toggle()">
         <FieldSegment
             :label="label"
             :value="value === null ? null : (display || value)"
@@ -50,7 +50,7 @@ watch(
         />
 
         <Popover :anchor="trigger" :open="open" :width="260" @close="open = false">
-            <div class="p-3">
+            <div class="il-edit-segment__editor p-3">
                 <p class="mb-2"><FieldCaption>{{ label }}</FieldCaption></p>
 
                 <InlineEdit

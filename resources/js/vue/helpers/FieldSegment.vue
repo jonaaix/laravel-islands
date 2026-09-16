@@ -72,13 +72,17 @@ onBeforeUnmount(() => clearTimeout(copyTimer));
 <template>
     <div
         @click="onClick($event)"
-        class="relative min-w-[100px] px-4 py-2.5"
+        class="il-field-segment relative min-w-[100px] px-4 py-2.5"
         :class="interactive || copy ? 'cursor-pointer transition-colors hover:bg-black/[0.04] dark:hover:bg-white/5' : ''"
+        :data-state="state || undefined"
+        :data-interactive="interactive || undefined"
+        :data-saving="saving || undefined"
+        :data-error="error ? true : undefined"
     >
         <!-- Nothing here is ever cut off: the segment grows to its content instead. -->
-        <p class="whitespace-nowrap text-[10px] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ label }}</p>
+        <p class="il-field-segment__label whitespace-nowrap text-[10px] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ label }}</p>
 
-        <p class="mt-0.5 flex items-center gap-1.5">
+        <p class="il-field-segment__value mt-0.5 flex items-center gap-1.5">
             <Icon
                 v-if="iconMark"
                 :name="iconMark.name"

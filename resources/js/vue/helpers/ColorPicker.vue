@@ -157,7 +157,7 @@ const isPreset = (value) => parseHex(value) && toHex(parseHex(value)) === toHex(
 </script>
 
 <template>
-    <div class="color-picker flex items-center gap-2">
+    <div class="il-color-picker color-picker flex items-center gap-2" :data-state="open ? 'open' : 'closed'" :data-disabled="disabled || undefined">
         <div class="w-40">
             <TextField
                 :model-value="text"
@@ -175,7 +175,7 @@ const isPreset = (value) => parseHex(value) && toHex(parseHex(value)) === toHex(
                 :disabled="disabled"
                 :aria-label="WORDS.open"
                 :aria-expanded="open ? 'true' : 'false'"
-                class="h-9 w-9 rounded-md ring-1 ring-gray-200 transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-60 dark:ring-white/10"
+                class="il-color-picker__swatch h-9 w-9 rounded-md ring-1 ring-gray-200 transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-60 dark:ring-white/10"
                 :style="{ backgroundColor: hex }"
                 @click="open = !open"
             ></button>
@@ -187,7 +187,7 @@ const isPreset = (value) => parseHex(value) && toHex(parseHex(value)) === toHex(
                     role="application"
                     tabindex="0"
                     :aria-label="WORDS.plane"
-                    class="relative h-40 w-full cursor-crosshair touch-none rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+                    class="il-color-picker__plane relative h-40 w-full cursor-crosshair touch-none rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
                     :style="{ background: `linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, ${hueColour})` }"
                     @pointerdown="onPlane"
                     @keydown="onPlaneKey"
@@ -206,7 +206,7 @@ const isPreset = (value) => parseHex(value) && toHex(parseHex(value)) === toHex(
                     :aria-valuemin="0"
                     :aria-valuemax="360"
                     :aria-valuenow="Math.round(hsv.h)"
-                    class="relative h-3 w-full cursor-pointer touch-none rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+                    class="il-color-picker__hue relative h-3 w-full cursor-pointer touch-none rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
                     style="background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)"
                     @pointerdown="onHue"
                     @keydown="onHueKey"
@@ -226,7 +226,7 @@ const isPreset = (value) => parseHex(value) && toHex(parseHex(value)) === toHex(
                     :aria-valuemin="0"
                     :aria-valuemax="100"
                     :aria-valuenow="Math.round(alphaValue * 100)"
-                    class="relative h-3 w-full cursor-pointer touch-none rounded-full bg-[length:8px_8px] bg-[linear-gradient(45deg,#d4d4d8_25%,transparent_25%,transparent_75%,#d4d4d8_75%),linear-gradient(45deg,#d4d4d8_25%,#fff_25%,#fff_75%,#d4d4d8_75%)] [background-position:0_0,4px_4px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+                    class="il-color-picker__alpha relative h-3 w-full cursor-pointer touch-none rounded-full bg-[length:8px_8px] bg-[linear-gradient(45deg,#d4d4d8_25%,transparent_25%,transparent_75%,#d4d4d8_75%),linear-gradient(45deg,#d4d4d8_25%,#fff_25%,#fff_75%,#d4d4d8_75%)] [background-position:0_0,4px_4px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
                     @pointerdown="onAlpha"
                     @keydown="onAlphaKey"
                 >
@@ -238,13 +238,13 @@ const isPreset = (value) => parseHex(value) && toHex(parseHex(value)) === toHex(
                     ></span>
                 </div>
 
-                <div v-if="presets.length" role="group" :aria-label="WORDS.presets" class="grid grid-cols-7 gap-1.5">
+                <div v-if="presets.length" role="group" :aria-label="WORDS.presets" class="il-color-picker__presets grid grid-cols-7 gap-1.5">
                     <Tooltip v-for="preset in presets" :key="preset" :text="preset">
                         <button
                             type="button"
                             :aria-label="preset"
                             :aria-pressed="isPreset(preset) ? 'true' : 'false'"
-                            class="h-7 w-7 rounded-md ring-1 ring-inset ring-black/10 transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                            class="il-color-picker__preset h-7 w-7 rounded-md ring-1 ring-inset ring-black/10 transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                             :class="isPreset(preset) ? 'ring-2 ring-offset-2 ring-offset-white ring-gray-900 dark:ring-white dark:ring-offset-gray-800' : ''"
                             :style="{ backgroundColor: preset }"
                             @click="pickPreset(preset)"
@@ -270,7 +270,7 @@ const isPreset = (value) => parseHex(value) && toHex(parseHex(value)) === toHex(
                         </IconButton>
                     </div>
 
-                    <code class="block truncate font-mono text-xs text-gray-700 dark:text-gray-200">{{ display }}</code>
+                    <code class="il-color-picker__value block truncate font-mono text-xs text-gray-700 dark:text-gray-200">{{ display }}</code>
                 </div>
             </div>
         </Popover>

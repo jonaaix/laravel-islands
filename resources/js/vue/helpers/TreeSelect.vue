@@ -267,7 +267,7 @@ defineExpose({ show, close, loadOptions, refresh });
 </script>
 
 <template>
-    <div class="tree-select">
+    <div class="il-tree-select tree-select" :data-state="open ? 'open' : 'closed'" :data-disabled="disabled || undefined">
         <div ref="trigger" class="relative">
             <slot name="trigger" :open="show" :path="path" :segments="segments" :picked="picked">
                 <button
@@ -275,7 +275,7 @@ defineExpose({ show, close, loadOptions, refresh });
                     @click.stop="show()"
                     :disabled="disabled"
                     :aria-expanded="open"
-                    class="flex h-9 w-full items-center gap-1 rounded-md border border-gray-200 bg-white pl-2.5 text-left text-sm transition-colors hover:bg-gray-50 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/10 dark:bg-gray-900 dark:hover:bg-white/5"
+                    class="il-tree-select__trigger flex h-9 w-full items-center gap-1 rounded-md border border-gray-200 bg-white pl-2.5 text-left text-sm transition-colors hover:bg-gray-50 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/10 dark:bg-gray-900 dark:hover:bg-white/5"
                     :class="clearable && hasValue ? 'pr-8' : 'pr-2'"
                 >
                     <span v-if="segments.length" class="flex min-w-0 flex-1 items-center gap-x-1 overflow-hidden">
@@ -300,7 +300,7 @@ defineExpose({ show, close, loadOptions, refresh });
 
                 <!-- The wrapper carries the position: a class handed to IconButton lands on
                      the button inside its tooltip span, not on what the layout sees. -->
-                <span v-if="clearable && hasValue" class="absolute inset-y-0 right-1.5 flex items-center">
+                <span v-if="clearable && hasValue" class="il-tree-select__clear absolute inset-y-0 right-1.5 flex items-center">
                     <IconButton
                         :label="clearLabel"
                         size="xs"
@@ -317,8 +317,8 @@ defineExpose({ show, close, loadOptions, refresh });
         </div>
 
         <Popover :anchor="trigger" :open="open" :width="width" @close="close()">
-            <div>
-                <div class="relative border-b border-gray-100 p-2 dark:border-white/10">
+            <div class="il-tree-select__menu">
+                <div class="il-tree-select__search relative border-b border-gray-100 p-2 dark:border-white/10">
                     <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-gray-400">
                         <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd"/></svg>
                     </span>
@@ -332,7 +332,7 @@ defineExpose({ show, close, loadOptions, refresh });
                     />
                 </div>
 
-                <ul ref="listEl" class="slim-scrollbar overflow-y-auto py-1" :style="{ maxHeight: `var(--picker-list-h, ${listHeight})` }" role="listbox">
+                <ul ref="listEl" class="il-tree-select__list slim-scrollbar overflow-y-auto py-1" :style="{ maxHeight: `var(--picker-list-h, ${listHeight})` }" role="listbox">
                     <li v-if="loading" class="flex items-center justify-center gap-2 py-8 text-sm text-gray-400">
                         <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M12 3a9 9 0 1 0 9 9"/></svg>
                         {{ loadingLabel }}
@@ -353,7 +353,7 @@ defineExpose({ show, close, loadOptions, refresh });
                         >
                             <div
                                 v-if="!option.selectable"
-                                class="truncate py-1 pr-3 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500"
+                                class="il-tree-select__heading truncate py-1 pr-3 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500"
                                 :style="{ paddingLeft: `${0.75 + option.depth * 0.85}rem` }"
                             >{{ option.name }}</div>
 
@@ -362,7 +362,8 @@ defineExpose({ show, close, loadOptions, refresh });
                                 type="button"
                                 @click="pick(option)"
                                 @mouseenter="highlighted = i"
-                                class="flex w-full items-center justify-between gap-2 py-1 pr-3 text-left"
+                                :data-state="String(option.id) === String(modelValue) ? 'selected' : undefined"
+                                class="il-tree-select__option flex w-full items-center justify-between gap-2 py-1 pr-3 text-left"
                                 :class="i === highlighted ? 'bg-gray-50 dark:bg-white/5' : ''"
                                 :style="{ paddingLeft: `${0.75 + option.depth * 0.85}rem` }"
                             >
@@ -383,7 +384,7 @@ defineExpose({ show, close, loadOptions, refresh });
                     </template>
                 </ul>
 
-                <div v-if="footer" class="border-t border-gray-100 px-3 py-1.5 text-[11px] text-gray-400 dark:border-white/10 dark:text-gray-500">
+                <div v-if="footer" class="il-tree-select__footer border-t border-gray-100 px-3 py-1.5 text-[11px] text-gray-400 dark:border-white/10 dark:text-gray-500">
                     {{ footer }}
                 </div>
             </div>

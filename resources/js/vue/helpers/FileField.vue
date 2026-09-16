@@ -126,10 +126,11 @@ function formatBytes(n) {
 </script>
 
 <template>
-    <div class="file-field" :class="$attrs.class">
+    <div class="il-file-field file-field" :class="$attrs.class" :data-state="dragging ? 'dragging' : (displayed.length ? 'filled' : 'empty')" :data-disabled="disabled || undefined">
         <button
             v-if="multiple || displayed.length === 0"
             type="button"
+            class="il-file-field__zone"
             :class="zoneClasses"
             :aria-disabled="disabled"
             @click="openPicker"
@@ -157,11 +158,11 @@ function formatBytes(n) {
             @change="onSelect"
         />
 
-        <ul v-if="displayed.length" class="space-y-1" :class="{ 'mt-2': multiple || displayed.length > 1 }">
+        <ul v-if="displayed.length" class="il-file-field__list space-y-1" :class="{ 'mt-2': multiple || displayed.length > 1 }">
             <li
                 v-for="(file, i) in displayed"
                 :key="i"
-                class="flex items-center gap-2 rounded-md bg-gray-50 px-3 py-2 text-xs dark:bg-gray-900"
+                class="il-file-field__file flex items-center gap-2 rounded-md bg-gray-50 px-3 py-2 text-xs dark:bg-gray-900"
             >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 15l2.25 2.25L15 12.75M6.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25V9.564c0-.596-.237-1.168-.659-1.591L14.686 3.03A2.25 2.25 0 0 0 13.094 2.37H6.75A2.25 2.25 0 0 0 4.5 4.62v14.88a2.25 2.25 0 0 0 2.25 2.25Z"/>
@@ -170,7 +171,7 @@ function formatBytes(n) {
                 <span class="shrink-0 tabular-nums text-gray-500 dark:text-gray-400">{{ formatBytes(file.size) }}</span>
                 <button
                     type="button"
-                    class="shrink-0 rounded-full p-1 text-gray-400 transition-colors hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-500/15 dark:hover:text-red-300"
+                    class="il-file-field__remove shrink-0 rounded-full p-1 text-gray-400 transition-colors hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-500/15 dark:hover:text-red-300"
                     :aria-label="'Remove ' + file.name"
                     @click="(e) => removeAt(i, e)"
                 >

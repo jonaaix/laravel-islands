@@ -3,6 +3,7 @@ import { computed, nextTick, ref, watch } from 'vue';
 import IconButton from './IconButton.vue';
 import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
 import { selectSkin } from './selectSkins.js';
+import { useTheme } from './theme.js';
 import { useOptionSearch } from '../composables/useOptionSearch.js';
 import { useTranslations } from '../composables/useTranslations.js';
 
@@ -67,7 +68,7 @@ function updatePosition() {
     menuStyle.value = { top: `${r.bottom + 4}px`, left: `${left}px`, width: `${props.menuWidth}px` };
 }
 
-const skin = computed(() => selectSkin(props.variant, 'field'));
+const skin = computed(() => selectSkin(props.variant, 'field', useTheme('select').skins));
 
 const hasValue = computed(() => props.modelValue !== 0 && props.modelValue !== '' && props.modelValue != null);
 const selectedName = computed(() => {
@@ -147,7 +148,7 @@ function onKeydown(e) {
 </script>
 
 <template>
-    <div class="relative">
+    <div class="il-combobox relative" :data-variant="variant" :data-state="open ? 'open' : (hasValue ? 'set' : 'empty')">
         <!--
             The whole surface opens the list, not just the words on it: the padding of a wide
             trigger is a large part of what a pointer aims at. The button inside stays the
@@ -156,7 +157,7 @@ function onKeydown(e) {
         <div
             ref="triggerEl"
             @click="toggle"
-            :class="[skin.base, 'cursor-pointer', hasValue ? skin.on : skin.off]"
+            :class="['il-combobox__trigger', skin.base, 'cursor-pointer', hasValue ? skin.on : skin.off]"
         >
             <button
                 type="button"
@@ -194,9 +195,9 @@ function onKeydown(e) {
         </div>
 
         <Teleport to="body">
-        <div v-if="open" class="fixed inset-0" :style="backdropStyle" @click="close"></div>
-        <div v-if="open" class="fixed overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10" :style="{ ...menuStyle, ...panelStyle }">
-            <div class="relative border-b border-gray-100 p-2 dark:border-white/10">
+        <div v-if="open" class="il-combobox__backdrop fixed inset-0" :style="backdropStyle" @click="close"></div>
+        <div v-if="open" class="il-combobox__menu fixed overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10" :style="{ ...menuStyle, ...panelStyle }" :data-variant="variant">
+            <div class="il-combobox__search relative border-b border-gray-100 p-2 dark:border-white/10">
                 <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-gray-400">
                     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd"/></svg>
                 </span>
@@ -209,8 +210,8 @@ function onKeydown(e) {
                     class="h-8 w-full rounded-md border border-gray-200 bg-white pl-8 pr-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-white/10 dark:bg-gray-900 dark:text-gray-100"
                 />
             </div>
-            <ul role="listbox" class="overflow-y-auto py-1" :style="{ maxHeight: `${menuHeight}px` }">
-                <li v-if="loadingOptions" class="flex items-center justify-center gap-2 py-6 text-sm text-gray-400">
+            <ul role="listbox" class="il-combobox__list overflow-y-auto py-1" :style="{ maxHeight: `${menuHeight}px` }">
+                <li v-if="loadingOptions" class="il-combobox__loading flex items-center justify-center gap-2 py-6 text-sm text-gray-400">
                     <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" />
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v3a5 5 0 0 0-5 5H4Z" />
@@ -219,7 +220,7 @@ function onKeydown(e) {
                 </li>
                 <template v-else>
                 <li v-if="hasValue && clearOption">
-                    <button type="button" @click="clear" class="flex w-full items-center px-3 py-1.5 text-left text-sm text-primary-700 hover:bg-gray-50 dark:text-primary-300 dark:hover:bg-white/5">
+                    <button type="button" @click="clear" class="il-combobox__clear-option flex w-full items-center px-3 py-1.5 text-left text-sm text-primary-700 hover:bg-gray-50 dark:text-primary-300 dark:hover:bg-white/5">
                         {{ allLabel }}
                     </button>
                 </li>
@@ -227,9 +228,10 @@ function onKeydown(e) {
                     <button
                         type="button"
                         :disabled="option.disabled"
+                        :data-state="String(option.value) === String(modelValue) ? 'selected' : (option.disabled ? 'heading' : (i === highlighted ? 'highlighted' : undefined))"
                         @click="select(option.value)"
                         @mouseenter="option.disabled ? null : (highlighted = i)"
-                        class="flex w-full items-center justify-between gap-2 px-3 py-1.5 text-left text-sm"
+                        class="il-combobox__option flex w-full items-center justify-between gap-2 px-3 py-1.5 text-left text-sm"
                         :class="[
                             i === highlighted && !option.disabled ? 'bg-gray-50 dark:bg-white/5' : '',
                             option.disabled ? 'cursor-default text-gray-500 dark:text-gray-400' : '',
@@ -244,7 +246,7 @@ function onKeydown(e) {
                         </svg>
                     </button>
                 </li>
-                <li v-if="!filtered.length" class="py-6 text-center text-sm text-gray-400">{{ emptyLabel }}</li>
+                <li v-if="!filtered.length" class="il-combobox__empty py-6 text-center text-sm text-gray-400">{{ emptyLabel }}</li>
                 </template>
             </ul>
         </div>

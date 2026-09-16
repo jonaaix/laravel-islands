@@ -31,11 +31,15 @@ const DISABLED = 'disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-gr
 const READONLY = 'read-only:bg-gray-50 read-only:text-gray-600 dark:read-only:bg-gray-800/60 dark:read-only:text-gray-300';
 
 /**
- * @param {{ shape?: string, size?: string, align?: string, mono?: boolean, tabular?: boolean, extra?: string }} opts
+ * `shapes` and `sizes` are the theme's tables; the package's own apply when a caller passes none.
+ *
+ * @param {{ shape?: string, size?: string, align?: string, mono?: boolean, tabular?: boolean, extra?: string, shapes?: Record<string, string>, sizes?: Record<string, string> }} opts
  */
 export function fieldClasses(opts = {}) {
-    const shape = FIELD_SHAPES[opts.shape ?? 'rounded'] ?? FIELD_SHAPES.rounded;
-    const size = FIELD_SIZES[opts.size ?? 'md'] ?? FIELD_SIZES.md;
+    const shapes = opts.shapes ?? FIELD_SHAPES;
+    const sizes = opts.sizes ?? FIELD_SIZES;
+    const shape = shapes[opts.shape ?? 'rounded'] ?? shapes.rounded ?? FIELD_SHAPES.rounded;
+    const size = sizes[opts.size ?? 'md'] ?? sizes.md ?? FIELD_SIZES.md;
 
     return [
         BASE_BOX,
@@ -53,11 +57,13 @@ export function fieldClasses(opts = {}) {
 }
 
 /**
- * @param {{ shape?: string, size?: string, mono?: boolean, extra?: string }} opts
+ * @param {{ shape?: string, size?: string, mono?: boolean, extra?: string, shapes?: Record<string, string>, sizes?: Record<string, string> }} opts
  */
 export function textareaClasses(opts = {}) {
-    const shape = FIELD_SHAPES[opts.shape ?? 'rounded'] ?? FIELD_SHAPES.rounded;
-    const size = TEXTAREA_SIZES[opts.size ?? 'md'] ?? TEXTAREA_SIZES.md;
+    const shapes = opts.shapes ?? FIELD_SHAPES;
+    const sizes = opts.sizes ?? TEXTAREA_SIZES;
+    const shape = shapes[opts.shape ?? 'rounded'] ?? shapes.rounded ?? FIELD_SHAPES.rounded;
+    const size = sizes[opts.size ?? 'md'] ?? sizes.md ?? TEXTAREA_SIZES.md;
 
     return [
         BASE_BOX,

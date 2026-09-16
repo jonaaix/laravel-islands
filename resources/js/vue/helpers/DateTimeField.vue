@@ -3,7 +3,7 @@ import { computed, nextTick, ref, useAttrs, watch } from 'vue';
 import Button from './Button.vue';
 import IconButton from './IconButton.vue';
 import Popover from './Popover.vue';
-import { FIELD_SHAPES, FIELD_SIZES } from './fieldStyles.js';
+import { useTheme } from './theme.js';
 import {
     formatDisplay,
     fromModel,
@@ -45,8 +45,9 @@ const props = defineProps({
     variant: { type: String, default: 'field' },
     /** The IconButton tone of the `button` variant. */
     tone: { type: String, default: 'quiet' },
-    shape: { type: String, default: 'rounded' },
-    size: { type: String, default: 'md' },
+    /** The theme decides when unset. */
+    shape: { type: String, default: null },
+    size: { type: String, default: null },
     disabled: { type: Boolean, default: false },
     placeholder: { type: String, default: '' },
     /** The words the picker needs — the application owns them. */
@@ -56,6 +57,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const attrs = useAttrs();
+const field = useTheme('field');
 
 const WORDS = computed(() => ({
     open: 'Pick a date and time',
@@ -103,8 +105,8 @@ const frame = computed(() => [
     invalid.value
         ? 'border-red-400 focus-within:border-red-500 focus-within:ring-red-500 dark:border-red-500/60'
         : 'border-gray-200 focus-within:border-primary-500 focus-within:ring-primary-500 dark:border-white/10',
-    FIELD_SHAPES[props.shape] ?? FIELD_SHAPES.rounded,
-    FIELD_SIZES[props.size] ?? FIELD_SIZES.md,
+    field.shapes[props.shape ?? field.shape] ?? field.shapes.rounded,
+    field.sizes[props.size ?? field.size] ?? field.sizes.md,
     props.disabled ? 'cursor-not-allowed opacity-60' : '',
     attrs.class ?? '',
 ]);
@@ -381,7 +383,14 @@ const popoverWidth = computed(() => {
 </script>
 
 <template>
-    <span ref="anchor" :class="variant === 'button' ? ['inline-flex', attrs.class ?? ''] : frame">
+    <span
+        ref="anchor"
+        :class="['il-date-time-field', ...(variant === 'button' ? ['inline-flex', attrs.class ?? ''] : frame)]"
+        :data-mode="mode"
+        :data-variant="variant"
+        :data-state="open ? 'open' : (invalid ? 'invalid' : (value ? 'set' : 'empty'))"
+        :data-disabled="disabled || undefined"
+    >
         <IconButton
             v-if="variant === 'button'"
             :label="WORDS.open"
@@ -398,7 +407,7 @@ const popoverWidth = computed(() => {
             v-else
             type="text"
             :value="text"
-            :class="FRAME_INPUT"
+            :class="['il-date-time-field__input', FRAME_INPUT]"
             :disabled="disabled"
             :placeholder="placeholder"
             :aria-invalid="invalid ? 'true' : 'false'"
@@ -411,7 +420,7 @@ const popoverWidth = computed(() => {
         <button
             v-if="variant === 'field'"
             type="button"
-            :class="FRAME_BUTTON"
+            :class="['il-date-time-field__open', FRAME_BUTTON]"
             :disabled="disabled"
             :aria-label="WORDS.open"
             :aria-expanded="open ? 'true' : 'false'"
@@ -422,12 +431,12 @@ const popoverWidth = computed(() => {
         </button>
 
         <Popover :anchor="anchor" :open="open" :width="popoverWidth" @close="close">
-            <div v-if="shortcuts.length" class="flex flex-wrap gap-1.5 border-b border-gray-200 p-2 dark:border-white/10">
+            <div v-if="shortcuts.length" class="il-date-time-field__shortcuts flex flex-wrap gap-1.5 border-b border-gray-200 p-2 dark:border-white/10">
                 <Button v-for="shortcut in shortcuts" :key="shortcut.label" size="sm" tone="secondary" @click="pickShortcut(shortcut)">{{ shortcut.label }}</Button>
             </div>
 
-            <div class="flex flex-wrap">
-                <div v-if="hasCalendar" class="w-72 p-3">
+            <div class="il-date-time-field__picker flex flex-wrap">
+                <div v-if="hasCalendar" class="il-date-time-field__calendar w-72 p-3">
                     <div class="flex items-center justify-between">
                         <IconButton size="md" :label="navLabels[0]" :tooltip="false" @click="shiftView(-1)">
                             <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd"/></svg>
@@ -465,7 +474,7 @@ const popoverWidth = computed(() => {
                         <span v-for="name in weekdays" :key="name" class="py-1">{{ name }}</span>
                     </div>
 
-                    <div v-if="view === 'days'" role="grid" class="grid grid-cols-7 gap-y-0.5" @keydown="onGridKey">
+                    <div v-if="view === 'days'" role="grid" class="il-date-time-field__days grid grid-cols-7 gap-y-0.5" @keydown="onGridKey">
                         <Button
                             v-for="cell in grid"
                             :id="dayId(cell.date)"
@@ -490,7 +499,7 @@ const popoverWidth = computed(() => {
                 </div>
 
                 <!-- Absolutely placed inside a stretched box, so the columns take the calendar's height instead of dictating it. -->
-                <div v-if="hasClock" class="relative self-stretch border-gray-200 dark:border-white/10" :class="hasCalendar ? 'w-[136px] border-l' : 'h-72 w-full'">
+                <div v-if="hasClock" class="il-date-time-field__clock relative self-stretch border-gray-200 dark:border-white/10" :class="hasCalendar ? 'w-[136px] border-l' : 'h-72 w-full'">
                     <div
                         ref="hourList"
                         role="listbox"
@@ -536,10 +545,10 @@ const popoverWidth = computed(() => {
                 </div>
             </div>
 
-            <div class="flex items-center justify-between gap-2 border-t border-gray-200 p-2 dark:border-white/10">
+            <div class="il-date-time-field__footer flex items-center justify-between gap-2 border-t border-gray-200 p-2 dark:border-white/10">
                 <Button size="sm" tone="ghost" @click="clear">{{ WORDS.clear }}</Button>
                 <div class="flex items-center gap-2">
-                    <span class="text-xs tabular-nums text-gray-500 dark:text-gray-400">{{ formatDisplay(draft, mode, locale) }}</span>
+                    <span class="il-date-time-field__draft text-xs tabular-nums text-gray-500 dark:text-gray-400">{{ formatDisplay(draft, mode, locale) }}</span>
                     <Button v-if="hasClock" size="sm" tone="cta" @click="apply">{{ WORDS.apply }}</Button>
                 </div>
             </div>

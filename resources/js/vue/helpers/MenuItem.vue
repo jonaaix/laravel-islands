@@ -27,7 +27,8 @@ const toneClass = computed(() => TONES[props.tone] ?? TONES.default);
         :type="href ? undefined : 'button'"
         :disabled="tag === 'button' ? disabled : undefined"
         :aria-disabled="tag === 'a' && disabled ? 'true' : undefined"
-        class="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60"
+        :data-tone="tone"
+        class="il-menu-item flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60"
         :class="toneClass"
         @click.stop="emit('click', $event)"
     >
