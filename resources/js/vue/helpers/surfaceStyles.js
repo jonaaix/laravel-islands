@@ -64,7 +64,7 @@ export const TABS_SKINS = {
         countInactive: 'bg-il-neutral-100 text-il-neutral-500 dark:bg-il-neutral-800 dark:text-il-neutral-400',
     },
     pills: {
-        strip: 'flex items-center gap-1 overflow-x-auto rounded-il-menu bg-il-neutral-100 p-1 dark:bg-white/5',
+        strip: 'flex w-fit max-w-full items-center gap-1 overflow-x-auto rounded-il-menu bg-il-neutral-100 p-1 dark:bg-white/5',
         tab: 'flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-il-control px-3.5 py-1.5 text-sm font-medium transition-colors duration-[var(--il-duration-fast)]',
         active: 'bg-white text-il-neutral-900 shadow-sm dark:bg-il-neutral-800 dark:text-white',
         inactive: 'text-il-neutral-500 hover:bg-white/60 hover:text-il-neutral-700 dark:text-il-neutral-400 dark:hover:bg-white/5 dark:hover:text-il-neutral-200',
