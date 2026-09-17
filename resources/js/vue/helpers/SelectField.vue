@@ -22,9 +22,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-/* A native select hands back a string, so a numeric or boolean option would come
- * out of the field as text and stop matching the list it came from. The option
- * carries the value; the raw string only stands in for a slotted list. */
+// A native select reports only strings, so the option carries the value back; raw stands in for a slotted list.
 function pick(raw) {
     const option = props.options.find((opt) => String(opt.value) === raw);
 
