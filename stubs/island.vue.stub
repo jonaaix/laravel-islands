@@ -1,5 +1,7 @@
 <script setup>
-// @ai-agent Follow the islands-development skill, plus islands-datagrid-development for a list view.
+/**
+ * @ai-agent Follow the islands-development skill, plus islands-datagrid-development for a list view.
+ */
 import { useIsland, useTranslations } from '@aaix/laravel-islands/vue';
 
 const island = useIsland();

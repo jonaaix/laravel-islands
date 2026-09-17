@@ -20,8 +20,11 @@ class {{ class }}IslandController extends Controller
         return response()->json(['data' => $this->query->data($request)]);
     }
 
+    /**
+     * Left empty on purpose: the middleware settles who is logged in, never who may see this island.
+     */
     private function authorizeAccess(): void
     {
-        // Empty until filled in: the middleware settles who is logged in, never who may see this island.
+        //
     }
 }
