@@ -23,6 +23,25 @@ export const MODAL_SURFACE = 'bg-white shadow-2xl ring-1 ring-il-neutral-200 dar
 
 export const MODAL_DIVIDER = 'border-il-neutral-200 dark:border-white/10';
 
+export const BADGE_BASE = 'rounded-il-control px-2 py-0.5 text-xs font-medium';
+
+/** The box of a checkbox and a radio, marked and not. */
+export const CHOICE_BOXES = {
+    on: 'border-il-primary-600 bg-il-primary-600 dark:border-il-primary-500 dark:bg-il-primary-500',
+    off: 'border-il-neutral-400 bg-transparent dark:border-il-neutral-500',
+};
+
+export const FILE_FIELD_ZONES = {
+    idle: 'border-il-neutral-300 bg-white hover:border-il-primary-500 hover:bg-il-primary-50/40 dark:border-white/15 dark:bg-il-neutral-950 dark:hover:border-il-primary-400 dark:hover:bg-il-primary-500/10',
+    dragging: 'border-il-primary-500 bg-il-primary-50 dark:border-il-primary-400 dark:bg-il-primary-500/10',
+};
+
+export const SKELETON_SURFACE = 'animate-pulse bg-il-neutral-200 dark:bg-white/10';
+
+export const TOOLTIP_SURFACE = 'bg-il-neutral-900 text-white shadow-lg ring-1 ring-white/10 dark:bg-il-neutral-700 dark:ring-white/10';
+
+export const TOOLTIP_ARROW = 'bg-il-neutral-900 dark:bg-il-neutral-700';
+
 /** The status colour appears in the rail down the left edge and in the icon, nowhere else. */
 export const TOAST_TONES = {
     info: { rail: 'bg-il-neutral-400 dark:bg-il-neutral-500', accent: 'text-il-neutral-400 dark:text-il-neutral-500' },
@@ -91,14 +110,14 @@ export const SWITCH_TONES = {
 };
 
 export const FIELD_GROUP_SURFACES = {
-    plain: 'bg-white ring-il-neutral-200 divide-il-neutral-100 dark:bg-il-neutral-900 dark:ring-white/10 dark:divide-white/10',
-    muted: 'bg-il-neutral-50 ring-il-neutral-200 divide-il-neutral-100 dark:bg-white/5 dark:ring-white/10 dark:divide-white/10',
+    plain: 'bg-white ring-1 ring-il-neutral-200 divide-il-neutral-100 dark:bg-il-neutral-900 dark:ring-white/10 dark:divide-white/10',
+    muted: 'bg-il-neutral-50 ring-1 ring-il-neutral-200 divide-il-neutral-100 dark:bg-white/5 dark:ring-white/10 dark:divide-white/10',
 };
 
 export const FIELD_GROUP_TONES = {
-    ok: 'bg-il-success-50 ring-il-success-200 divide-il-success-200 dark:bg-il-success-500/10 dark:ring-il-success-500/30 dark:divide-il-success-500/30',
-    blocked: 'bg-il-warning-50 ring-il-warning-200 divide-il-warning-200 dark:bg-il-warning-500/10 dark:ring-il-warning-500/30 dark:divide-il-warning-500/30',
-    critical: 'bg-il-danger-50 ring-il-danger-200 divide-il-danger-200 dark:bg-il-danger-500/10 dark:ring-il-danger-500/30 dark:divide-il-danger-500/30',
+    ok: 'bg-il-success-50 ring-1 ring-il-success-200 divide-il-success-200 dark:bg-il-success-500/10 dark:ring-il-success-500/30 dark:divide-il-success-500/30',
+    blocked: 'bg-il-warning-50 ring-1 ring-il-warning-200 divide-il-warning-200 dark:bg-il-warning-500/10 dark:ring-il-warning-500/30 dark:divide-il-warning-500/30',
+    critical: 'bg-il-danger-50 ring-1 ring-il-danger-200 divide-il-danger-200 dark:bg-il-danger-500/10 dark:ring-il-danger-500/30 dark:divide-il-danger-500/30',
     off: 'bg-il-neutral-50 ring-il-neutral-200 divide-il-neutral-200 dark:bg-white/5 dark:ring-white/10 dark:divide-white/10',
 };
 

@@ -1,11 +1,14 @@
 <script setup>
 import { computed, ref, nextTick, onBeforeUnmount } from 'vue';
+import { useTheme } from './theme.js';
 
 const props = defineProps({
     text: { type: String, default: '' },
     placement: { type: String, default: 'top' },
     delay: { type: Number, default: 80 },
 });
+
+const tooltipTheme = useTheme('tooltip');
 
 // The tip stands off by exactly as much as the arrow sticks out, so the arrow touches
 // the trigger and the body of the tip does not.
@@ -151,7 +154,8 @@ onBeforeUnmount(() => {
                 v-if="visible && text"
                 ref="tipRef"
                 role="tooltip"
-                class="il-tooltip__tip pointer-events-none fixed z-[9999] max-w-xs rounded-il-control bg-il-neutral-900 px-2 py-1 text-xs font-medium leading-snug text-white shadow-lg ring-1 ring-white/10 dark:bg-il-neutral-700 dark:ring-white/10"
+                class="il-tooltip__tip pointer-events-none fixed z-[9999] max-w-xs rounded-il-control px-2 py-1 text-xs font-medium leading-snug"
+                :class="tooltipTheme.surface"
                 :data-placement="arrow.side"
                 :style="{ top: `${coords.top}px`, left: `${coords.left}px` }"
             >
@@ -160,7 +164,8 @@ onBeforeUnmount(() => {
                 <!-- A square on its corner: two of its sides show, which is the point. -->
                 <span
                     aria-hidden="true"
-                    class="il-tooltip__arrow absolute h-2 w-2 rotate-45 bg-il-neutral-900 dark:bg-il-neutral-700"
+                    class="il-tooltip__arrow absolute h-2 w-2 rotate-45"
+                    :class="tooltipTheme.arrow"
                     :style="arrowStyle"
                 ></span>
             </div>

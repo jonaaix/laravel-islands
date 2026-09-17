@@ -3,9 +3,12 @@ import { BADGE_TONES, BUTTON_SHAPES, BUTTON_SIZES, BUTTON_SPLIT, BUTTON_TONES, I
 import { FIELD_BASE, FIELD_FRAME, FIELD_FRAME_INVALID, FIELD_SHAPES, FIELD_SIZES, TEXTAREA_SIZES } from './fieldStyles.js';
 import { SELECT_SKINS } from './selectSkins.js';
 import {
+    BADGE_BASE,
+    CHOICE_BOXES,
     EDIT_BUTTON_SIZES,
     FIELD_GROUP_SURFACES,
     FIELD_GROUP_TONES,
+    FILE_FIELD_ZONES,
     LIST_ITEM_TONES,
     MENU_ITEM_TONES,
     MODAL_DIVIDER,
@@ -16,10 +19,13 @@ import {
     OPTION_STRIP_SKINS,
     POPOVER_SURFACE,
     SELECT_MENU_SURFACE,
+    SKELETON_SURFACE,
     SWITCH_TONES,
     TABS_SKINS,
     TOAST_SURFACE,
     TOAST_TONES,
+    TOOLTIP_ARROW,
+    TOOLTIP_SURFACE,
 } from './surfaceStyles.js';
 
 export const THEME_KEY = Symbol.for('aaix.laravel-islands.theme');
@@ -68,7 +74,21 @@ export const defaultTheme = {
     },
     badge: {
         tone: 'gray',
+        base: BADGE_BASE,
         tones: BADGE_TONES,
+    },
+    choice: {
+        boxes: CHOICE_BOXES,
+    },
+    fileField: {
+        zones: FILE_FIELD_ZONES,
+    },
+    skeleton: {
+        surface: SKELETON_SURFACE,
+    },
+    tooltip: {
+        surface: TOOLTIP_SURFACE,
+        arrow: TOOLTIP_ARROW,
     },
     card: {
         /** The shape pictures are shown in — a house decision, so it has no value until an application names one. */

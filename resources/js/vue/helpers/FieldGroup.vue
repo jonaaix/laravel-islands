@@ -25,7 +25,7 @@ const surfaceClass = computed(() => {
         <p v-if="label" class="il-field-group__label mb-1"><FieldCaption>{{ label }}</FieldCaption></p>
 
         <div
-            class="il-field-group__frame flex w-fit divide-x overflow-hidden rounded-il-menu ring-1"
+            class="il-field-group__frame flex w-fit divide-x overflow-hidden rounded-il-menu"
             :class="surfaceClass"
         >
             <slot />

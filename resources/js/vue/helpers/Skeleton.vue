@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { useTheme } from './theme.js';
 
 /**
  * The shape of content that has not arrived: a pulsing block, a run of text lines or a
@@ -18,7 +19,7 @@ const props = defineProps({
 
 const px = (value) => (typeof value === 'number' ? `${value}px` : value);
 
-const SURFACE = 'animate-pulse bg-il-neutral-200 dark:bg-white/10';
+const SURFACE = useTheme('skeleton').surface;
 
 const blockStyle = computed(() => ({ width: px(props.width), height: px(props.height) }));
 

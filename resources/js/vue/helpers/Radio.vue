@@ -1,6 +1,7 @@
 <script setup>
 import { computed, inject } from 'vue';
 import { RADIO_GROUP_KEY } from './radioGroup.js';
+import { useTheme } from './theme.js';
 
 const props = defineProps({
     value: { type: [String, Number, Boolean, Object], default: null },
@@ -35,6 +36,8 @@ const marked = computed(() => sameChoice(group ? group.modelValue.value : props.
 const isDisabled = computed(() => props.disabled || (group?.disabled.value ?? false));
 
 const name = computed(() => props.name || group?.name.value || undefined);
+
+const boxes = useTheme('choice').boxes;
 
 function pick() {
     if (group) {
@@ -73,9 +76,7 @@ function pick() {
         <span
             aria-hidden="true"
             class="il-radio__box pointer-events-none relative flex h-full w-full items-center justify-center rounded-full border-2 transition-colors duration-[var(--il-duration-fast)]"
-            :class="marked
-                ? 'border-il-primary-600 bg-il-primary-600 dark:border-il-primary-500 dark:bg-il-primary-500'
-                : 'border-il-neutral-400 bg-transparent dark:border-il-neutral-500'"
+            :class="marked ? boxes.on : boxes.off"
         >
             <span
                 class="il-radio__dot h-1.5 w-1.5 rounded-full bg-white transition-transform duration-[var(--il-duration-fast)] ease-out"

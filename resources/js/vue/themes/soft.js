@@ -53,6 +53,38 @@ export const softTheme = defineTheme({
     tabs: {
         variant: 'pills',
     },
+    iconButton: {
+        tones: {
+            outlined: 'bg-il-neutral-100 text-il-neutral-700 hover:bg-il-neutral-200/70 active:bg-il-neutral-300/70 dark:bg-white/10 dark:text-il-neutral-200 dark:hover:bg-white/15 dark:active:bg-white/20',
+        },
+    },
+    badge: {
+        base: 'rounded-full px-2.5 py-0.5 text-xs font-medium',
+    },
+    choice: {
+        boxes: {
+            off: 'border-transparent bg-il-neutral-200 dark:border-transparent dark:bg-white/15',
+        },
+    },
+    fieldGroup: {
+        surfaces: {
+            plain: 'bg-il-neutral-100 ring-0 divide-white dark:bg-white/10 dark:divide-white/10',
+            muted: 'bg-il-neutral-100/70 ring-0 divide-white dark:bg-white/5 dark:divide-white/10',
+        },
+    },
+    fileField: {
+        zones: {
+            idle: 'border-transparent bg-il-neutral-100 hover:bg-il-neutral-200/70 dark:bg-white/10 dark:hover:bg-white/15',
+            dragging: 'border-il-primary-500/60 bg-il-primary-500/10 dark:border-il-primary-400/60',
+        },
+    },
+    skeleton: {
+        surface: 'animate-pulse bg-il-neutral-200/70 dark:bg-white/10',
+    },
+    tooltip: {
+        surface: 'bg-il-neutral-800 text-white shadow-xl shadow-il-neutral-900/20 dark:bg-il-neutral-700',
+        arrow: 'bg-il-neutral-800 dark:bg-il-neutral-700',
+    },
     popover: {
         surface: 'bg-white shadow-xl shadow-il-neutral-900/10 ring-1 ring-il-neutral-200/60 dark:bg-il-neutral-800 dark:ring-white/10',
     },

@@ -33,6 +33,8 @@ const internal = ref(null);
 
 const field = useTheme('field');
 
+const zones = useTheme('fileField').zones;
+
 const shape = computed(() => field.shapes[props.shape ?? field.shape] ?? field.shapes.rounded);
 
 const displayed = computed(() => {
@@ -52,9 +54,7 @@ const displayedLabel = computed(() => {
 const zoneClasses = computed(() =>
     [
         'group relative flex w-full cursor-pointer flex-col items-center justify-center gap-1 border-2 border-dashed px-4 py-6 text-center transition-colors',
-        dragging.value
-            ? 'border-il-primary-500 bg-il-primary-50 dark:border-il-primary-400 dark:bg-il-primary-500/10'
-            : 'border-il-neutral-300 bg-white hover:border-il-primary-500 hover:bg-il-primary-50/40 dark:border-white/15 dark:bg-il-neutral-950 dark:hover:border-il-primary-400 dark:hover:bg-il-primary-500/10',
+        dragging.value ? zones.dragging : zones.idle,
         props.disabled ? 'cursor-not-allowed opacity-60' : '',
         shape.value,
     ]

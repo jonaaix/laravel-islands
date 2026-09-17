@@ -194,7 +194,8 @@ and win over the theme where both are set.
 
 The class tables live in the same sections: `button.tones`, `button.sizes`, `button.shapes`,
 `button.split`, `iconButton.tones|boxes|glyphs`, `field.base|frame|frameInvalid|shapes|sizes|textareaSizes`,
-`select.skins|menu`, `popover.surface`, `badge.tones`, `modal.sizes|surface|divider`, `toast.surface|tones`,
+`select.skins|menu`, `popover.surface`, `badge.base|tones`, `choice.boxes` (checkbox and radio),
+`fileField.zones`, `skeleton.surface`, `tooltip.surface|arrow`, `modal.sizes|surface|divider`, `toast.surface|tones`,
 `optionStrip.frames|sizes|skins`, `tabs.skins`, `switch.tones`, `fieldGroup.surfaces|tones`,
 `listItem.tones`, `menuItem.tones`, `editButton.sizes`. The merge is key by key, so a theme
 adds or replaces one entry and keeps the rest.
@@ -242,9 +243,10 @@ strips; `material.css` rounds the radius tokens and raises the control heights.
 
 `softTheme` with `themes/soft.css` is the quieter one: fields and select triggers are filled
 rather than framed, actions are tinted rather than saturated, tabs sit as pills in a filled
-track, floating panels (select menus, popovers, modals, toasts) lift on a tinted shadow with
-a faint edge instead of a hard ring, corners are generous (`0.75rem` controls, `1.25rem`
-cards) and the neutral is Tailwind's cooler slate. It replaces `field.base` — the box every input draws — which is the
+track, floating panels (select menus, popovers, modals, toasts, tooltips) lift on a tinted
+shadow with a faint edge instead of a hard ring, badges are pills, an unchecked box, a file
+zone and a field group are filled rather than outlined, corners are generous (`0.75rem`
+controls, `1.25rem` cards) and the neutral is Tailwind's cooler slate. It replaces `field.base` — the box every input draws — which is the
 knob for any filled-field look — together with `field.frame` and `field.frameInvalid`, the box of
 the fields that hold a button beside the text (DateTimeField, DateRangeField).
 

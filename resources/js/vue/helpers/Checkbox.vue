@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { useTheme } from './theme.js';
 
 const props = defineProps({
     modelValue: { type: Boolean, default: false },
@@ -13,6 +14,8 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const marked = computed(() => props.indeterminate || props.modelValue);
+
+const boxes = useTheme('choice').boxes;
 
 /** Long enough to cover the tick, so it can be wiped off and drawn back on. */
 const TICK_LENGTH = 20;
@@ -53,9 +56,7 @@ const TICK_LENGTH = 20;
         <span
             aria-hidden="true"
             class="il-checkbox__box pointer-events-none relative flex h-full w-full items-center justify-center rounded-[4px] border-2 transition-colors duration-[var(--il-duration-fast)]"
-            :class="marked
-                ? 'border-il-primary-600 bg-il-primary-600 dark:border-il-primary-500 dark:bg-il-primary-500'
-                : 'border-il-neutral-400 bg-transparent dark:border-il-neutral-500'"
+            :class="marked ? boxes.on : boxes.off"
         >
             <svg viewBox="0 0 18 18" class="h-full w-full text-white">
                 <!-- Drawn rather than switched on: the stroke is wiped off and runs back in. -->
