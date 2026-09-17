@@ -258,4 +258,14 @@ writes it beside the other files.
 @import './islands/themes/soft-filament.css';
 ```
 
+The sidebar items answer a press. `:active` alone is gone before a trackpad tap can be seen,
+so `delegatePress()` from the core entry holds an `il-pressed` class for a readable moment,
+and the stylesheet paints both:
+
+```js
+import { delegatePress } from '@aaix/laravel-islands';
+
+delegatePress(document, '.fi-sidebar-item-btn');
+```
+
 `defaultTheme` is exported beside them, for a theme that starts from the package's tables.
