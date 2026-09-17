@@ -7,10 +7,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-/**
- * @ai-agent For a list-view island, follow `base-datagrid-recipe.md` in the
- * islands-datagrid-development skill.
- */
 class {{ class }}IslandController extends Controller
 {
     public function __construct(private readonly {{ class }}Query $query)
@@ -24,12 +20,8 @@ class {{ class }}IslandController extends Controller
         return response()->json(['data' => $this->query->data($request)]);
     }
 
-    /**
-     * Guard every endpoint of this island. The middleware settles who is logged in, never
-     * who may see this island — left empty, every signed-in user gets what it returns.
-     */
     private function authorizeAccess(): void
     {
-        //
+        // Empty until filled in: the middleware settles who is logged in, never who may see this island.
     }
 }

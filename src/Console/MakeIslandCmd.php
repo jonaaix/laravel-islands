@@ -118,6 +118,7 @@ class MakeIslandCmd extends Command
             "Endpoints answer under {$replacements['{{ routePrefix }}']}, named {$replacements['{{ routeName }}']}*",
             "Fill in {$class}IslandController::authorizeAccess() before exposing any data",
             "Render it from a page with: ['islandProps' => app({$class}Props::class)->build(request())]",
+            'Building it with an AI agent: follow the islands-development skill, plus islands-datagrid-development for a list view',
         ]);
 
         return self::SUCCESS;

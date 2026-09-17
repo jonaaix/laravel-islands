@@ -5,10 +5,6 @@ namespace {{ namespace }};
 use Aaix\LaravelIslands\IslandRoutes;
 use Illuminate\Http\Request;
 
-/**
- * @ai-agent Props shape and validation live in `base-datagrid-recipe.md`
- * (islands-datagrid-development skill).
- */
 class {{ class }}Props
 {
     public function build(Request $request): array

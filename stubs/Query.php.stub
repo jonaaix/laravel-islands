@@ -4,10 +4,6 @@ namespace {{ namespace }}\Queries;
 
 use Illuminate\Http\Request;
 
-/**
- * @ai-agent Query shape and URL-value whitelisting live in `base-datagrid-recipe.md`
- * (islands-datagrid-development skill).
- */
 class {{ class }}Query
 {
     public function data(Request $request): array
