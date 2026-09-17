@@ -8,10 +8,14 @@ import {
     FIELD_GROUP_TONES,
     LIST_ITEM_TONES,
     MENU_ITEM_TONES,
+    MODAL_DIVIDER,
     MODAL_SIZES,
+    MODAL_SURFACE,
     OPTION_STRIP_FRAMES,
     OPTION_STRIP_SIZES,
     OPTION_STRIP_SKINS,
+    POPOVER_SURFACE,
+    SELECT_MENU_SURFACE,
     SWITCH_TONES,
     TABS_SKINS,
     TOAST_SURFACE,
@@ -57,6 +61,10 @@ export const defaultTheme = {
     },
     select: {
         skins: SELECT_SKINS,
+        menu: SELECT_MENU_SURFACE,
+    },
+    popover: {
+        surface: POPOVER_SURFACE,
     },
     badge: {
         tone: 'gray',
@@ -69,6 +77,8 @@ export const defaultTheme = {
     modal: {
         size: 'md',
         sizes: MODAL_SIZES,
+        surface: MODAL_SURFACE,
+        divider: MODAL_DIVIDER,
     },
     toast: {
         surface: TOAST_SURFACE,

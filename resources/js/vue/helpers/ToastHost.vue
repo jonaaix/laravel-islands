@@ -37,7 +37,7 @@ function tone(name) {
                 <div
                     v-for="toast in toasts.items.value"
                     :key="toast.id"
-                    class="il-toast pointer-events-auto relative w-full max-w-sm overflow-hidden rounded-il-menu py-3 pl-5 pr-3 shadow-lg ring-1"
+                    class="il-toast pointer-events-auto relative w-full max-w-sm overflow-hidden rounded-il-menu py-3 pl-5 pr-3"
                     :class="SURFACE"
                     :data-tone="toast.tone"
                     role="status"

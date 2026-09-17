@@ -45,11 +45,22 @@ export const softTheme = defineTheme({
                 clear: 'hover:bg-il-primary-200/60 dark:hover:bg-il-primary-500/25',
             },
         },
+        menu: 'bg-white shadow-xl shadow-il-neutral-900/10 ring-1 ring-il-neutral-200/60 dark:bg-il-neutral-800 dark:ring-white/10',
     },
     optionStrip: {
         variant: 'segmented',
     },
     tabs: {
         variant: 'pills',
+    },
+    popover: {
+        surface: 'bg-white shadow-xl shadow-il-neutral-900/10 ring-1 ring-il-neutral-200/60 dark:bg-il-neutral-800 dark:ring-white/10',
+    },
+    modal: {
+        surface: 'bg-white shadow-2xl shadow-il-neutral-900/15 dark:bg-il-neutral-900 dark:ring-1 dark:ring-white/10',
+        divider: 'border-il-neutral-100 dark:border-white/10',
+    },
+    toast: {
+        surface: 'bg-white shadow-xl shadow-il-neutral-900/10 ring-1 ring-il-neutral-200/60 dark:bg-il-neutral-900 dark:ring-white/10',
     },
 });

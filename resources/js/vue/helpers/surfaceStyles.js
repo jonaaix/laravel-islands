@@ -12,7 +12,16 @@ export const MODAL_SIZES = {
     full: 'max-w-none',
 };
 
-export const TOAST_SURFACE = 'bg-white ring-il-neutral-200 dark:bg-il-neutral-900 dark:ring-white/10';
+export const TOAST_SURFACE = 'bg-white shadow-lg ring-1 ring-il-neutral-200 dark:bg-il-neutral-900 dark:ring-white/10';
+
+/** The floating panels: what lifts a popover, a select menu and a modal off the page. */
+export const POPOVER_SURFACE = 'bg-white shadow-2xl ring-1 ring-il-neutral-200 dark:bg-il-neutral-800 dark:ring-white/10';
+
+export const SELECT_MENU_SURFACE = 'bg-white shadow-lg ring-1 ring-il-neutral-200 dark:bg-il-neutral-800 dark:ring-white/10';
+
+export const MODAL_SURFACE = 'bg-white shadow-2xl ring-1 ring-il-neutral-200 dark:bg-il-neutral-900 dark:ring-white/10';
+
+export const MODAL_DIVIDER = 'border-il-neutral-200 dark:border-white/10';
 
 /** The status colour appears in the rail down the left edge and in the icon, nowhere else. */
 export const TOAST_TONES = {

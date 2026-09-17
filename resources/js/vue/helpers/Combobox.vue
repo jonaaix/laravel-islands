@@ -68,7 +68,11 @@ function updatePosition() {
     menuStyle.value = { top: `${r.bottom + 4}px`, left: `${left}px`, width: `${props.menuWidth}px` };
 }
 
-const skin = computed(() => selectSkin(props.variant, 'field', useTheme('select').skins));
+const selectTheme = useTheme('select');
+
+const skin = computed(() => selectSkin(props.variant, 'field', selectTheme.skins));
+
+const menuSurface = selectTheme.menu;
 
 const hasValue = computed(() => props.modelValue !== 0 && props.modelValue !== '' && props.modelValue != null);
 const selectedName = computed(() => {
@@ -196,7 +200,7 @@ function onKeydown(e) {
 
         <Teleport to="body">
         <div v-if="open" class="il-combobox__backdrop fixed inset-0" :style="backdropStyle" @click="close"></div>
-        <div v-if="open" class="il-combobox__menu fixed overflow-hidden rounded-il-menu bg-white shadow-lg ring-1 ring-il-neutral-200 dark:bg-il-neutral-800 dark:ring-white/10" :style="{ ...menuStyle, ...panelStyle }" :data-variant="variant">
+        <div v-if="open" class="il-combobox__menu fixed overflow-hidden rounded-il-menu" :class="menuSurface" :style="{ ...menuStyle, ...panelStyle }" :data-variant="variant">
             <div class="il-combobox__search relative border-b border-il-neutral-100 p-2 dark:border-white/10">
                 <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-il-neutral-400">
                     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd"/></svg>

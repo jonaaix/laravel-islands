@@ -1,6 +1,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
+import { useTheme } from './theme.js';
 
 const props = defineProps({
     /** The element the panel hangs under. Pass the ref, not its value. */
@@ -20,6 +21,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close']);
+
+const surface = useTheme('popover').surface;
 
 const style = ref({});
 
@@ -139,7 +142,8 @@ defineExpose({ position });
         <div
             v-if="open"
             ref="panel"
-            class="il-popover fixed overflow-hidden rounded-il-card bg-white shadow-2xl ring-1 ring-il-neutral-200 dark:bg-il-neutral-800 dark:ring-white/10"
+            class="il-popover fixed overflow-hidden rounded-il-card"
+            :class="surface"
             :style="{ ...style, zIndex: layer + 1, ...(placed ? {} : unplacedStyle) }"
             @keydown.esc.stop="emit('close')"
             @click.stop
