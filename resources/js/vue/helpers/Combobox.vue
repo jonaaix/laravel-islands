@@ -17,6 +17,7 @@ const props = defineProps({
     emptyLabel: { type: String, default: 'No match' },
     emptyValue: { type: [String, Number], default: 0 },
     searchValues: { type: Boolean, default: false },
+    disabled: { type: Boolean, default: false },
     fetchOptions: { type: Function, default: null },
     fetchDelay: { type: Number, default: 150 },
     loadingLabel: { type: String, default: '' },
@@ -30,6 +31,8 @@ const props = defineProps({
     maxOptions: { type: Number, default: 60 },
     /** The row that resets the choice — redundant where the trigger already carries a clear. */
     clearOption: { type: Boolean, default: true },
+    /** The cross on the trigger. A field that must hold a value turns it off, as TreeSelect does. */
+    clearable: { type: Boolean, default: true },
     /**
      * In a list whose entries carry a `depth`, a match keeps the entries it sits under, so
      * searching narrows the tree instead of flattening it.
@@ -93,6 +96,10 @@ watch(query, () => {
 });
 
 function toggle() {
+    if (props.disabled) {
+        return;
+    }
+
     open.value = !open.value;
     if (open.value) {
         query.value = '';
@@ -152,7 +159,7 @@ function onKeydown(e) {
 </script>
 
 <template>
-    <div class="il-combobox relative" :data-variant="variant" :data-state="open ? 'open' : (hasValue ? 'set' : 'empty')">
+    <div class="il-combobox relative" :data-variant="variant" :data-state="open ? 'open' : (hasValue ? 'set' : 'empty')" :data-disabled="disabled || undefined">
         <!--
             The whole surface opens the list, not just the words on it: the padding of a wide
             trigger is a large part of what a pointer aims at. The button inside stays the
@@ -161,13 +168,14 @@ function onKeydown(e) {
         <div
             ref="triggerEl"
             @click="toggle"
-            :class="['il-combobox__trigger', skin.base, 'cursor-pointer', hasValue ? skin.on : skin.off]"
+            :class="['il-combobox__trigger', skin.base, hasValue ? skin.on : skin.off, disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer']"
         >
             <button
                 type="button"
                 role="combobox"
+                :disabled="disabled"
                 :aria-expanded="open"
-                class="flex min-w-0 flex-1 items-center text-left focus:outline-none"
+                class="flex min-w-0 flex-1 items-center text-left focus:outline-none disabled:cursor-not-allowed"
             >
                 <template v-if="hasValue">
                     <slot v-if="$slots.selected" name="selected" :key-value="modelValue" :label="selectedName" />
@@ -178,11 +186,12 @@ function onKeydown(e) {
                 <span v-else class="max-w-[12rem] truncate">{{ placeholder }}</span>
             </button>
             <IconButton
-                v-if="hasValue"
+                v-if="clearable && hasValue"
                 :label="allLabel"
                 size="xs"
                 tone="plain"
                 :tooltip="false"
+                :disabled="disabled"
                 class="ml-1"
                 :class="skin.clear"
                 @click.stop="clear"

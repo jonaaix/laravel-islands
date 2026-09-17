@@ -20,7 +20,16 @@ const props = defineProps({
     placeholder: { type: String, default: '' },
 });
 
-defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue']);
+
+/* A native select hands back a string, so a numeric or boolean option would come
+ * out of the field as text and stop matching the list it came from. The option
+ * carries the value; the raw string only stands in for a slotted list. */
+function pick(raw) {
+    const option = props.options.find((opt) => String(opt.value) === raw);
+
+    emit('update:modelValue', option ? option.value : raw);
+}
 
 const attrs = useAttrs();
 const field = useTheme('field');
@@ -52,7 +61,7 @@ const chevron = "url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www
         :data-shape="shape ?? field.shape"
         :style="{ backgroundImage: chevron, backgroundPosition: 'right 0.5rem center', backgroundSize: '1rem' }"
         v-bind="{ ...attrs, class: undefined }"
-        @change="$emit('update:modelValue', $event.target.value)"
+        @change="pick($event.target.value)"
     >
         <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
         <slot>
