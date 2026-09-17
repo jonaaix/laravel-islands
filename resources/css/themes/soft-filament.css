@@ -83,22 +83,38 @@
     background-color: rgb(255 255 255 / 0.06);
 }
 
-.fi-sidebar-item > .fi-sidebar-item-btn:active {
-    background-color: var(--color-il-neutral-200);
+/* As specific as the hover above, or the hover would paint over the press; instant, or the fade
+   would still be running when the press is already over. `il-pressed` comes from delegatePress(). */
+.fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:active,
+.fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn.il-pressed {
+    background-color: color-mix(in oklab, var(--color-il-neutral-300) 70%, transparent);
+    transition-duration: 0s;
 }
 
-.dark .fi-sidebar-item > .fi-sidebar-item-btn:active {
-    background-color: rgb(255 255 255 / 0.12);
+.dark .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:active,
+.dark .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn.il-pressed {
+    background-color: rgb(255 255 255 / 0.16);
 }
 
 .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
-.fi-sidebar-item.fi-active > .fi-sidebar-item-btn:hover {
+.fi-sidebar-item.fi-active.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover {
     background-color: color-mix(in oklab, var(--color-il-primary-500) 10%, transparent);
 }
 
+.fi-sidebar-item.fi-active.fi-sidebar-item-has-url > .fi-sidebar-item-btn:active,
+.fi-sidebar-item.fi-active.fi-sidebar-item-has-url > .fi-sidebar-item-btn.il-pressed {
+    background-color: color-mix(in oklab, var(--color-il-primary-500) 18%, transparent);
+    transition-duration: 0s;
+}
+
 .dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
-.dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn:hover {
+.dark .fi-sidebar-item.fi-active.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover {
     background-color: color-mix(in oklab, var(--color-il-primary-500) 15%, transparent);
+}
+
+.dark .fi-sidebar-item.fi-active.fi-sidebar-item-has-url > .fi-sidebar-item-btn:active,
+.dark .fi-sidebar-item.fi-active.fi-sidebar-item-has-url > .fi-sidebar-item-btn.il-pressed {
+    background-color: color-mix(in oklab, var(--color-il-primary-500) 24%, transparent);
 }
 
 .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label {
