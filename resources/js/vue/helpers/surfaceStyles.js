@@ -52,11 +52,11 @@ export const TOAST_TONES = {
 
 export const OPTION_STRIP_FRAMES = {
     pills: 'inline-flex items-center gap-2',
-    // One pixel all round, so the surface meets the frame's own ring instead of floating inside it.
-    segmented: 'inline-flex items-center gap-0.5 rounded-full p-px ring-1 ring-inset ring-il-neutral-200 dark:ring-white/10',
+    // A filled track needs no outline; the pill lifts off it by being lighter, not by a ring.
+    segmented: 'inline-flex items-center gap-0.5 rounded-full bg-il-neutral-100/60 p-px dark:bg-white/5',
 };
 
-// The frame is one pixel taller than its options on either side, so the surface never touches the ring.
+// The frame is one pixel taller than its options on either side, so the surface never touches the track's edge.
 export const OPTION_STRIP_SIZES = {
     md: { frame: 'h-il-control-sm', option: 'h-il-control-xs px-2.5', iconOnly: 'px-2', glyph: 'h-4 w-4' },
     sm: { frame: 'h-il-control-xs', option: 'h-6 px-2', iconOnly: 'px-1.5', glyph: 'h-3.5 w-3.5' },
@@ -69,11 +69,10 @@ export const OPTION_STRIP_SKINS = {
         off: 'bg-transparent text-il-neutral-500 ring-il-neutral-200 hover:bg-il-neutral-50 hover:text-il-neutral-700 dark:text-il-neutral-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-il-neutral-200',
     },
     segmented: {
-        // Inset like the pills variant: drawn outward the ring lands exactly on the frame's own edge.
         base: 'relative z-10 inline-flex items-center gap-1.5 rounded-full text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-il-primary-500',
         on: 'font-bold text-il-neutral-900 dark:text-white',
         off: 'font-medium text-il-neutral-500 hover:text-il-neutral-700 dark:text-il-neutral-400 dark:hover:text-il-neutral-200',
-        surface: 'bg-white shadow-sm ring-1 ring-il-neutral-200 dark:bg-il-neutral-800 dark:ring-white/10',
+        surface: 'bg-white shadow-sm dark:bg-il-neutral-800',
     },
 };
 
