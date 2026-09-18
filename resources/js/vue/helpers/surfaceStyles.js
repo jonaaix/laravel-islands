@@ -70,7 +70,7 @@ export const OPTION_STRIP_SKINS = {
     },
     segmented: {
         base: 'relative z-10 inline-flex items-center gap-1.5 rounded-full text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-il-primary-500',
-        on: 'font-bold text-il-neutral-900 dark:text-white',
+        on: 'font-semibold text-il-neutral-900 dark:text-white',
         off: 'font-medium text-il-neutral-500 hover:text-il-neutral-700 dark:text-il-neutral-400 dark:hover:text-il-neutral-200',
         surface: 'bg-white shadow-sm dark:bg-il-neutral-800',
     },
