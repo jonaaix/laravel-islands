@@ -114,6 +114,7 @@ table but not the other is a bug in waiting.
 | `useOptionSearch(props, query)` / `selectSkin(variant)` | what the selects are built from — the filtered, ranked, server-fetched option list and the trigger skins — for a picker of your own |
 | `TreeSelect` | a hierarchy with a searchable path, cached per URL; `variant` = `field` · `filter` · `filter-card`, the same skins as Combobox |
 | `OptionStrip` | micro switcher — `variant` = `pills` (row of switches) or `segmented` (one question, n answers); `size` = `md` beside fields, `sm` in a dense toolbar beside `Button size="sm"` |
+| `SwipeRow` / `SwipeSlide` | anything a thumb should swipe through on a phone: one slide per view, snapping, a dot per slide, no scrollbar. Below `sm` by default, `always` at every width; `trackClass` dresses the rail (a frame above the breakpoint), the slides bring their own look. Never hand-roll a snap row again |
 | `FilterPanel` | the panel beside the table, docking with the toolbar |
 | `useFilterPanelDock(storageKey, { baseWidth })` | `useViewWidth` plus a docking panel: the same `root` + `rootStyle`, widened while the panel is docked, overlaid when there is no room |
 

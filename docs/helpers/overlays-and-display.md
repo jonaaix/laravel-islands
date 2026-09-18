@@ -220,3 +220,28 @@ on a cell wins. Truncation is deliberately not applied — let the region scroll
 
 For a table with search, filters, sorting and pagination, see
 [Laravel Islands Datagrid](https://jonaaix.github.io/laravel-islands-datagrid/).
+
+## `SwipeRow` and `SwipeSlide`
+
+A row a thumb moves through: one slide per view, snapping into place, a dot per slide
+underneath, no scrollbar. Below `sm` by default — a pointer scrolls a wide row perfectly
+well — and at every width with `always`. The slides bring no look of their own, so the same
+row carries stat cards, a photo strip or a set of filter chips.
+
+```vue
+<SwipeRow :track-class="'sm:flex-wrap sm:rounded-xl sm:bg-white sm:px-4 sm:py-2 sm:ring-1 sm:ring-gray-200'">
+    <SwipeSlide v-for="card in cards" :key="card.key" class="rounded-xl bg-white p-4 ring-1 ring-gray-200">
+        …
+    </SwipeSlide>
+</SwipeRow>
+```
+
+| Prop | Default | Meaning |
+| --- | --- | --- |
+| `always` | `false` | A row at every width instead of below `sm` only. The breakpoint itself is fixed: a Tailwind variant assembled at runtime never reaches the compiled stylesheet. |
+| `dots` | `true` | The indicator under the row. It is an indicator, not a control — the thumb is what moves the row, so the dots carry no wording and no focus. |
+| `trackClass` | `''` | Classes for the rail itself: the frame it wears above the breakpoint, its own padding. The component's own class goes to the block around rail and dots. |
+
+The rail keeps two pixels of padding, because a `ring` is drawn outside the element and a
+slide as wide as the rail would have its outline clipped at both edges. `active` and `slides`
+are exposed on the component for a caller that wants to show the position elsewhere.
