@@ -23,6 +23,7 @@ Composables the runtime provides to any island component.
 | `useSortableTiles({ container, list, attribute?, onReorder, enabled? })` | pointer-event dragging for a strip or grid |
 | `useViewWidth({ baseWidth? })` | **the root element of every island** — `root` + `rootStyle` carry the view's maximum width and publish `--table-toolbar-h`. Never write a `max-w-*` class instead; a view that needs more room passes `baseWidth` |
 | `startVueIslands(registry, { setup? })` | the runtime; called once at boot with the component registry |
+| `delegateNavigate(root, { within, isEnabled? })` (core entry) | one listener that turns the plain links an island renders into in-place page swaps — a row pointing at a record no longer loads a document. Called once at boot, never per view; leaves a new tab, a modifier click, `download`, a foreign host and anything under `data-no-spa` to the browser |
 
 ## `@aaix/laravel-islands/vue/helpers`
 

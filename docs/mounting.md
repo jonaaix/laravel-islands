@@ -120,7 +120,25 @@ loading a page, and the runtime follows along:
   it off for a table.
 
 Nothing has to be configured. Without navigate events the runtime behaves as on a classic
-page load. A datagrid's history entries carry Livewire's navigation state as well, so a
+page load.
+
+### Links an island renders
+
+A link inside an island is markup Vue owns, so it carries no `wire:navigate` and loads a whole
+document — every row that points at a record does. `delegateNavigate()` from the core entry
+answers that in one place instead of per view:
+
+```js
+import { delegateNavigate } from '@aaix/laravel-islands';
+
+delegateNavigate(document, { within: '/admin' });
+```
+
+It swaps a plain left click on a link whose path lies inside `within` and leaves everything else
+to the browser: a new tab, a modifier click, `download`, a foreign host, `mailto:`/`tel:`, a link
+that already has `wire:navigate`, and anything under `data-no-spa` — which is what a page that
+needs its own document, an embedded tool or a log viewer, is marked with. Without Livewire on
+the page it does nothing at all. A datagrid's history entries carry Livewire's navigation state as well, so a
 back step into a filtered table works from another page, and a step that changes only the
 table's own parameters is answered by the table itself — see
 [Table State](https://aaix.github.io/laravel-islands-datagrid/table-state#the-url).
