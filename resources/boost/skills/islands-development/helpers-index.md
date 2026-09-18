@@ -61,6 +61,7 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 | `Badge` | one-line status word — `tone`, `icon`, `numeric` |
 | `Skeleton` | the shape of content not yet loaded — `variant` = `block` · `text` (`lines`) · `circle`; sized with `width`/`height`; a loading view is the finished view in grey, never a spinner on an empty page |
 | `PersonChip` | avatar with a name-based fallback |
+| `RemovableChip` | a value the user can take out of a list — takes `removeLabel`, emits `remove` |
 | `List`, `ListItem` | hairline-divided list; item takes `label`, `description`, `descriptionTone` |
 | `Table` | thin frame over a native `<table>` — uniform header typography, no silent truncation |
 | `Tabs` | tab strip with icon/count/mark per item; `variant` = `underline` · `pills`, the theme decides when unset |
