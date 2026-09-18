@@ -71,7 +71,7 @@ export const OPTION_STRIP_SKINS = {
     segmented: {
         // Inset like the pills variant: drawn outward the ring lands exactly on the frame's own edge.
         base: 'relative z-10 inline-flex items-center gap-1.5 rounded-full text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-il-primary-500',
-        on: 'font-bold text-il-primary-700 dark:text-il-primary-300',
+        on: 'font-bold text-il-neutral-900 dark:text-white',
         off: 'font-medium text-il-neutral-500 hover:text-il-neutral-700 dark:text-il-neutral-400 dark:hover:text-il-neutral-200',
         surface: 'bg-white shadow-sm ring-1 ring-il-neutral-200 dark:bg-il-neutral-800 dark:ring-white/10',
     },
