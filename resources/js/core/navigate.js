@@ -6,6 +6,23 @@ function navigator() {
         : null;
 }
 
+/**
+ * Goes to `url` the way the page navigates: in place where Livewire can swap it, as an ordinary
+ * page load otherwise. For a view that navigates on its own — a whole card as one target — where
+ * there is no link for `delegateNavigate()` to catch.
+ */
+export function navigateTo(url) {
+    const go = navigator();
+
+    if (go) {
+        go(url);
+
+        return;
+    }
+
+    window.location.href = url;
+}
+
 function wantsANewTab(event) {
     return event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
 }

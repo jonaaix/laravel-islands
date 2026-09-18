@@ -138,7 +138,16 @@ It swaps a plain left click on a link whose path lies inside `within` and leaves
 to the browser: a new tab, a modifier click, `download`, a foreign host, `mailto:`/`tel:`, a link
 that already has `wire:navigate`, and anything under `data-no-spa` — which is what a page that
 needs its own document, an embedded tool or a log viewer, is marked with. Without Livewire on
-the page it does nothing at all. A datagrid's history entries carry Livewire's navigation state as well, so a
+the page it does nothing at all.
+
+A view that navigates on its own — a whole card as one target, with no link to catch — reaches
+the same mechanism through `navigateTo(url)`, which falls back to an ordinary page load:
+
+```js
+import { navigateTo } from '@aaix/laravel-islands';
+
+navigateTo(row.url);
+``` A datagrid's history entries carry Livewire's navigation state as well, so a
 back step into a filtered table works from another page, and a step that changes only the
 table's own parameters is answered by the table itself — see
 [Table State](https://aaix.github.io/laravel-islands-datagrid/table-state#the-url).
