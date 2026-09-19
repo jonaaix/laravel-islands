@@ -49,6 +49,7 @@ export { default as DateRangeField } from './DateRangeField.vue';
 export { default as Skeleton } from './Skeleton.vue';
 export { formatDayRange, formatDisplay as formatDateTime, fromModel as parseDateTimeModel, parseTyped as parseTypedDateTime, toModel as toDateTimeModel } from './dateTime.js';
 export { default as Combobox } from './Combobox.vue';
+export { default as SelectMenu } from './SelectMenu.vue';
 export { fieldClasses, textareaClasses, FIELD_SHAPES, FIELD_SIZES } from './fieldStyles.js';
 export { default as ChoiceSegment } from './ChoiceSegment.vue';
 export { default as EditSegment } from './EditSegment.vue';

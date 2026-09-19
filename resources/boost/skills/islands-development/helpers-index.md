@@ -109,7 +109,8 @@ table but not the other is a bug in waiting.
 | Import | Purpose |
 | --- | --- |
 | `SearchInput` | the search field bound to `state.q` via `onSearchInput` / `clearSearch` |
-| `Combobox` | single-value select with search; `variant` = `field` · `filter` · `filter-card`; supports async `fetchOptions`; an option with `depth` nests under the row above, one with `disabled: true` is a heading that cannot be picked |
+| `Combobox` | single-value select with search; `variant` = `field` · `filter` · `filter-card`; supports async `fetchOptions`; an option with `depth` nests under the row above, one with `disabled: true` is a heading that cannot be picked; `:searchable="false"` drops the search box |
+| `SelectMenu` | the `Combobox` without its search box, for a list short enough to read — the same props, arrow keys and typing jump through the list; prefer it over `SelectField`, which is the native control |
 | `MultiCombobox` | several values from a searchable list — the `Combobox`'s search, `fetchOptions`, `depth` and headings, with checkboxes; the model is an array, the trigger names the first `previewLimit` picks |
 | `MultiSelect` | several values from one short list, no search field |
 | `useOptionSearch(props, query)` / `selectSkin(variant)` | what the selects are built from — the filtered, ranked, server-fetched option list and the trigger skins — for a picker of your own |

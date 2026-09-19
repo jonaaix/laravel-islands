@@ -17,6 +17,8 @@ const props = defineProps({
     emptyLabel: { type: String, default: 'No match' },
     emptyValue: { type: [String, Number], default: 0 },
     searchValues: { type: Boolean, default: false },
+    /** Off turns the list into a plain picker: no search box, the keyboard works on the list itself. */
+    searchable: { type: Boolean, default: true },
     disabled: { type: Boolean, default: false },
     fetchOptions: { type: Function, default: null },
     fetchDelay: { type: Number, default: 150 },
@@ -47,7 +49,10 @@ const { t } = useTranslations();
 const open = ref(false);
 const query = ref('');
 const searchInput = ref(null);
+const listEl = ref(null);
 const highlighted = ref(0);
+const typed = ref('');
+let typedTimer = null;
 const triggerEl = ref(null);
 const menuStyle = ref({});
 const picked = ref(null);
@@ -107,7 +112,19 @@ function toggle() {
         highlighted.value = 0;
         overlayId.value = registerOverlay();
         updatePosition();
-        nextTick(() => searchInput.value?.focus());
+        nextTick(() => {
+            if (props.searchable) {
+                searchInput.value?.focus();
+                return;
+            }
+
+            // Without a search box the list carries the keyboard, so it opens on the set value.
+            const at = filtered.value.findIndex((option) => String(option.value) === String(props.modelValue));
+
+            highlighted.value = at >= 0 ? at : 0;
+            listEl.value?.focus();
+            scrollToHighlighted();
+        });
     } else {
         releaseOverlay();
     }
@@ -116,6 +133,11 @@ function close() {
     if (!open.value) return;
     open.value = false;
     releaseOverlay();
+
+    // The list held the keyboard, so the trigger takes it back rather than dropping it on the page.
+    if (!props.searchable) {
+        triggerEl.value?.querySelector('button')?.focus();
+    }
 }
 function releaseOverlay() {
     if (overlayId.value !== null) {
@@ -139,13 +161,34 @@ function nextPickable(from, step) {
     } while (i >= 0 && i < filtered.value.length && filtered.value[i].disabled);
     return i < 0 || i >= filtered.value.length ? from : i;
 }
+function scrollToHighlighted() {
+    listEl.value?.querySelector(`[data-index="${highlighted.value}"]`)?.scrollIntoView({ block: 'nearest' });
+}
+// The letters typed in quick succession jump to the entry they start, as a plain picker does.
+function typeahead(key) {
+    clearTimeout(typedTimer);
+    typed.value += key.toLowerCase();
+    typedTimer = setTimeout(() => { typed.value = ''; }, 600);
+
+    const at = filtered.value.findIndex((option) => !option.disabled && option.label.toLowerCase().startsWith(typed.value));
+
+    if (at >= 0) {
+        highlighted.value = at;
+        scrollToHighlighted();
+    }
+}
 function onKeydown(e) {
     if (e.key === 'ArrowDown') {
         e.preventDefault();
         highlighted.value = nextPickable(highlighted.value, 1);
+        scrollToHighlighted();
     } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         highlighted.value = nextPickable(highlighted.value, -1);
+        scrollToHighlighted();
+    } else if (!props.searchable && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        typeahead(e.key);
     } else if (e.key === 'Enter') {
         e.preventDefault();
         const hit = filtered.value[highlighted.value];
@@ -210,7 +253,7 @@ function onKeydown(e) {
         <Teleport to="body">
         <div v-if="open" class="il-combobox__backdrop fixed inset-0" :style="backdropStyle" @click="close"></div>
         <div v-if="open" class="il-combobox__menu fixed overflow-hidden rounded-il-menu" :class="menuSurface" :style="{ ...menuStyle, ...panelStyle }" :data-variant="variant">
-            <div class="il-combobox__search relative border-b border-il-neutral-100 p-2 dark:border-white/10">
+            <div v-if="searchable" class="il-combobox__search relative border-b border-il-neutral-100 p-2 dark:border-white/10">
                 <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-il-neutral-400">
                     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd"/></svg>
                 </span>
@@ -223,7 +266,14 @@ function onKeydown(e) {
                     class="h-8 w-full rounded-il-control border border-il-neutral-200 bg-white pl-8 pr-2 text-sm text-il-neutral-900 placeholder:text-il-neutral-400 focus:border-il-primary-500 focus:outline-none focus:ring-1 focus:ring-il-primary-500 dark:border-white/10 dark:bg-il-neutral-900 dark:text-il-neutral-100"
                 />
             </div>
-            <ul role="listbox" class="il-combobox__list overflow-y-auto py-1" :style="{ maxHeight: `${menuHeight}px` }">
+            <ul
+                ref="listEl"
+                role="listbox"
+                :tabindex="searchable ? undefined : -1"
+                class="il-combobox__list overflow-y-auto py-1 focus:outline-none"
+                :style="{ maxHeight: `${menuHeight}px` }"
+                @keydown="searchable ? null : onKeydown($event)"
+            >
                 <li v-if="loadingOptions" class="il-combobox__loading flex items-center justify-center gap-2 py-6 text-sm text-il-neutral-400">
                     <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" />
@@ -237,7 +287,7 @@ function onKeydown(e) {
                         {{ allLabel }}
                     </button>
                 </li>
-                <li v-for="(option, i) in filtered" :key="option.value" role="option" :aria-selected="String(option.value) === String(modelValue)">
+                <li v-for="(option, i) in filtered" :key="option.value" :data-index="i" role="option" :aria-selected="String(option.value) === String(modelValue)">
                     <button
                         type="button"
                         :disabled="option.disabled"
