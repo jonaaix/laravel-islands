@@ -8,7 +8,7 @@ import { useOptionSearch } from '../composables/useOptionSearch.js';
 import { useTranslations } from '../composables/useTranslations.js';
 
 const props = defineProps({
-    modelValue: { type: [String, Number], default: 0 },
+    modelValue: { type: [String, Number, null], default: 0 },
     /** `{ value, label, depth?, disabled? }` — a `disabled` entry is a heading: shown, searched past, never picked. */
     options: { type: [Object, Array], default: () => ({}) },
     placeholder: { type: String, default: 'Select…' },
