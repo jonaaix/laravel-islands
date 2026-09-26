@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import IconButton from './IconButton.vue';
 import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
 import { selectSkin } from './selectSkins.js';
@@ -95,6 +95,17 @@ const selectedName = computed(() => {
 
     return match ?? props.selectedLabel ?? '';
 });
+
+function followTrigger(isOpen) {
+    const method = isOpen ? 'addEventListener' : 'removeEventListener';
+
+    window[method]('resize', updatePosition);
+    window[method]('scroll', updatePosition, true);
+}
+
+watch(open, followTrigger);
+
+onBeforeUnmount(() => followTrigger(false));
 
 watch(query, () => {
     highlighted.value = 0;
