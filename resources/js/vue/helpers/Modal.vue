@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import IconButton from './IconButton.vue';
 import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
+import { lockPageScroll, unlockPageScroll } from './scrollLock.js';
 import { useTheme } from './theme.js';
 
 const props = defineProps({
@@ -23,6 +24,17 @@ const panel = ref(null);
 
 // Where focus came from, so closing puts it back on the control that opened the modal.
 let returnFocusTo = null;
+
+let holdsScrollLock = false;
+
+function holdPageScroll(hold) {
+    if (hold === holdsScrollLock) {
+        return;
+    }
+
+    holdsScrollLock = hold;
+    hold ? lockPageScroll() : unlockPageScroll();
+}
 
 const resolvedSize = computed(() => props.size ?? theme.size ?? 'md');
 const sizeClass = computed(() => theme.sizes[resolvedSize.value] ?? theme.sizes.md);
@@ -84,6 +96,8 @@ const overlayId = ref(null);
 const overlayStyle = computed(() => overlayId.value !== null ? { zIndex: overlayZIndex(overlayId.value) } : {});
 
 watch(() => props.open, async (open) => {
+    holdPageScroll(open);
+
     if (!open) {
         returnFocusTo?.focus?.();
         returnFocusTo = null;
@@ -107,6 +121,7 @@ function releaseOverlay() {
 }
 
 onBeforeUnmount(() => {
+    holdPageScroll(false);
     returnFocusTo = null;
     releaseOverlay();
 });
