@@ -22,12 +22,14 @@ lets a callsite refuse to close a dirty form.
 | `open` | `false` | Renders nothing while false. |
 | `title` | `''` | Header text; without one the close button floats over the content. |
 | `size` | `'md'` | `sm` · `md` · `lg` for content-height windows, `xl` · `full` for ones that fill the screen. |
+| `align` | `'center'` | `top` pins a content-height window near the top, so it grows downwards instead of jumping while its content changes — a search, a filtered list. |
 | `closable` | `true` | `false` drops the close button and ignores backdrop and Escape. |
 | `closeOnBackdrop`, `closeOnEscape` | `true` | Emit `close`. |
 | `closeLabel` | `'Close'` | Accessible label of the close button. |
 
 Event: `close`. Slots: default, `#title`, `#actions` (beside the close button), `#footer`.
-Focus stays inside while open and returns to the opener on close.
+Focus stays inside while open and returns to the opener on close; the page behind does not scroll
+while any modal is open.
 
 ## `FormModal`
 

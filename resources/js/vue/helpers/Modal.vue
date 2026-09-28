@@ -10,6 +10,8 @@ const props = defineProps({
     title: { type: String, default: '' },
     /** `sm` … `full`; the theme decides when unset. */
     size: { type: String, default: null },
+    /** `center`, or `top` for a window whose content grows and shrinks while it is open. */
+    align: { type: String, default: 'center' },
     closable: { type: Boolean, default: true },
     closeOnBackdrop: { type: Boolean, default: true },
     closeOnEscape: { type: Boolean, default: true },
@@ -132,7 +134,8 @@ onBeforeUnmount(() => {
         <Transition name="island-modal" @after-leave="releaseOverlay">
             <div
                 v-if="open"
-                class="il-modal fixed inset-0 flex items-center justify-center bg-il-neutral-900/50 p-4 backdrop-blur-[2px]"
+                class="il-modal fixed inset-0 flex justify-center bg-il-neutral-900/50 p-4 backdrop-blur-[2px]"
+                :class="align === 'top' && !fills ? 'items-start pt-[10vh]' : 'items-center'"
                 :data-size="resolvedSize"
                 :style="overlayStyle"
                 @click.self="onBackdrop"
