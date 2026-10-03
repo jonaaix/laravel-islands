@@ -134,7 +134,7 @@ onBeforeUnmount(() => {
         <Transition name="island-modal" @after-leave="releaseOverlay">
             <div
                 v-if="open"
-                class="il-modal fixed inset-0 flex justify-center bg-il-neutral-900/50 p-4 backdrop-blur-[2px] dark:bg-black/70"
+                class="il-modal fixed inset-0 flex justify-center bg-il-neutral-900/60 p-4 backdrop-blur-[2px] dark:bg-black/60"
                 :class="align === 'top' && !fills ? 'items-start pt-[10vh]' : 'items-center'"
                 :data-size="resolvedSize"
                 :style="overlayStyle"
