@@ -105,13 +105,17 @@ function measure() {
         return;
     }
 
-    const x = box.left - strip.getBoundingClientRect().left;
+    const stripBox = strip.getBoundingClientRect();
+    // A strip inside a modal that scales in is measured mid-transform; the ratio takes the scale back out.
+    const unscale = stripBox.width ? (parseFloat(getComputedStyle(strip).width) || strip.offsetWidth) / stripBox.width : 1;
+    const x = (box.left - stripBox.left) * unscale;
+    const width = box.width * unscale;
 
     // The first placement must not travel in from the left edge.
     const still = !surface.value.shown;
     const moves = !still && surface.value.x !== x;
 
-    surface.value = { x, width: box.width, shown: true, still, moving: moves };
+    surface.value = { x, width, shown: true, still, moving: moves };
 
     if (still) {
         requestAnimationFrame(() => { surface.value = { ...surface.value, still: false }; });
