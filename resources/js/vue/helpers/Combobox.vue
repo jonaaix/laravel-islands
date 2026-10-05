@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import { anchoredLeft } from './anchoredLeft.js';
 import IconButton from './IconButton.vue';
 import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
 import { selectSkin } from './selectSkins.js';
@@ -69,9 +70,7 @@ function updatePosition() {
     }
     const r = el.getBoundingClientRect();
 
-    // Pulled back only far enough to stay on screen, so a wide menu under a trigger near the
-    // right edge does not run off it.
-    const left = Math.max(8, Math.min(r.left, window.innerWidth - props.menuWidth - 8));
+    const left = anchoredLeft(r, props.menuWidth, 8);
 
     menuStyle.value = { top: `${r.bottom + 4}px`, left: `${left}px`, width: `${props.menuWidth}px` };
 }

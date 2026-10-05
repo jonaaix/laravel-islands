@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import { anchoredLeft } from './anchoredLeft.js';
 import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
 import { useTheme } from './theme.js';
 
@@ -49,24 +50,6 @@ const placed = ref(false);
 const unplacedStyle = { opacity: '0', pointerEvents: 'none' };
 
 /**
- * Which third of the window the anchor sits in decides where the panel grows from: on the
- * left it opens to the right, in the middle it stays centred under the anchor, on the right
- * it opens to the left. Then it is pulled back far enough to stay on screen.
- */
-function left(rect, width) {
-    const third = window.innerWidth / 3;
-    const centre = rect.left + rect.width / 2;
-
-    const preferred = centre < third
-        ? rect.left
-        : centre < third * 2
-            ? centre - width / 2
-            : rect.right - width;
-
-    return Math.max(props.margin, Math.min(preferred, window.innerWidth - width - props.margin));
-}
-
-/**
  * Downwards, unless the panel would run past the bottom edge. Opening upwards from the
  * middle of a window just because the anchor sits there reads as a glitch, so the height of
  * the panel decides, not the position of the anchor.
@@ -95,7 +78,7 @@ function position() {
 
     style.value = {
         top: `${top(rect, height)}px`,
-        left: `${left(rect, width)}px`,
+        left: `${anchoredLeft(rect, width, props.margin)}px`,
         ...(props.width === null ? {} : { width: `${props.width}px` }),
     };
 
