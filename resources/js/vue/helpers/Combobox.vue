@@ -1,8 +1,7 @@
 <script setup>
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
-import { anchoredLeft } from './anchoredLeft.js';
+import { computed, nextTick, ref, watch } from 'vue';
 import IconButton from './IconButton.vue';
-import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
+import Popover from './Popover.vue';
 import { selectSkin } from './selectSkins.js';
 import { useTheme } from './theme.js';
 import { useOptionSearch } from '../composables/useOptionSearch.js';
@@ -55,31 +54,14 @@ const highlighted = ref(0);
 const typed = ref('');
 let typedTimer = null;
 const triggerEl = ref(null);
-const menuStyle = ref({});
 const picked = ref(null);
-const overlayId = ref(null);
-const backdropStyle = computed(() => overlayId.value !== null ? { zIndex: overlayZIndex(overlayId.value) } : {});
-const panelStyle = computed(() => overlayId.value !== null ? { zIndex: overlayZIndex(overlayId.value) + 1 } : {});
 
 const { loadingOptions, known, filtered, reset } = useOptionSearch(props, query);
-
-function updatePosition() {
-    const el = triggerEl.value;
-    if (!el) {
-        return;
-    }
-    const r = el.getBoundingClientRect();
-
-    const left = anchoredLeft(r, props.menuWidth, 8);
-
-    menuStyle.value = { top: `${r.bottom + 4}px`, left: `${left}px`, width: `${props.menuWidth}px` };
-}
 
 const selectTheme = useTheme('select');
 
 const skin = computed(() => selectSkin(props.variant, 'field', selectTheme.skins));
 
-const menuSurface = selectTheme.menu;
 
 const hasValue = computed(() => props.modelValue !== 0 && props.modelValue !== '' && props.modelValue != null);
 const selectedName = computed(() => {
@@ -95,17 +77,6 @@ const selectedName = computed(() => {
     return match ?? props.selectedLabel ?? '';
 });
 
-function followTrigger(isOpen) {
-    const method = isOpen ? 'addEventListener' : 'removeEventListener';
-
-    window[method]('resize', updatePosition);
-    window[method]('scroll', updatePosition, true);
-}
-
-watch(open, followTrigger);
-
-onBeforeUnmount(() => followTrigger(false));
-
 watch(query, () => {
     highlighted.value = 0;
 });
@@ -120,8 +91,6 @@ function toggle() {
         query.value = '';
         reset();
         highlighted.value = 0;
-        overlayId.value = registerOverlay();
-        updatePosition();
         nextTick(() => {
             if (props.searchable) {
                 searchInput.value?.focus();
@@ -135,24 +104,15 @@ function toggle() {
             listEl.value?.focus();
             scrollToHighlighted();
         });
-    } else {
-        releaseOverlay();
     }
 }
 function close() {
     if (!open.value) return;
     open.value = false;
-    releaseOverlay();
 
     // The list held the keyboard, so the trigger takes it back rather than dropping it on the page.
     if (!props.searchable) {
         triggerEl.value?.querySelector('button')?.focus();
-    }
-}
-function releaseOverlay() {
-    if (overlayId.value !== null) {
-        unregisterOverlay(overlayId.value);
-        overlayId.value = null;
     }
 }
 function select(key) {
@@ -260,9 +220,8 @@ function onKeydown(e) {
             </span>
         </div>
 
-        <Teleport to="body">
-        <div v-if="open" class="il-combobox__backdrop fixed inset-0" :style="backdropStyle" @click="close"></div>
-        <div v-if="open" class="il-combobox__menu fixed overflow-hidden rounded-il-menu" :class="menuSurface" :style="{ ...menuStyle, ...panelStyle }" :data-variant="variant">
+        <Popover :anchor="triggerEl" :open="open" :width="menuWidth" :margin="8" @close="close">
+        <div class="il-combobox__menu" :data-variant="variant">
             <div v-if="searchable" class="il-combobox__search relative border-b border-il-neutral-100 p-2 dark:border-white/10">
                 <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-il-neutral-400">
                     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd"/></svg>
@@ -323,6 +282,6 @@ function onKeydown(e) {
                 </template>
             </ul>
         </div>
-        </Teleport>
+        </Popover>
     </div>
 </template>
