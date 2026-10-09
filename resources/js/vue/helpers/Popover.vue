@@ -1,7 +1,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { anchoredLeft } from './anchoredLeft.js';
-import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
+import { isTopOverlay, overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
 import { useTheme } from './theme.js';
 
 const props = defineProps({
@@ -87,14 +87,27 @@ function position() {
     }
 }
 
+// Listened for on the window, because focus usually stays on the trigger or the page and never enters the panel.
+function closeOnEscape(event) {
+    if (event.key === 'Escape' && overlayId.value !== null && isTopOverlay(overlayId.value)) {
+        event.stopPropagation();
+        emit('close');
+    }
+}
+
+function stopListening() {
+    window.removeEventListener('resize', position);
+    window.removeEventListener('scroll', position, true);
+    window.removeEventListener('keydown', closeOnEscape, true);
+}
+
 watch(
     () => props.open,
     (isOpen) => {
         if (!isOpen) {
             placed.value = false;
             releaseOverlay();
-            window.removeEventListener('resize', position);
-            window.removeEventListener('scroll', position, true);
+            stopListening();
 
             return;
         }
@@ -104,14 +117,14 @@ watch(
         nextTick(position);
         window.addEventListener('resize', position);
         window.addEventListener('scroll', position, true);
+        window.addEventListener('keydown', closeOnEscape, true);
     },
     { immediate: true },
 );
 
 onBeforeUnmount(() => {
     releaseOverlay();
-    window.removeEventListener('resize', position);
-    window.removeEventListener('scroll', position, true);
+    stopListening();
 });
 
 defineExpose({ position });
@@ -128,7 +141,6 @@ defineExpose({ position });
             class="il-popover fixed overflow-hidden rounded-il-card"
             :class="surface"
             :style="{ ...style, zIndex: layer + 1, ...(placed ? {} : unplacedStyle) }"
-            @keydown.esc.stop="emit('close')"
             @click.stop
         >
             <slot />

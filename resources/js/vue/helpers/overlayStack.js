@@ -17,6 +17,10 @@ export function unregisterOverlay(id) {
     stack.value = stack.value.filter((entry) => entry !== id);
 }
 
+export function isTopOverlay(id) {
+    return stack.value[stack.value.length - 1] === id;
+}
+
 export function overlayZIndex(id) {
     const depth = stack.value.indexOf(id);
 
