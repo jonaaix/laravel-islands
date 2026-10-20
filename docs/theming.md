@@ -50,7 +50,7 @@ the tokens that overrides variables, on `:root`, on `.dark`, or on any element t
 | `--radius-il-control` | `0.375rem` | fields, buttons, select triggers, badges |
 | `--radius-il-menu` | `0.5rem` | menus, toasts, icon boxes, field groups |
 | `--radius-il-card` | `0.75rem` | cards, modals, popovers |
-| `--spacing-il-control-xs`, `-sm`, `il-control`, `-lg` | `1.75rem`, `2rem`, `2.25rem`, `2.5rem` | the heights of small buttons, small fields, fields, large fields |
+| `--spacing-il-control-2xs`, `-xs`, `-sm`, `il-control`, `-lg` | `1.5rem`, `1.75rem`, `2rem`, `2.25rem`, `2.5rem` | the heights of micro buttons, small buttons, small fields, fields, large fields |
 | `--il-duration-fast`, `-hover`, `-panel`, `-tooltip` | `150ms`, `500ms`, `350ms`, `120ms` | state changes, hover affordances, panels unfolding, tooltips |
 
 ```css

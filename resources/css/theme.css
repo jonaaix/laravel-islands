@@ -105,6 +105,7 @@
 
     /* ----- Control heights ----- */
 
+    --spacing-il-control-2xs: 1.5rem;
     --spacing-il-control-xs: 1.75rem;
     --spacing-il-control-sm: 2rem;
     --spacing-il-control: 2.25rem;

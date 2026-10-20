@@ -4,6 +4,13 @@
  */
 
 export const BUTTON_SIZES = {
+    xs: {
+        box: 'h-il-control-2xs gap-1 px-2 text-xs',
+        splitAction: 'h-il-control-2xs gap-1 pl-2 pr-1.5 text-xs',
+        splitMenu: 'h-il-control-2xs w-5 text-xs',
+        glyph: 'h-3 w-3',
+        chevron: 'h-3 w-3',
+    },
     sm: {
         box: 'h-il-control-xs gap-1.5 px-3 text-xs',
         splitAction: 'h-il-control-xs gap-1.5 pl-3 pr-2 text-xs',

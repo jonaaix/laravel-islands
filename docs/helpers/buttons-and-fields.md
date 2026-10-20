@@ -13,7 +13,7 @@
 | --- | --- | --- |
 | `label` | `''` | Fallback text when no default slot is passed. |
 | `tone` | `'primary'` | `cta` (one-off ask, saturated) · `primary` (tinted, persistent) · `secondary` · `outlined` · `ghost` · `danger`. |
-| `size` | `'md'` | `sm` (28px) · `md` (36px) · `lg` (40px). |
+| `size` | `'md'` | `xs` (24px, a micro control in a dense toolbar) · `sm` (28px) · `md` (36px) · `lg` (40px). |
 | `shape` | `'rounded'` | `rounded` or `pill`. |
 | `loading` | `false` | Spinner in place of the leading icon; disables the button. |
 | `disabled`, `fullWidth` | `false` | |
