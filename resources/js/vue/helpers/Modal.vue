@@ -10,8 +10,8 @@ const props = defineProps({
     title: { type: String, default: '' },
     /** `sm` … `full`; the theme decides when unset. */
     size: { type: String, default: null },
-    /** `center`, or `top` for a window whose content grows and shrinks while it is open. */
-    align: { type: String, default: 'center' },
+    /** `auto` centres a panel taller than half the window and pins a shorter one near the top; `center` and `top` force either. */
+    align: { type: String, default: 'auto' },
     closable: { type: Boolean, default: true },
     closeOnBackdrop: { type: Boolean, default: true },
     closeOnEscape: { type: Boolean, default: true },
@@ -43,6 +43,29 @@ const sizeClass = computed(() => theme.sizes[resolvedSize.value] ?? theme.sizes.
 
 /** Fills the screen: the panel takes the height it is given rather than its content's. */
 const fills = computed(() => resolvedSize.value === 'xl' || resolvedSize.value === 'full');
+
+const tall = ref(false);
+
+let heightObserver = null;
+
+// A short panel sits near the top so it grows downwards instead of jumping; once it passes half the window, centring keeps it off the bottom edge.
+function measure() {
+    tall.value = (panel.value?.offsetHeight ?? 0) > window.innerHeight * 0.5;
+}
+
+function watchHeight(watching) {
+    heightObserver?.disconnect();
+    heightObserver = null;
+    window.removeEventListener('resize', measure);
+
+    if (watching && panel.value && typeof ResizeObserver !== 'undefined') {
+        heightObserver = new ResizeObserver(measure);
+        heightObserver.observe(panel.value);
+        window.addEventListener('resize', measure);
+    }
+}
+
+const pinnedToTop = computed(() => !fills.value && (props.align === 'top' || (props.align === 'auto' && !tall.value)));
 
 function close() {
     if (props.closable) {
@@ -101,6 +124,7 @@ watch(() => props.open, async (open) => {
     holdPageScroll(open);
 
     if (!open) {
+        watchHeight(false);
         returnFocusTo?.focus?.();
         returnFocusTo = null;
         return;
@@ -110,6 +134,8 @@ watch(() => props.open, async (open) => {
 
     returnFocusTo = document.activeElement;
     await nextTick();
+    measure();
+    watchHeight(true);
     (focusables()[0] ?? panel.value)?.focus?.();
 }, { immediate: true });
 
@@ -123,6 +149,7 @@ function releaseOverlay() {
 }
 
 onBeforeUnmount(() => {
+    watchHeight(false);
     holdPageScroll(false);
     returnFocusTo = null;
     releaseOverlay();
@@ -135,7 +162,7 @@ onBeforeUnmount(() => {
             <div
                 v-if="open"
                 class="il-modal fixed inset-0 flex justify-center bg-il-neutral-900/60 p-4 backdrop-blur-[2px] dark:bg-black/70"
-                :class="align === 'top' && !fills ? 'items-start pt-[10vh]' : 'items-center'"
+                :class="pinnedToTop ? 'items-start pt-[10vh]' : 'items-center'"
                 :data-size="resolvedSize"
                 :style="overlayStyle"
                 @click.self="onBackdrop"
