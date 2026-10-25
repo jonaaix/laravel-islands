@@ -62,6 +62,9 @@ const selectTheme = useTheme('select');
 
 const skin = computed(() => selectSkin(props.variant, 'field', selectTheme.skins));
 
+// A theme's own skin table without a `label` keeps the cap every trigger had before.
+const labelClass = computed(() => skin.value.label ?? 'max-w-[12rem] truncate');
+
 
 const hasValue = computed(() => props.modelValue !== 0 && props.modelValue !== '' && props.modelValue != null);
 const selectedName = computed(() => {
@@ -193,10 +196,10 @@ function onKeydown(e) {
                 <template v-if="hasValue">
                     <slot v-if="$slots.selected" name="selected" :key-value="modelValue" :label="selectedName" />
                     <slot v-else name="option" :key-value="modelValue" :label="selectedName">
-                        <span class="max-w-[12rem] truncate">{{ selectedName }}</span>
+                        <span :class="labelClass">{{ selectedName }}</span>
                     </slot>
                 </template>
-                <span v-else class="max-w-[12rem] truncate">{{ placeholder }}</span>
+                <span v-else :class="labelClass">{{ placeholder }}</span>
             </button>
             <IconButton
                 v-if="clearable && hasValue"

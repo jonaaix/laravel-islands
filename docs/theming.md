@@ -219,6 +219,12 @@ theme: {
 }
 ```
 
+A select skin's `label` holds the classes of the value shown in the trigger. The package's `field`
+lets the value use the trigger's whole width (`truncate`); the toolbar looks cap it at 12rem so a
+content-sized pill cannot grow with a long value (`max-w-[12rem] truncate`). A skin without
+`label` keeps that 12rem cap, so a `field` that sits in a content-sized row and should stay narrow
+sets `field.label: 'max-w-[12rem] truncate'` in the theme.
+
 Classes you write into a theme must reach Tailwind's build like any other class: put the
 theme file where your `@source` rules already look, or add it.
 

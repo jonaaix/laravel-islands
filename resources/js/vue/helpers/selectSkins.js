@@ -11,24 +11,28 @@ export const SELECT_SKINS = {
         on: 'border-il-neutral-200 bg-white text-il-neutral-900 hover:bg-il-neutral-50 dark:border-white/10 dark:bg-il-neutral-900 dark:text-il-neutral-100 dark:hover:bg-white/5',
         off: 'border-il-neutral-200 bg-white text-il-neutral-400 hover:bg-il-neutral-50 dark:border-white/10 dark:bg-il-neutral-900 dark:text-il-neutral-500 dark:hover:bg-white/5',
         clear: 'hover:bg-il-neutral-100 dark:hover:bg-white/10',
+        label: 'truncate',
     },
     filter: {
         base: `flex h-il-control items-center rounded-il-control border pl-2.5 pr-1 text-sm transition-colors ${FOCUS}`,
         on: 'border-il-primary-200 bg-il-primary-50 text-il-primary-800 dark:border-il-primary-500/30 dark:bg-il-primary-500/15 dark:text-il-primary-200',
         off: 'border-il-neutral-200 bg-white text-il-neutral-700 hover:bg-il-neutral-50 dark:border-white/10 dark:bg-il-neutral-900 dark:text-il-neutral-200 dark:hover:bg-white/5',
         clear: 'hover:bg-il-primary-200/60 dark:hover:bg-il-primary-500/25',
+        label: 'max-w-[12rem] truncate',
     },
     'filter-card': {
         base: `flex h-il-control items-center rounded-il-menu pl-3 pr-1.5 text-sm font-medium transition-colors ${FOCUS}`,
         on: 'bg-il-primary-500/15 text-il-primary-800 dark:text-il-primary-200',
         off: 'bg-il-neutral-50 text-il-neutral-700 hover:bg-il-neutral-100 dark:bg-white/5 dark:text-il-neutral-200 dark:hover:bg-white/10',
         clear: 'hover:bg-il-primary-200/60 dark:hover:bg-il-primary-500/25',
+        label: 'max-w-[12rem] truncate',
     },
     'filter-pill': {
         base: `flex h-il-control-sm items-center rounded-full pl-3 pr-1 text-xs font-medium ring-1 ring-inset transition-colors ${FOCUS}`,
         on: 'bg-il-primary-500/10 text-il-primary-700 ring-il-primary-500/25 hover:bg-il-primary-500/15 dark:text-il-primary-300',
         off: 'bg-transparent text-il-neutral-500 ring-il-neutral-200 hover:bg-il-neutral-50 hover:text-il-neutral-700 dark:text-il-neutral-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-il-neutral-200',
         clear: 'hover:bg-il-primary-200/60 dark:hover:bg-il-primary-500/25',
+        label: 'max-w-[12rem] truncate',
     },
 };
 
