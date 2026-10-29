@@ -174,7 +174,8 @@ data lands — a loading view is the finished view drawn in grey, never a spinne
 ## `PersonChip`
 
 An avatar with the name beside it; without a picture the initial keeps the shape.
-Props: `name` (required), `image`.
+Props: `name` (required), `image`, `avatar` (default `true`; `false` drops the picture and the
+initial, for a chip that stands beside a larger avatar of the same person).
 
 ## `Tabs`
 
