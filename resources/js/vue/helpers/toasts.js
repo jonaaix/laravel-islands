@@ -1,4 +1,4 @@
-import { inject, provide, ref } from 'vue';
+import { getCurrentInstance, inject, provide, ref } from 'vue';
 
 export const TOASTS_KEY = Symbol('islands.toasts');
 
@@ -66,17 +66,36 @@ export function createToasts() {
     return api;
 }
 
+const providedHere = new WeakMap();
+
 export function provideToasts() {
     const toasts = createToasts();
     provide(TOASTS_KEY, toasts);
+
+    const instance = getCurrentInstance();
+    if (instance) {
+        providedHere.set(instance, toasts);
+    }
 
     return toasts;
 }
 
 /**
- * The telling half, for any component below the island root. Without a host the messages go
- * nowhere rather than throwing: a missing toast must never break the action it reports on.
+ * The telling half, for the island root that provides it and any component below. Without a
+ * host the messages go nowhere rather than throwing: a missing toast must never break the
+ * action it reports on.
  */
 export function useToast() {
-    return inject(TOASTS_KEY, null) ?? createToasts();
+    // inject() only reads ancestors, so the component that called provideToasts() finds its own here.
+    const toasts = providedHere.get(getCurrentInstance()) ?? inject(TOASTS_KEY, null);
+
+    if (!toasts) {
+        if (import.meta.env?.DEV) {
+            console.warn('[islands] useToast() found no provideToasts() in this component or above it; its messages are not shown.');
+        }
+
+        return createToasts();
+    }
+
+    return toasts;
 }

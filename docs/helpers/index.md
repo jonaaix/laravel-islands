@@ -55,9 +55,11 @@ provideToasts();
 | `ConfirmHost` | `provideConfirm()` | `useConfirm()` — a promise that resolves to `true` or `false` |
 | `ToastHost` | `provideToasts()` | `useToast()` — `toast.success('…')` and friends |
 
-Without a host, `useConfirm()` resolves `false` and `useToast()` swallows messages — an
-island never throws for a missing host, but a confirm that cannot be shown must never read
-as a yes.
+`useConfirm()` and `useToast()` work in the component that calls the provider as well as in
+every component below it. Without a provider, `useConfirm()` resolves `false` and
+`useToast()` swallows messages — an island never throws for a missing host, but a confirm
+that cannot be shown must never read as a yes. Development builds warn in the console when
+that happens.
 
 ## Conventions
 

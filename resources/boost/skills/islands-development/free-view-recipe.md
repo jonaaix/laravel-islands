@@ -128,9 +128,10 @@ it lands too big or too small.
   `mod+s` that silently stops working is a regression nobody reports.
 - A rejected value is **explained at the field it is about**, not in a message
   that floats away.
-- `provideToasts()` belongs in the view that renders `ToastHost`; `useToast()`
-  alone hands the caller a store the host never sees, and the message lands
-  nowhere.
+- `provideToasts()` and `provideConfirm()` belong in the view that renders the
+  hosts; `useToast()` and `useConfirm()` then work in that view and below it.
+  Without a provider they hand back a store no host shows and a question always
+  answered no — development builds warn in the console.
 - Show what a setting **works out to** before it is saved, when the effect is not
   obvious from the number itself.
 
