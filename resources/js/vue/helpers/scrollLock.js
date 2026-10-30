@@ -12,8 +12,11 @@ export function lockPageScroll() {
     const root = document.documentElement;
     saved = { overflow: root.style.overflow, scrollbarGutter: root.style.scrollbarGutter };
 
-    // The gutter keeps the scrollbar's width reserved, so the page does not shift sideways.
-    root.style.scrollbarGutter = 'stable';
+    // The gutter keeps a shown scrollbar's width reserved, so the page does not shift sideways; a page without one would gain an empty gutter instead.
+    if (window.innerWidth > root.clientWidth) {
+        root.style.scrollbarGutter = 'stable';
+    }
+
     root.style.overflow = 'hidden';
 }
 
