@@ -137,7 +137,8 @@ it lands too big or too small.
 
 ## 6 Figures
 
-- Format centrally — `formatCount`, `formatDate`, `formatDuration`. A view that
+- Format centrally — `formatCount`, `formatDate`, `formatDuration` from
+  `@islands/shared/Support/format.js`. A view that
   formats a duration by hand is a view whose numbers will one day disagree with
   the next view's.
 - Figures carry tabular numerals, so a column does not jitter as values change.

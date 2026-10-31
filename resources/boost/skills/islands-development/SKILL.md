@@ -56,6 +56,12 @@ app/Islands/Products/
 - **`Support/` holds both languages**, PHP helpers and loose `.js` modules;
   `Components/` is `.vue` only.
 
+## Shared between islands
+
+Code used by more than one island lives in `app/Islands/@Shared/`
+(`Support/`, `Components/`), imported through the `@islands/shared`
+alias. Formatting lives in `@islands/shared/Support/format.js`.
+
 ## Endpoints
 
 `Routes.php` in the island directory is auto-loaded into a group of its own.
