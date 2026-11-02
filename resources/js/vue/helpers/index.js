@@ -63,3 +63,4 @@ export { createConfirm, provideConfirm, useConfirm, CONFIRM_KEY } from './confir
 export { default as ToastHost } from './ToastHost.vue';
 export { createToasts, provideToasts, useToast, TOASTS_KEY } from './toasts.js';
 export { provideIcons, useIcons, ICONS_KEY } from './icons.js';
+export { lockPageScroll, unlockPageScroll } from './scrollLock.js';
