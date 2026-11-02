@@ -5,7 +5,7 @@
       <stop offset="100%" stop-color="#1E293B" />
     </linearGradient>
 
-    <linearGradient id="window-surface" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="island-surface" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#1E293B" />
       <stop offset="100%" stop-color="#0F172A" />
     </linearGradient>
@@ -15,6 +15,11 @@
       <stop offset="100%" stop-color="#FB7185" />
     </linearGradient>
 
+    <linearGradient id="signal-line" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#34D399" stop-opacity="0.3" />
+    </linearGradient>
+
     <filter id="soft-glow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="3.5" />
     </filter>
@@ -22,54 +27,37 @@
 
   <rect x="8" y="8" width="184" height="184" rx="36" fill="url(#bg-core)" stroke="#334155" stroke-width="1.5" />
 
-  <g fill="none" stroke="#334155" stroke-width="1" stroke-dasharray="2 6" opacity="0.3">
-    <circle cx="100" cy="98" r="62" />
-    <circle cx="100" cy="98" r="78" />
+  <g fill="none" stroke="#334155" stroke-width="1" stroke-dasharray="3 5" opacity="0.35">
+    <path d="M 14,40 Q 50,30 86,40 T 186,36" />
+    <path d="M 14,168 Q 54,158 96,170 T 186,162" />
   </g>
 
-  <path d="M 156,74 C 166,66 168,54 176,46" fill="none" stroke="#38BDF8" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.6" />
-  <path d="M 50,136 C 42,146 34,150 26,158" fill="none" stroke="#34D399" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.6" />
-  <path d="M 150,118 C 160,130 166,140 176,150" fill="none" stroke="#FB7185" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.6" />
-
-  <rect x="36" y="46" width="128" height="104" rx="12" fill="url(#window-surface)" stroke="#475569" stroke-width="1.5" />
-  <path d="M 36,62 L 164,62" stroke="#334155" stroke-width="1.5" />
-  <circle cx="47" cy="54" r="2.2" fill="#FB7185" opacity="0.8" />
-  <circle cx="55" cy="54" r="2.2" fill="#FBBF24" opacity="0.6" />
-  <circle cx="63" cy="54" r="2.2" fill="#34D399" opacity="0.8" />
-  <rect x="74" y="51" width="62" height="6" rx="3" fill="#334155" opacity="0.8" />
-
-  <rect x="46" y="72" width="36" height="4" rx="2" fill="#334155" />
-  <rect x="46" y="81" width="28" height="4" rx="2" fill="#334155" />
-  <rect x="46" y="90" width="32" height="4" rx="2" fill="#334155" />
-  <rect x="90" y="122" width="54" height="4" rx="2" fill="#334155" />
-  <rect x="90" y="131" width="40" height="4" rx="2" fill="#334155" />
-
-  <rect x="90" y="70" width="64" height="44" rx="7" fill="none" stroke="url(#archipelago-glow)" stroke-width="7" filter="url(#soft-glow)" opacity="0.85" />
-  <rect x="90" y="70" width="64" height="44" rx="7" fill="#0F172A" stroke="url(#archipelago-glow)" stroke-width="2" />
-  <rect x="98" y="77" width="22" height="3" rx="1.5" fill="#94A3B8" opacity="0.5" />
-  <rect x="100" y="94" width="8" height="13" rx="2" fill="#38BDF8" />
-  <rect x="112" y="88" width="8" height="19" rx="2" fill="#34D399" />
-  <rect x="124" y="98" width="8" height="9" rx="2" fill="#FB7185" />
-  <rect x="136" y="84" width="8" height="23" rx="2" fill="#38BDF8" opacity="0.6" />
-
-  <rect x="46" y="102" width="36" height="34" rx="7" fill="none" stroke="#34D399" stroke-width="5" filter="url(#soft-glow)" opacity="0.7" />
-  <rect x="46" y="102" width="36" height="34" rx="7" fill="#0F172A" stroke="#34D399" stroke-width="1.8" />
-  <rect x="53" y="114" width="22" height="11" rx="5.5" fill="#34D399" opacity="0.25" />
-  <circle cx="69.5" cy="119.5" r="4" fill="#34D399" />
-
-  <g>
-    <circle cx="176" cy="46" r="7" fill="#38BDF8" filter="url(#soft-glow)" opacity="0.8" />
-    <circle cx="176" cy="46" r="4" fill="#38BDF8" />
-    <circle cx="176" cy="46" r="1.5" fill="#0F172A" />
+  <g fill="none" stroke="#38BDF8" stroke-width="1" stroke-dasharray="2 4" opacity="0.3">
+    <path d="M 44,92 C 40,62 74,42 100,46 C 128,50 140,74 134,100 C 126,130 92,140 66,132 C 50,126 46,110 44,92 Z" />
+    <path d="M 120,113 C 118,96 134,88 148,91 C 162,94 168,108 162,122 C 156,136 138,140 128,132 C 122,127 121,121 120,113 Z" />
+    <path d="M 60,148 C 58,136 70,129 81,130 C 93,131 98,142 94,152 C 90,162 76,164 68,158 C 63,155 61,152 60,148 Z" />
   </g>
-  <g>
-    <circle cx="26" cy="158" r="7" fill="#34D399" filter="url(#soft-glow)" opacity="0.8" />
-    <circle cx="26" cy="158" r="4" fill="#34D399" />
-    <circle cx="26" cy="158" r="1.5" fill="#0F172A" />
+
+  <g fill="none" stroke="url(#signal-line)" stroke-width="1.5" stroke-dasharray="3 3">
+    <path d="M 118,106 Q 124,110 130,112" />
+    <path d="M 80,124 Q 79,130 79,137" />
+    <path d="M 113,68 Q 126,62 138,62" />
   </g>
-  <g>
-    <circle cx="176" cy="150" r="7" fill="#FB7185" filter="url(#soft-glow)" opacity="0.8" />
-    <circle cx="176" cy="150" r="4" fill="#FB7185" />
-    <circle cx="176" cy="150" r="1.5" fill="#0F172A" />
-  </g>
+
+  <path d="M 58,92 C 54,70 78,56 98,60 C 118,64 126,80 120,98 C 114,118 90,126 72,118 C 62,113 60,104 58,92 Z" fill="none" stroke="url(#archipelago-glow)" stroke-width="7" filter="url(#soft-glow)" opacity="0.85" />
+  <path d="M 58,92 C 54,70 78,56 98,60 C 118,64 126,80 120,98 C 114,118 90,126 72,118 C 62,113 60,104 58,92 Z" fill="url(#island-surface)" stroke="url(#archipelago-glow)" stroke-width="2.5" />
+  <path d="M 70,92 C 68,78 82,70 95,72 C 108,74 112,84 109,96 C 106,108 90,112 80,108 C 74,105 71,99 70,92 Z" fill="none" stroke="#34D399" stroke-width="1.2" opacity="0.55" />
+  <path d="M 82,91 C 81,84 88,80 94,81 C 100,82 101,88 99,93 C 97,98 90,99 86,97 C 83,95 82,93 82,91 Z" fill="none" stroke="#FB7185" stroke-width="1.2" opacity="0.6" />
+  <circle cx="91" cy="89" r="2.5" fill="#FB7185" />
+
+  <path d="M 128,112 C 126,102 136,96 146,98 C 156,100 160,110 156,120 C 152,130 140,132 133,126 C 129,122 129,118 128,112 Z" fill="none" stroke="#34D399" stroke-width="5" filter="url(#soft-glow)" opacity="0.8" />
+  <path d="M 128,112 C 126,102 136,96 146,98 C 156,100 160,110 156,120 C 152,130 140,132 133,126 C 129,122 129,118 128,112 Z" fill="url(#island-surface)" stroke="#34D399" stroke-width="2" />
+  <path d="M 136,113 C 135,107 140,104 145,105 C 151,106 152,112 150,117 C 148,122 142,123 138,120 C 136,118 136,116 136,113 Z" fill="none" stroke="#34D399" stroke-width="1.1" opacity="0.5" />
+
+  <path d="M 68,146 C 67,140 74,136 80,137 C 87,138 90,144 87,150 C 84,156 76,157 71,153 C 69,151 68,149 68,146 Z" fill="none" stroke="#FB7185" stroke-width="5" filter="url(#soft-glow)" opacity="0.8" />
+  <path d="M 68,146 C 67,140 74,136 80,137 C 87,138 90,144 87,150 C 84,156 76,157 71,153 C 69,151 68,149 68,146 Z" fill="url(#island-surface)" stroke="#FB7185" stroke-width="2" />
+
+  <path d="M 138,62 C 138,57 145,55 150,57 C 154,59 154,65 149,67 C 144,69 138,67 138,62 Z" fill="none" stroke="#38BDF8" stroke-width="4" filter="url(#soft-glow)" opacity="0.8" />
+  <path d="M 138,62 C 138,57 145,55 150,57 C 154,59 154,65 149,67 C 144,69 138,67 138,62 Z" fill="url(#island-surface)" stroke="#38BDF8" stroke-width="1.8" />
+  <circle cx="145.5" cy="62" r="1.8" fill="#38BDF8" />
 </svg>
