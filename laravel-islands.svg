@@ -5,8 +5,18 @@
       <stop offset="100%" stop-color="#1E293B" />
     </linearGradient>
 
-    <linearGradient id="island-surface" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="face-top" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#273449" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+
+    <linearGradient id="face-left" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#111a2e" />
+    </linearGradient>
+
+    <linearGradient id="face-right" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#172033" />
       <stop offset="100%" stop-color="#0F172A" />
     </linearGradient>
 
@@ -28,36 +38,57 @@
   <rect x="8" y="8" width="184" height="184" rx="36" fill="url(#bg-core)" stroke="#334155" stroke-width="1.5" />
 
   <g fill="none" stroke="#334155" stroke-width="1" stroke-dasharray="3 5" opacity="0.35">
-    <path d="M 14,40 Q 50,30 86,40 T 186,36" />
-    <path d="M 14,168 Q 54,158 96,170 T 186,162" />
-  </g>
-
-  <g fill="none" stroke="#38BDF8" stroke-width="1" stroke-dasharray="2 4" opacity="0.3">
-    <path d="M 44,92 C 40,62 74,42 100,46 C 128,50 140,74 134,100 C 126,130 92,140 66,132 C 50,126 46,110 44,92 Z" />
-    <path d="M 120,113 C 118,96 134,88 148,91 C 162,94 168,108 162,122 C 156,136 138,140 128,132 C 122,127 121,121 120,113 Z" />
-    <path d="M 60,148 C 58,136 70,129 81,130 C 93,131 98,142 94,152 C 90,162 76,164 68,158 C 63,155 61,152 60,148 Z" />
+    <path d="M 14,46 Q 52,36 92,46 T 186,42" />
+    <path d="M 14,170 Q 56,160 98,172 T 186,164" />
   </g>
 
   <g fill="none" stroke="url(#signal-line)" stroke-width="1.5" stroke-dasharray="3 3">
-    <path d="M 118,106 Q 124,110 130,112" />
-    <path d="M 80,124 Q 79,130 79,137" />
-    <path d="M 113,68 Q 126,62 138,62" />
+    <path d="M 128,104 Q 136,110 140,118" />
+    <path d="M 72,104 Q 64,112 60,120" />
+    <path d="M 120,78 Q 134,66 144,62" />
   </g>
-
-  <path d="M 58,92 C 54,70 78,56 98,60 C 118,64 126,80 120,98 C 114,118 90,126 72,118 C 62,113 60,104 58,92 Z" fill="none" stroke="url(#archipelago-glow)" stroke-width="7" filter="url(#soft-glow)" opacity="0.85" />
-  <path d="M 58,92 C 54,70 78,56 98,60 C 118,64 126,80 120,98 C 114,118 90,126 72,118 C 62,113 60,104 58,92 Z" fill="url(#island-surface)" stroke="url(#archipelago-glow)" stroke-width="2.5" />
-  <path d="M 70,92 C 68,78 82,70 95,72 C 108,74 112,84 109,96 C 106,108 90,112 80,108 C 74,105 71,99 70,92 Z" fill="none" stroke="#34D399" stroke-width="1.2" opacity="0.55" />
-  <path d="M 82,91 C 81,84 88,80 94,81 C 100,82 101,88 99,93 C 97,98 90,99 86,97 C 83,95 82,93 82,91 Z" fill="none" stroke="#FB7185" stroke-width="1.2" opacity="0.6" />
-  <circle cx="91" cy="89" r="2.5" fill="#FB7185" />
-
-  <path d="M 128,112 C 126,102 136,96 146,98 C 156,100 160,110 156,120 C 152,130 140,132 133,126 C 129,122 129,118 128,112 Z" fill="none" stroke="#34D399" stroke-width="5" filter="url(#soft-glow)" opacity="0.8" />
-  <path d="M 128,112 C 126,102 136,96 146,98 C 156,100 160,110 156,120 C 152,130 140,132 133,126 C 129,122 129,118 128,112 Z" fill="url(#island-surface)" stroke="#34D399" stroke-width="2" />
-  <path d="M 136,113 C 135,107 140,104 145,105 C 151,106 152,112 150,117 C 148,122 142,123 138,120 C 136,118 136,116 136,113 Z" fill="none" stroke="#34D399" stroke-width="1.1" opacity="0.5" />
-
-  <path d="M 68,146 C 67,140 74,136 80,137 C 87,138 90,144 87,150 C 84,156 76,157 71,153 C 69,151 68,149 68,146 Z" fill="none" stroke="#FB7185" stroke-width="5" filter="url(#soft-glow)" opacity="0.8" />
-  <path d="M 68,146 C 67,140 74,136 80,137 C 87,138 90,144 87,150 C 84,156 76,157 71,153 C 69,151 68,149 68,146 Z" fill="url(#island-surface)" stroke="#FB7185" stroke-width="2" />
-
-  <path d="M 138,62 C 138,57 145,55 150,57 C 154,59 154,65 149,67 C 144,69 138,67 138,62 Z" fill="none" stroke="#38BDF8" stroke-width="4" filter="url(#soft-glow)" opacity="0.8" />
-  <path d="M 138,62 C 138,57 145,55 150,57 C 154,59 154,65 149,67 C 144,69 138,67 138,62 Z" fill="url(#island-surface)" stroke="#38BDF8" stroke-width="1.8" />
-  <circle cx="145.5" cy="62" r="1.8" fill="#38BDF8" />
+  <ellipse cx="56" cy="151.0" rx="17.1" ry="4.3" fill="none" stroke="#38BDF8" stroke-width="1" stroke-dasharray="2 4" opacity="0.35" />
+  <path d="M 56,119.0 L 74,128 L 74,135 L 56,144.0 L 38,135 L 38,128 Z" fill="none" stroke="#FB7185" stroke-width="5" stroke-linejoin="round" filter="url(#soft-glow)" opacity="0.8" />
+  <path d="M 38,128 L 56,137.0 L 56,144.0 L 38,135 Z" fill="url(#face-left)" />
+  <path d="M 56,137.0 L 74,128 L 74,135 L 56,144.0 Z" fill="url(#face-right)" />
+  <path d="M 56,119.0 L 74,128 L 56,137.0 L 38,128 Z" fill="url(#face-top)" />
+  <g fill="none" stroke="#FB7185" stroke-width="1.8" stroke-linejoin="round">
+    <path d="M 56,119.0 L 74,128 L 74,135 L 56,144.0 L 38,135 L 38,128 Z" />
+    <path d="M 38,128 L 56,137.0 L 74,128 M 56,137.0 L 56,144.0" />
+  </g>
+  <ellipse cx="146" cy="152.0" rx="20.9" ry="5.3" fill="none" stroke="#38BDF8" stroke-width="1" stroke-dasharray="2 4" opacity="0.35" />
+  <path d="M 146,115.0 L 168,126 L 168,134 L 146,145.0 L 124,134 L 124,126 Z" fill="none" stroke="#34D399" stroke-width="5" stroke-linejoin="round" filter="url(#soft-glow)" opacity="0.8" />
+  <path d="M 124,126 L 146,137.0 L 146,145.0 L 124,134 Z" fill="url(#face-left)" />
+  <path d="M 146,137.0 L 168,126 L 168,134 L 146,145.0 Z" fill="url(#face-right)" />
+  <path d="M 146,115.0 L 168,126 L 146,137.0 L 124,126 Z" fill="url(#face-top)" />
+  <g fill="none" stroke="#34D399" stroke-width="1.8" stroke-linejoin="round">
+    <path d="M 146,115.0 L 168,126 L 168,134 L 146,145.0 L 124,134 L 124,126 Z" />
+    <path d="M 124,126 L 146,137.0 L 168,126 M 146,137.0 L 146,145.0" />
+  </g>
+  <ellipse cx="150" cy="74.0" rx="9.5" ry="2.4" fill="none" stroke="#38BDF8" stroke-width="1" stroke-dasharray="2 4" opacity="0.35" />
+  <path d="M 150,53.0 L 160,58 L 160,62 L 150,67.0 L 140,62 L 140,58 Z" fill="none" stroke="#38BDF8" stroke-width="4" stroke-linejoin="round" filter="url(#soft-glow)" opacity="0.8" />
+  <path d="M 140,58 L 150,63.0 L 150,67.0 L 140,62 Z" fill="url(#face-left)" />
+  <path d="M 150,63.0 L 160,58 L 160,62 L 150,67.0 Z" fill="url(#face-right)" />
+  <path d="M 150,53.0 L 160,58 L 150,63.0 L 140,58 Z" fill="url(#face-top)" />
+  <g fill="none" stroke="#38BDF8" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M 150,53.0 L 160,58 L 160,62 L 150,67.0 L 140,62 L 140,58 Z" />
+    <path d="M 140,58 L 150,63.0 L 160,58 M 150,63.0 L 150,67.0" />
+  </g>
+  <ellipse cx="100" cy="131.0" rx="38.0" ry="9.6" fill="none" stroke="#38BDF8" stroke-width="1" stroke-dasharray="2 4" opacity="0.35" />
+  <path d="M 100,72.0 L 140,92 L 140,104 L 100,124.0 L 60,104 L 60,92 Z" fill="none" stroke="url(#archipelago-glow)" stroke-width="7" stroke-linejoin="round" filter="url(#soft-glow)" opacity="0.85" />
+  <path d="M 60,92 L 100,112.0 L 100,124.0 L 60,104 Z" fill="url(#face-left)" />
+  <path d="M 100,112.0 L 140,92 L 140,104 L 100,124.0 Z" fill="url(#face-right)" />
+  <path d="M 100,72.0 L 140,92 L 100,112.0 L 60,92 Z" fill="url(#face-top)" />
+  <g fill="none" stroke="url(#archipelago-glow)" stroke-width="2.2" stroke-linejoin="round">
+    <path d="M 100,72.0 L 140,92 L 140,104 L 100,124.0 L 60,104 L 60,92 Z" />
+    <path d="M 60,92 L 100,112.0 L 140,92 M 100,112.0 L 100,124.0" />
+  </g>
+  <path d="M 92,92 L 92,86.0" stroke="#94A3B8" stroke-width="1.6" stroke-linecap="round" />
+  <path d="M 92,70.0 L 100.0,86.0 L 84.0,86.0 Z" fill="#34D399" opacity="0.9" stroke="#34D399" stroke-width="1" stroke-linejoin="round" />
+  <path d="M 92,64.0 L 97.5,76.0 L 86.5,76.0 Z" fill="#6EE7B7" stroke="#6EE7B7" stroke-width="1" stroke-linejoin="round" />
+  <path d="M 112,86 L 112,82.1" stroke="#94A3B8" stroke-width="1.0" stroke-linecap="round" />
+  <path d="M 112,71.7 L 117.2,82.1 L 106.8,82.1 Z" fill="#34D399" opacity="0.9" stroke="#34D399" stroke-width="1" stroke-linejoin="round" />
+  <path d="M 112,67.8 L 115.575,75.6 L 108.425,75.6 Z" fill="#6EE7B7" stroke="#6EE7B7" stroke-width="1" stroke-linejoin="round" />
+  <circle cx="56" cy="128" r="2.5" fill="#FB7185" />
+  <circle cx="146" cy="126" r="2.5" fill="#34D399" />
 </svg>
