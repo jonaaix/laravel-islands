@@ -28,7 +28,7 @@ A searchable single select; the list filters as you type and can be fed from the
 | `fetchOptions(query)` | `null` | Async function returning options for a non-empty query; stale responses are discarded. |
 | `fetchDelay`, `loadingLabel` | `150`, `''` | Debounce and the line shown while fetching. |
 | `variant` | `'field'` | `field` for forms, `filter` for a toolbar, `filter-card` for a tinted card. |
-| `menuWidth`, `menuHeight` | `288`, `240` | |
+| `menuWidth`, `menuHeight` | `288`, `240` | `menuWidth="trigger"` makes the list as wide as the field it opens from. |
 
 Slots: `#selected` (`{ keyValue, label }`), `#option` (`{ keyValue, label, option }`).
 

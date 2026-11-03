@@ -26,8 +26,8 @@ const props = defineProps({
     selectedLabel: { type: String, default: '' },
     /** `field` is a plain form control; `filter` and `filter-card` colour a set value. */
     variant: { type: String, default: 'field' },
-    /** A long or deeply named list earns more room than the trigger it hangs under. */
-    menuWidth: { type: Number, default: 288 },
+    /** A long or deeply named list earns more room than the trigger it hangs under; `'trigger'` matches the trigger. */
+    menuWidth: { type: [Number, String], default: 288 },
     menuHeight: { type: Number, default: 240 },
     /** How many entries a list may show at once; zero or less shows all of them. */
     maxOptions: { type: Number, default: 60 },
@@ -54,6 +54,8 @@ const highlighted = ref(0);
 const typed = ref('');
 let typedTimer = null;
 const triggerEl = ref(null);
+const triggerWidth = ref(0);
+const resolvedMenuWidth = computed(() => (props.menuWidth === 'trigger' ? triggerWidth.value || 288 : Number(props.menuWidth)));
 const picked = ref(null);
 
 const { loadingOptions, known, filtered, reset } = useOptionSearch(props, query);
@@ -91,6 +93,7 @@ function toggle() {
 
     open.value = !open.value;
     if (open.value) {
+        triggerWidth.value = Math.round(triggerEl.value?.getBoundingClientRect().width ?? 0);
         query.value = '';
         reset();
         highlighted.value = 0;
@@ -223,7 +226,7 @@ function onKeydown(e) {
             </span>
         </div>
 
-        <Popover :anchor="triggerEl" :open="open" :width="menuWidth" :margin="8" @close="close">
+        <Popover :anchor="triggerEl" :open="open" :width="resolvedMenuWidth" :margin="8" @close="close">
         <div class="il-combobox__menu" :data-variant="variant">
             <div v-if="searchable" class="il-combobox__search relative border-b border-il-neutral-100 p-2 dark:border-white/10">
                 <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-il-neutral-400">
