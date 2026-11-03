@@ -281,11 +281,68 @@ alpha rail, presets and a format switch.
 | `copyable` | `true` | A copy button beside the value. |
 | `labels` | `{}` | `open`, `plane`, `hue`, `alpha`, `presets`, `copy`, `copied`. |
 
+### `IconPicker`
+
+A field that opens a searchable grid of icons. The model is the chosen icon's `value`; the
+clear button sets `''`. The picker knows no icon library: `sets` names the groups to choose
+from, a segmented switch appears when there is more than one, and each set loads its icons
+only when the picker opens. The grid opens scrolled to the chosen icon.
+
+```vue
+<IconPicker v-model="form.icon" :sets="sets" :labels="{ placeholder: t('Choose icon') }" />
+```
+
+```js
+const sets = [
+    {
+        value: 'brand',
+        label: t('Brand'),
+        owns: (value) => value.startsWith('brand-'),
+        load: async () => Object.entries(await import('./brandIcons.js'))
+            .map(([name, component]) => ({ value: `brand-${name}`, label: name, component })),
+    },
+];
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `sets` | — | `{ value, label, load, owns? }`. `load()` resolves to `{ value, label, component }` items; `label` is what the search matches and the tooltip shows. `owns(value)` picks the set a stored value belongs to when the picker opens. |
+| `columns` | `8` | Icons per row. |
+| `width` | `384` | Width of the panel in pixels. |
+| `labels` | `{}` | `placeholder`, `search`, `clear`, `empty`. |
+
+The trigger shows the chosen icon once its set has loaded. To show it before that, render
+it yourself in the `selected` slot, which receives the `value`.
+
+#### Heroicons
+
+Projects on Heroicons get a ready picker and a component that draws one Heroicon from its
+Blade name (`heroicon-o-truck`, `-s-`, `-m-`, `-c-`), behind their own import:
+
+```bash
+npm install @heroicons/vue
+```
+
+```js
+import { HeroiconPicker, NamedHeroicon } from '@aaix/laravel-islands/vue/helpers/heroicons';
+```
+
+```vue
+<HeroiconPicker v-model="form.icon" :labels="{ outline: t('Outline'), solid: t('Solid') }" />
+<NamedHeroicon :name="link.icon" class="h-5 w-5" />
+```
+
+`HeroiconPicker` offers outline and solid; `styles` takes any of `o`, `s`, `m`, `c`, and
+`labels` adds `outline`, `solid`, `mini` and `micro` to the picker's own. The stored names
+are the ones Blade Heroicons renders, so the server can draw the same icon. `NamedHeroicon`
+loads only the one icon it draws. `heroiconSets(styles, labels)` hands the same sets to an
+`IconPicker` of your own.
+
 ### `WysiwygEditor`
 
-A TipTap rich-text field. The model is HTML; an empty document emits `''`. It is the one
-helper with a dependency of its own, so it lives behind its own import and the rest of the
-helpers load without TipTap installed:
+A TipTap rich-text field. The model is HTML; an empty document emits `''`. It is one of the
+two helpers with a dependency of their own, so it lives behind its own import and the rest of
+the helpers load without TipTap installed:
 
 ```bash
 npm install @tiptap/vue-3 @tiptap/starter-kit
