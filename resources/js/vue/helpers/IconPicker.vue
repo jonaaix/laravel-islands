@@ -121,7 +121,7 @@ watch([open, activeSet], ([isOpen, name]) => {
         <button type="button" :disabled="disabled" :class="triggerClasses" @click="openPicker()">
             <template v-if="modelValue">
                 <slot name="selected" :value="modelValue">
-                    <component :is="selectedComponent" v-if="selectedComponent" class="h-5 w-5 shrink-0 text-il-primary-500" aria-hidden="true" />
+                    <component :is="selectedComponent" v-if="selectedComponent" class="h-5 w-5 shrink-0 text-il-primary-500 dark:text-il-primary-400" aria-hidden="true" />
                 </slot>
                 <span class="min-w-0 flex-1 truncate text-il-neutral-900 dark:text-white">{{ modelValue }}</span>
             </template>

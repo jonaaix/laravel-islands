@@ -24,7 +24,7 @@ const sets = computed(() => heroiconSets(props.styles, props.labels));
         :labels="labels"
         @update:model-value="emit('update:modelValue', $event)">
         <template #selected="{ value }">
-            <NamedHeroicon :name="value" class="h-5 w-5 shrink-0 text-il-primary-500" />
+            <NamedHeroicon :name="value" class="h-5 w-5 shrink-0 text-il-primary-500 dark:text-il-primary-400" />
         </template>
     </IconPicker>
 </template>
