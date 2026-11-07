@@ -83,7 +83,7 @@ function onPointerLeave() {
         ref="el"
         :href="href || undefined"
         :target="href ? target : undefined"
-        :rel="href && target === '_blank' ? 'noopener' : undefined"
+        :rel="href && target !== '_self' ? 'noopener' : undefined"
         :type="href ? undefined : 'button'"
         :role="role"
         :tabindex="level ? -1 : undefined"
