@@ -31,6 +31,8 @@ export const CHOICE_BOXES = {
     off: 'border-il-neutral-400 bg-transparent dark:border-il-neutral-500',
 };
 
+export const CHOICE_RING = 'border-il-primary-600 dark:border-il-primary-500';
+
 export const FILE_FIELD_ZONES = {
     idle: 'border-il-neutral-300 bg-white hover:border-il-primary-500 hover:bg-il-primary-50/40 dark:border-white/15 dark:bg-il-neutral-950 dark:hover:border-il-primary-400 dark:hover:bg-il-primary-500/10',
     dragging: 'border-il-primary-500 bg-il-primary-50 dark:border-il-primary-400 dark:bg-il-primary-500/10',

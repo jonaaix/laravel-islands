@@ -194,7 +194,7 @@ and win over the theme where both are set.
 
 The class tables live in the same sections: `button.tones`, `button.sizes`, `button.shapes`,
 `button.split`, `iconButton.tones|boxes|glyphs`, `field.base|frame|frameInvalid|shapes|sizes|textareaSizes`,
-`select.skins|menu`, `popover.surface`, `badge.base|tones`, `choice.boxes` (checkbox and radio),
+`select.skins|menu`, `popover.surface`, `badge.base|tones`, `choice.boxes` (checkbox and radio), `choice.radio` (`filled` · `ring`: a checked radio as an accent ring with a hollow centre, coloured by `choice.ring`),
 `fileField.zones`, `skeleton.surface`, `tooltip.surface|arrow`, `modal.sizes|surface|divider`, `toast.surface|tones`,
 `optionStrip.frames|sizes|skins`, `tabs.skins`, `switch.tones`, `fieldGroup.surfaces|tones`,
 `listItem.tones`, `menuItem.tones`, `editButton.sizes`. The merge is key by key, so a theme

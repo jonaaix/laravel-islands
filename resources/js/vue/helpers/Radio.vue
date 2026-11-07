@@ -37,7 +37,17 @@ const isDisabled = computed(() => props.disabled || (group?.disabled.value ?? fa
 
 const name = computed(() => props.name || group?.name.value || undefined);
 
-const boxes = useTheme('choice').boxes;
+const choice = useTheme('choice');
+
+const ring = computed(() => choice.radio === 'ring');
+
+const boxClass = computed(() => {
+    if (!marked.value) {
+        return ['border-2', choice.boxes.off];
+    }
+
+    return ring.value ? ['border-[5px] bg-transparent', choice.ring] : ['border-2', choice.boxes.on];
+});
 
 function pick() {
     if (group) {
@@ -75,10 +85,11 @@ function pick() {
 
         <span
             aria-hidden="true"
-            class="il-radio__box pointer-events-none relative flex h-full w-full items-center justify-center rounded-full border-2 transition-colors duration-[var(--il-duration-fast)]"
-            :class="marked ? boxes.on : boxes.off"
+            class="il-radio__box pointer-events-none relative flex h-full w-full items-center justify-center rounded-full duration-[var(--il-duration-fast)]"
+            :class="[boxClass, ring ? 'transition-[border-width,border-color,background-color] ease-out' : 'transition-colors']"
         >
             <span
+                v-if="!ring"
                 class="il-radio__dot h-1.5 w-1.5 rounded-full bg-white transition-transform duration-[var(--il-duration-fast)] ease-out"
                 :class="marked ? 'scale-100' : 'scale-0'"
             ></span>

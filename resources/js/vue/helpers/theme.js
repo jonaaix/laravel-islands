@@ -5,6 +5,7 @@ import { SELECT_SKINS } from './selectSkins.js';
 import {
     BADGE_BASE,
     CHOICE_BOXES,
+    CHOICE_RING,
     EDIT_BUTTON_SIZES,
     FIELD_GROUP_SURFACES,
     FIELD_GROUP_TONES,
@@ -78,7 +79,9 @@ export const defaultTheme = {
         tones: BADGE_TONES,
     },
     choice: {
+        radio: 'filled',
         boxes: CHOICE_BOXES,
+        ring: CHOICE_RING,
     },
     fileField: {
         zones: FILE_FIELD_ZONES,
