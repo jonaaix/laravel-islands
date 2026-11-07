@@ -5,6 +5,7 @@ import IconButton from './IconButton.vue';
 import Popover from './Popover.vue';
 import { selectSkin } from './selectSkins.js';
 import { useTheme } from './theme.js';
+import { useMenuWidth } from '../composables/useMenuWidth.js';
 
 /**
  * Several answers to one question, where the Combobox takes exactly one.
@@ -29,7 +30,8 @@ const props = defineProps({
     /** How long a single name may get in the trigger; the list itself keeps the full wording. */
     previewChars: { type: Number, default: 14 },
     variant: { type: String, default: 'filter' },
-    menuWidth: { type: Number, default: 288 },
+    menuWidth: { type: [Number, String], default: 'trigger' },
+    menuMinWidth: { type: Number, default: null },
     menuHeight: { type: Number, default: 320 },
 });
 
@@ -38,6 +40,7 @@ const emit = defineEmits(['update:modelValue']);
 
 const open = ref(false);
 const triggerEl = ref(null);
+const resolvedMenuWidth = useMenuWidth(props, triggerEl, open);
 
 const skin = computed(() => selectSkin(props.variant, 'filter', useTheme('select').skins));
 
@@ -119,7 +122,7 @@ function clear() {
             </span>
         </div>
 
-        <Popover :anchor="triggerEl" :open="open" :width="menuWidth" @close="open = false">
+        <Popover :anchor="triggerEl" :open="open" :width="resolvedMenuWidth" @close="open = false">
             <div class="il-multi-select__list slim-scrollbar overflow-y-auto py-1" :style="{ maxHeight: `${menuHeight}px` }">
                 <label
                     v-for="entry in entries"

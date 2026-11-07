@@ -4,6 +4,7 @@ import IconButton from './IconButton.vue';
 import Popover from './Popover.vue';
 import { selectSkin } from './selectSkins.js';
 import { useTheme } from './theme.js';
+import { useMenuWidth } from '../composables/useMenuWidth.js';
 import { useOptionSearch } from '../composables/useOptionSearch.js';
 import { useTranslations } from '../composables/useTranslations.js';
 
@@ -26,8 +27,9 @@ const props = defineProps({
     selectedLabel: { type: String, default: '' },
     /** `field` is a plain form control; `filter` and `filter-card` colour a set value. */
     variant: { type: String, default: 'field' },
-    /** A long or deeply named list earns more room than the trigger it hangs under; `'trigger'` matches the trigger. */
-    menuWidth: { type: [Number, String], default: 288 },
+    /** `'trigger'` matches the trigger and follows it; a number fixes the width. */
+    menuWidth: { type: [Number, String], default: 'trigger' },
+    menuMinWidth: { type: Number, default: null },
     menuHeight: { type: Number, default: 240 },
     /** How many entries a list may show at once; zero or less shows all of them. */
     maxOptions: { type: Number, default: 60 },
@@ -54,8 +56,7 @@ const highlighted = ref(0);
 const typed = ref('');
 let typedTimer = null;
 const triggerEl = ref(null);
-const triggerWidth = ref(0);
-const resolvedMenuWidth = computed(() => (props.menuWidth === 'trigger' ? triggerWidth.value || 288 : Number(props.menuWidth)));
+const resolvedMenuWidth = useMenuWidth(props, triggerEl, open);
 const picked = ref(null);
 
 const { loadingOptions, known, filtered, reset } = useOptionSearch(props, query);
@@ -93,7 +94,6 @@ function toggle() {
 
     open.value = !open.value;
     if (open.value) {
-        triggerWidth.value = Math.round(triggerEl.value?.getBoundingClientRect().width ?? 0);
         query.value = '';
         reset();
         highlighted.value = 0;

@@ -122,6 +122,15 @@ watch(
     { immediate: true },
 );
 
+watch(
+    () => props.width,
+    () => {
+        if (props.open) {
+            position();
+        }
+    },
+);
+
 onBeforeUnmount(() => {
     releaseOverlay();
     stopListening();

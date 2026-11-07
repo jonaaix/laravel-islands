@@ -28,7 +28,8 @@ A searchable single select; the list filters as you type and can be fed from the
 | `fetchOptions(query)` | `null` | Async function returning options for a non-empty query; stale responses are discarded. |
 | `fetchDelay`, `loadingLabel` | `150`, `''` | Debounce and the line shown while fetching. |
 | `variant` | `'field'` | `field` for forms, `filter` for a toolbar, `filter-card` for a tinted card. |
-| `menuWidth`, `menuHeight` | `288`, `240` | `menuWidth="trigger"` makes the list as wide as the field it opens from. |
+| `menuWidth`, `menuHeight` | `'trigger'`, `240` | The list is as wide as its field and follows it; a number fixes the width. |
+| `menuMinWidth` | `null` | The least width of a list that matches its field. Unset, a `field` list has none and the filter variants keep 288. Ignored with a fixed `menuWidth`. |
 
 Slots: `#selected` (`{ keyValue, label }`), `#option` (`{ keyValue, label, option }`).
 
@@ -60,7 +61,7 @@ few picks, then trails off.
 | `fetchOptions(query)`, `fetchDelay` | `null`, `150` | As for `Combobox`. A pick from a fetched list keeps its label after the list is gone. |
 | `previewLimit`, `previewChars` | `3`, `14` | How many picks the trigger names, and how long each may be. |
 | `variant` | `'field'` | `field`, `filter`, `filter-card` or `filter-pill`. |
-| `menuWidth`, `menuHeight` | `288`, `240` | |
+| `menuWidth`, `menuMinWidth`, `menuHeight` | `'trigger'`, `null`, `240` | As for `Combobox`. |
 
 The model is an array; picks keep the order they were made in, the trigger names them in the
 order the options are offered. Events: `update:modelValue`, `open`, `close`. Slots:
@@ -81,7 +82,7 @@ Several values from one short list without a search field; for a list worth sear
 | `placeholder`, `allLabel`, `emptyLabel` | `''` | |
 | `previewLimit`, `previewChars` | `3`, `14` | How many picks the trigger names, and how long each may be. |
 | `variant` | `'filter'` | As for `Combobox`. |
-| `menuWidth`, `menuHeight` | `288`, `320` | |
+| `menuWidth`, `menuMinWidth`, `menuHeight` | `'trigger'`, `null`, `320` | As for `Combobox`. |
 
 The model is an array. Slot `#option` receives `{ option, label }`.
 

@@ -5,6 +5,7 @@ import IconButton from './IconButton.vue';
 import Popover from './Popover.vue';
 import { selectSkin } from './selectSkins.js';
 import { useTheme } from './theme.js';
+import { useMenuWidth } from '../composables/useMenuWidth.js';
 import { useOptionSearch } from '../composables/useOptionSearch.js';
 import { useTranslations } from '../composables/useTranslations.js';
 
@@ -39,7 +40,8 @@ const props = defineProps({
     previewChars: { type: Number, default: 14 },
     /** `field` is a plain form control; `filter`, `filter-card` and `filter-pill` colour a set value. */
     variant: { type: String, default: 'field' },
-    menuWidth: { type: Number, default: 288 },
+    menuWidth: { type: [Number, String], default: 'trigger' },
+    menuMinWidth: { type: Number, default: null },
     menuHeight: { type: Number, default: 240 },
 });
 
@@ -51,6 +53,7 @@ const open = ref(false);
 const query = ref('');
 const highlighted = ref(0);
 const triggerEl = ref(null);
+const resolvedMenuWidth = useMenuWidth(props, triggerEl, open);
 const searchInput = ref(null);
 
 const search = useOptionSearch(props, query);
@@ -244,7 +247,7 @@ defineExpose({ show, close });
             </span>
         </div>
 
-        <Popover :anchor="triggerEl" :open="open" :width="menuWidth" @close="close">
+        <Popover :anchor="triggerEl" :open="open" :width="resolvedMenuWidth" @close="close">
             <div class="il-multi-combobox__search relative border-b border-il-neutral-100 p-2 dark:border-white/10">
                 <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-il-neutral-400">
                     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd"/></svg>
