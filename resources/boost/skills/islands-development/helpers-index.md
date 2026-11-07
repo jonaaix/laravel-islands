@@ -72,7 +72,8 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 | Import | Purpose |
 | --- | --- |
 | `Tooltip` | hover label, fixed positioning, auto-flip; **never** use the native `title` attribute |
-| `Popover` | anchored layer with `anchor`, `open`, `width`, `offset`, `margin` |
+| `Popover` | anchored layer with `anchor`, `open`, `width`, `offset`, `margin`, `side`, `align`, `flip`, `backdrop` |
+| `Menu` + `MenuItem` / `MenuGroup` / `MenuSeparator` / `MenuSub` | action menu on the WAI-ARIA menu button pattern (keyboard, roles, focus); items with `description`, `#leading` / `#trailing`, `checked` (+ `multiple`), `target`; `trigger="context"` opens at the pointer on right-click and long-press; `width="trigger"`, `maxHeight`, `side` / `align` |
 | `Modal` | teleported dialog with focus-trap, backdrop and Escape handling, holds the page scroll; controlled — only emits `close`, callsite owns `:open`; `align="top"` for content that changes height |
 | `FormModal` | `Modal` wrapper for Save-forms: content sits in a `<form>`, footer has Cancel + primary in one row, wording as props, `#title` / `#footer` as escape hatches |
 | `lockPageScroll` / `unlockPageScroll` | hold the page scroll for an overlay of your own, counted together with every `Modal`; reserves the scrollbar's width only when the page shows one, so nothing shifts sideways |

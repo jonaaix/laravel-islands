@@ -126,8 +126,8 @@ export const LIST_ITEM_TONES = {
 };
 
 export const MENU_ITEM_TONES = {
-    default: 'text-il-neutral-700 hover:bg-il-neutral-50 dark:text-il-neutral-200 dark:hover:bg-white/5',
-    danger: 'text-il-danger-600 hover:bg-il-danger-50 dark:text-il-danger-400 dark:hover:bg-il-danger-500/10',
+    default: 'text-il-neutral-700 hover:bg-il-neutral-50 focus:bg-il-neutral-50 dark:text-il-neutral-200 dark:hover:bg-white/5 dark:focus:bg-white/5',
+    danger: 'text-il-danger-600 hover:bg-il-danger-50 focus:bg-il-danger-50 dark:text-il-danger-400 dark:hover:bg-il-danger-500/10 dark:focus:bg-il-danger-500/10',
 };
 
 export const EDIT_BUTTON_SIZES = { sm: 'h-3.5 w-3.5', md: 'h-4 w-4' };

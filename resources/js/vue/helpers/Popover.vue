@@ -10,8 +10,12 @@ const props = defineProps({
     open: { type: Boolean, default: false },
     /** `null` leaves the width to the panel's own classes, for a menu that grows with its longest entry. */
     width: { type: Number, default: 260 },
-    /** Distance between the anchor's bottom edge and the panel. */
+    /** Distance between the anchor's edge and the panel. */
     offset: { type: Number, default: 4 },
+    side: { type: String, default: 'bottom' },
+    align: { type: String, default: null },
+    flip: { type: Boolean, default: true },
+    backdrop: { type: Boolean, default: true },
     /** Room kept between the panel and the window, so it never touches the edge. */
     margin: { type: Number, default: 16 },
     /**
@@ -56,12 +60,64 @@ const unplacedStyle = { opacity: '0', pointerEvents: 'none' };
  */
 function top(rect, height) {
     const below = rect.bottom + props.offset;
+    const above = rect.top - props.offset - height;
+    const fitsBelow = below + height + props.margin <= window.innerHeight;
+    const fitsAbove = above >= props.margin;
 
-    if (height === 0 || below + height + props.margin <= window.innerHeight) {
+    if (props.side === 'top') {
+        return height === 0 || fitsAbove || !props.flip || !fitsBelow ? Math.max(props.margin, above) : below;
+    }
+
+    if (height === 0 || fitsBelow || !props.flip) {
         return below;
     }
 
-    return Math.max(props.margin, rect.top - props.offset - height);
+    return Math.max(props.margin, above);
+}
+
+function clamp(value, size, room) {
+    return Math.max(props.margin, Math.min(value, room - size - props.margin));
+}
+
+function alignedStart(start, end, size, room) {
+    if (props.align === 'end') {
+        return clamp(end - size, size, room);
+    }
+
+    if (props.align === 'center') {
+        return clamp((start + end - size) / 2, size, room);
+    }
+
+    return clamp(start, size, room);
+}
+
+function beside(rect, width) {
+    const right = rect.right + props.offset;
+    const left = rect.left - props.offset - width;
+    const fitsRight = right + width + props.margin <= window.innerWidth;
+    const fitsLeft = left >= props.margin;
+
+    if (props.side === 'left') {
+        return fitsLeft || !props.flip || !fitsRight ? left : right;
+    }
+
+    return fitsRight || !props.flip || !fitsLeft ? right : left;
+}
+
+function place(rect, width, height) {
+    if (props.side === 'left' || props.side === 'right') {
+        return {
+            top: alignedStart(rect.top, rect.bottom, height, window.innerHeight),
+            left: clamp(beside(rect, width), width, window.innerWidth),
+        };
+    }
+
+    return {
+        top: top(rect, height),
+        left: props.align === null
+            ? anchoredLeft(rect, width, props.margin)
+            : alignedStart(rect.left, rect.right, width, window.innerWidth),
+    };
 }
 
 /** Recomputed while open, because the page underneath can still scroll and resize. */
@@ -76,9 +132,11 @@ function position() {
     const height = panel.value?.offsetHeight ?? 0;
     const width = props.width ?? panel.value?.offsetWidth ?? 0;
 
+    const at = place(rect, width, height);
+
     style.value = {
-        top: `${top(rect, height)}px`,
-        left: `${anchoredLeft(rect, width, props.margin)}px`,
+        top: `${at.top}px`,
+        left: `${at.left}px`,
         ...(props.width === null ? {} : { width: `${props.width}px` }),
     };
 
@@ -142,7 +200,7 @@ defineExpose({ position });
 <template>
     <Teleport to="body">
         <!-- A click beside the panel means no, the same as Escape. -->
-        <div v-if="open" class="il-popover__backdrop fixed inset-0" :style="{ zIndex: layer }" @click="emit('close')"></div>
+        <div v-if="open && backdrop" class="il-popover__backdrop fixed inset-0" :style="{ zIndex: layer }" @click="emit('close')"></div>
 
         <div
             v-if="open"

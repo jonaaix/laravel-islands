@@ -125,7 +125,7 @@ single utility class; use the attribute where a bare class does not win.
 | IconButton | `il-icon-button` · `data-tone` `data-size` | `__glyph` |
 | InlineEdit | `il-inline-edit` · `data-state` `data-size` `data-error` | `__display` `__pencil` `__input` `__save` `__cancel` `__hint` `__error` |
 | List, ListItem | `il-list`, `il-list-item` | `__text` `__label` `__description` · `data-tone` · `__value` |
-| Menu, MenuItem | `il-menu` · `data-state`, `il-menu-item` · `data-tone` | `il-menu__panel` |
+| Menu, MenuItem, MenuGroup, MenuSeparator, MenuSub | `il-menu` · `data-state`, `il-menu-item` · `data-tone` · `data-state`, `il-menu-group`, `il-menu-separator`, `il-menu-sub` · `data-state` | `il-menu__panel`, `il-menu-item__label`, `il-menu-item__description`, `il-menu-item__check`, `il-menu-group__label` |
 | Modal | `il-modal` · `data-size` | `__panel` `__header` `__title` `__actions` `__close` `__body` `__footer` |
 | MultiCombobox | `il-multi-combobox` · `data-variant` `data-state` `data-count` | `__trigger` `__search` `__list` `__loading` `__heading` `__option` `__empty` `__clear-option` |
 | MultiSelect | `il-multi-select` · `data-variant` `data-state` `data-count` | `__trigger` `__list` `__option` `__empty` `__clear-option` |

@@ -109,6 +109,10 @@ resize, flips at the viewport edge.
 | `open` | `false` | |
 | `width` | `260` | Pixels; `null` leaves sizing to classes. |
 | `offset`, `margin` | `4`, `16` | Gap to the anchor; minimum distance to the viewport edge. |
+| `side` | `'bottom'` | `top`, `bottom`, `left` or `right` of the anchor. |
+| `align` | `null` | `start`, `end` or `center` along that side. Unset, a panel under its anchor grows from the third of the window the anchor sits in. |
+| `flip` | `true` | Moves to the opposite side when the chosen one has no room. |
+| `backdrop` | `true` | The layer that closes the panel on a click beside it. |
 | `zIndex` | `60` | |
 
 Event: `close` on a click outside or Escape. Exposes `position()`.
@@ -120,18 +124,69 @@ A dropdown of actions. Beyond three actions in a row, this replaces them.
 ```vue
 <Menu :width="220">
     <template #trigger="{ toggle, open }">
-        <Button tone="secondary" :aria-expanded="open" @click="toggle">{{ t('More') }}</Button>
+        <Button tone="secondary" @click="toggle">{{ t('More') }}</Button>
     </template>
-    <template #default="{ close }">
-        <MenuItem @click="inbound(); close()">{{ t('Inbound') }}</MenuItem>
-        <MenuItem :href="searchUrl">{{ t('Search the web') }}</MenuItem>
-        <MenuItem tone="danger" @click="remove(); close()">{{ t('Delete') }}</MenuItem>
-    </template>
+    <MenuItem @click="inbound()">{{ t('Inbound') }}</MenuItem>
+    <MenuItem :href="searchUrl">{{ t('Search the web') }}</MenuItem>
+    <MenuItem tone="danger" @click="remove()">{{ t('Delete') }}</MenuItem>
 </Menu>
 ```
 
-`Menu` takes `width` (`200`) and `zIndex` (`60`). `MenuItem` takes `href` (a link in a new
-tab), `tone` (`default` · `danger`), `disabled`; emits `click`; slot `#icon`.
+The menu follows the WAI-ARIA menu button pattern. It marks the first focusable element in
+`#trigger` with `aria-haspopup`, `aria-expanded` and `aria-controls`. Enter, Space and ↓ on
+the trigger open it on the first item (or the checked one), ↑ on the last. Inside, ↑ ↓ Home
+End move, a typed letter jumps to the item it starts, Enter and Space activate, Escape closes
+and hands focus back to the trigger, Tab closes and moves on. Activating an item closes the
+menu; the default slot still receives `close` for anything else.
+
+| `Menu` prop | Default | Purpose |
+| --- | --- | --- |
+| `width` | `200` | Pixels, or `'trigger'` to match the trigger and follow it. |
+| `minWidth` | `null` | The floor for `width="trigger"`. |
+| `maxHeight` | `null` | Scrolls the list beyond this height; the checked item is in view on open. |
+| `side`, `align`, `offset` | `'bottom'`, `null`, `4` | As for `Popover`; the menu flips when its side has no room. |
+| `trigger` | `'click'` | `context` makes `#trigger` an area that opens the menu at the pointer on right-click and long-press. |
+| `label` | `''` | Names the menu for screen readers where no trigger does — a context menu. |
+| `zIndex` | `60` | |
+
+Exposes `openAt(event)` — one menu shared by many rows opens beside the row that was
+right-clicked — and `close()`.
+
+| `MenuItem` prop | Default | Purpose |
+| --- | --- | --- |
+| `href`, `target` | `''`, `'_blank'` | A link. `target="_self"` keeps it in the tab; a `click` handler may call `preventDefault()` and hand it to a router. |
+| `tone` | theme | `default` · `danger`. |
+| `disabled` | `false` | |
+| `description` | `''` | A second line under the label. |
+| `checked` | `null` | Set, the item is a choice: `menuitemradio`, or `menuitemcheckbox` with `multiple`. A check mark trails it. |
+| `multiple` | `false` | A checkbox item; it keeps the menu open. |
+| `keepOpen` | `false` | Activating the item leaves the menu open. |
+
+Slots: default (the label), `#leading` (any content, `#icon` still works), `#description`,
+`#trailing` (a shortcut, a count; replaces the check mark).
+
+`MenuGroup` gathers items under a `label` (or `#label`), `MenuSeparator` draws the line
+between groups. `MenuSub` opens a nested menu beside its item on hover, →, Enter or Space;
+← and Escape close it again. It takes `label`, `description`, `disabled`, `width` (`200`)
+and `maxHeight`, and the items as its default slot.
+
+```vue
+<Menu :width="240" :max-height="320">
+    <template #trigger="{ toggle }"><IconButton :label="t('Speed')" @click="toggle">…</IconButton></template>
+    <MenuGroup :label="t('Speed')">
+        <MenuItem v-for="s in speeds" :key="s" :checked="speed === s" @click="speed = s">{{ s }}×</MenuItem>
+    </MenuGroup>
+    <MenuSeparator />
+    <MenuSub :label="t('Move to')">
+        <MenuItem v-for="p in projects" :key="p.id" @click="move(p.id)">{{ p.name }}</MenuItem>
+    </MenuSub>
+</Menu>
+
+<Menu trigger="context" :label="t('Project')">
+    <template #trigger><ProjectRow :project="project" /></template>
+    <MenuItem @click="rename()">{{ t('Rename') }}</MenuItem>
+</Menu>
+```
 
 ## `Tooltip`
 

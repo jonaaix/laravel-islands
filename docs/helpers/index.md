@@ -82,7 +82,7 @@ that happens.
 | [Buttons & Fields](/helpers/buttons-and-fields) | `Button`, `ButtonGroup`, `IconButton`, `EditButton`, `vRipple`, `TextField`, `NumberField`, `TextArea`, `SelectField`, `FileField`, `DateTimeField`, `DateRangeField`, `Checkbox`, `Switch`, `Radio`, `RadioGroup`, `Slider`, `ColorPicker`, `IconPicker`, `FieldCaption`, `FieldGroup`; `WysiwygEditor` from `@aaix/laravel-islands/vue/helpers/wysiwyg`; `HeroiconPicker`, `NamedHeroicon` from `@aaix/laravel-islands/vue/helpers/heroicons` |
 | [Theming](/theming) | tokens, `il-*` class hooks, the theme object (`startVueIslands({ theme })`, `provideTheme`, `useTheme`), skins as data, the `materialTheme` preset |
 | [Selects & Inline Editing](/helpers/selects-and-editing) | `Combobox`, `MultiCombobox`, `MultiSelect`, `TreeSelect`, `OptionStrip`, `InlineEdit`, `FieldSegment`, `EditSegment`, `ChoiceSegment` |
-| [Overlays & Display](/helpers/overlays-and-display) | `Modal`, `FormModal`, `ConfirmHost`, `ToastHost`, `Popover`, `Menu`, `MenuItem`, `Tooltip`, `Badge`, `Skeleton`, `PersonChip`, `Tabs`, `Card`, `CardMedia`, `List`, `ListItem`, `Table`, `SwipeRow`, `SwipeSlide` |
+| [Overlays & Display](/helpers/overlays-and-display) | `Modal`, `FormModal`, `ConfirmHost`, `ToastHost`, `Popover`, `Menu`, `MenuItem`, `MenuGroup`, `MenuSeparator`, `MenuSub`, `Tooltip`, `Badge`, `Skeleton`, `PersonChip`, `Tabs`, `Card`, `CardMedia`, `List`, `ListItem`, `Table`, `SwipeRow`, `SwipeSlide` |
 
 ## Icons
 
