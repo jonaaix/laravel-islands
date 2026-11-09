@@ -64,7 +64,7 @@ Generic UI primitives. All Tailwind-styled — register the package with your bu
 | `PersonChip` | avatar with a name-based fallback; `:avatar="false"` for the name alone beside a larger avatar |
 | `RemovableChip` | a value the user can take out of a list — takes `removeLabel`, emits `remove` |
 | `List`, `ListItem` | hairline-divided list; item takes `label`, `description`, `descriptionTone` |
-| `Table` | thin frame over a native `<table>` — uniform header typography, no silent truncation |
+| `Table` | thin frame over a native `<table>` — uniform header typography, no silent truncation; opt-in `dividers`, `stickyHeader`, `keepLineBreaks` |
 | `Tabs` | tab strip with icon/count/mark per item; `variant` = `underline` · `pills`, the theme decides when unset |
 
 ### Overlays

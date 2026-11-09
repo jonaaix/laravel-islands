@@ -138,7 +138,7 @@ single utility class; use the attribute where a bare class does not win.
 | Skeleton | `il-skeleton` · `data-variant` | `__line` |
 | Slider | `il-slider` · `data-state` `data-disabled` | `__track` `__rail` `__fill` `__tick` `__handle` `__labels` |
 | Switch | `il-switch` · `data-state` `data-tone` `data-disabled` | `__input` `__track` `__halo` `__handle` |
-| Table | `il-table` | |
+| Table | `il-table` · `data-dividers` `data-sticky-header` `data-keep-line-breaks` | |
 | Tabs | `il-tabs` · `data-variant` | `__tab` · `data-state` · `__icon` `__count` `__mark` |
 | ToastHost | `il-toasts`, `il-toast` · `data-tone` | `__rail` `__icon` `__title` `__message` `__close` `__timer` |
 | Tooltip | `il-tooltip` · `data-state` | `__tip` · `data-placement` · `__arrow` |

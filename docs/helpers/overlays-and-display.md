@@ -276,6 +276,14 @@ on a cell wins. Truncation is deliberately not applied — let the region scroll
 </Table>
 ```
 
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `dividers` | `false` | A 1px line between rows and under the header, none after the last row. |
+| `stickyHeader` | `false` | The header cells stay at the top of the nearest scroll container, on an opaque background in light and dark. |
+| `keepLineBreaks` | `false` | Cells keep the line breaks of their text and align to the top. |
+
+Header cells align with `text-start`, so a right-to-left page aligns them to the right.
+
 For a table with search, filters, sorting and pagination, see
 [Laravel Islands Datagrid](https://jonaaix.github.io/laravel-islands-datagrid/).
 
