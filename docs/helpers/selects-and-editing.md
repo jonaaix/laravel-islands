@@ -123,8 +123,13 @@ Events: `update:modelValue`, `open`, `close`. Slot `#trigger` receives
 
 ## `OptionStrip`
 
-A row of pills or one segmented control for a few values at a glance — the view mode, a
-quick filter.
+A row of pills or one segmented control for a few values at a glance. Two uses, two
+shapes:
+
+- **A one-of-many choice** such as the view mode: `variant="segmented"`, one value.
+- **Quick filters**: `variant="pills" multiple`, one pill per filter. Each pill switches on
+  and off on its own — "Open" and "Closed" side by side, either, both or neither — and the
+  strip never carries an "All" option, because no pill set already means all.
 
 ```vue
 <OptionStrip v-model="state.mode" variant="segmented" :options="[
