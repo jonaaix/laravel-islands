@@ -108,7 +108,7 @@ single utility class; use the attribute where a bare class does not win.
 | Card | `il-card` · `data-state` `data-interactive` | `__header` `__body` `__footer` |
 | CardMedia | `il-card-media` | |
 | Checkbox | `il-checkbox` · `data-state` `data-disabled` | `__input` `__halo` `__box` |
-| ChoiceSegment | `il-choice-segment` · `data-state` | `__menu` `__option` |
+| ChoiceSegment | `il-choice-segment` · `data-state` | `__menu` `__option` `__hint` |
 | ColorPicker | `il-color-picker` · `data-state` `data-disabled` | `__swatch` `__plane` `__hue` `__alpha` `__presets` `__preset` `__value` |
 | Combobox | `il-combobox` · `data-variant` `data-state` | `__trigger` `__backdrop` `__menu` `__search` `__list` `__loading` `__clear-option` `__option` `__empty` |
 | ConfirmHost | | `il-confirm__title` · `data-tone` · `il-confirm__message` |

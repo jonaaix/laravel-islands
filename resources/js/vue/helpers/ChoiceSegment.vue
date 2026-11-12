@@ -70,7 +70,9 @@ function pick(option) {
                                 ? 'font-semibold text-il-primary-700 dark:text-il-primary-300'
                                 : 'text-il-neutral-700 dark:text-il-neutral-200'"
                         >{{ option.label }}</span>
-                        <span v-if="option.hint" class="mt-0.5 block text-[11px] leading-tight text-il-neutral-500 dark:text-il-neutral-400">{{ option.hint }}</span>
+                        <span v-if="option.hint" class="il-choice-segment__hint mt-0.5 flex items-center gap-1 text-[11px] leading-tight text-il-neutral-500 dark:text-il-neutral-400">
+                            <slot name="hint" :option="option">{{ option.hint }}</slot>
+                        </span>
                     </span>
                 </button>
             </div>

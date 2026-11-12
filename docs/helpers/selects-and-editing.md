@@ -210,5 +210,6 @@ one of a few options (`ChoiceSegment`).
 
 `EditSegment` takes `label`, `value`, `display` (the formatted value at rest), `type`,
 `parts`, `separator`, `suffix`. `ChoiceSegment` takes `label`, `modelValue`, `options`
-(`{ value, label, hint?, state? }[]`), `zIndex`. Both take `saving` and `error` and emit
+(`{ value, label, hint?, state? }[]`), `zIndex`; the `#hint` slot (`{ option }`) draws an
+option's hint, for a marker beside its words. Both take `saving` and `error` and emit
 `save(value)` only when the value changed.
