@@ -179,6 +179,7 @@ const tiles = useSortableTiles({
 | `attribute` | `'data-tile'` | The attribute that marks a tile. |
 | `onReorder(list)` | `null` | Called with the final order once the drop has settled. |
 | `enabled` | `null` (always) | A ref or getter; dragging is ignored while it is false. |
+| `threshold` | `0` | Pixels the pointer must travel before a press becomes a drag. At `0` the press itself starts the drag and swallows the click; above it, a click on the tile or a button inside it still lands. |
 
 | Returns | Meaning |
 | --- | --- |
@@ -187,6 +188,25 @@ const tiles = useSortableTiles({
 | `held(index)`, `settlingAt(index)` | Whether a tile is the one being dragged, or the one settling into place after a drop. |
 | `heldIndex`, `heldOffset`, `settling`, `settleIndex` | The underlying refs, for custom rendering. |
 | `measureSlots()` | Re-measure the grid, for the rare case where tiles change size mid-drag. |
+| `wasDragged()` | Whether the last press became a drag, then resets. A click handler calls it to ignore the click that ends a drag. |
 
 Because the list is reordered before `onReorder` runs, the strip never snaps back while
-the save request is in flight. A drag starts with the primary button only.
+the save request is in flight. A drag starts with the primary button only. With a
+`threshold`, `onReorder` runs only when the press actually became a drag.
+
+The held tile's `translate` is written onto the element directly, not through `styleFor()`,
+so the list does not re-render on every pointer move and a surrounding `<TransitionGroup>`
+glides instead of jittering.
+
+```vue
+<div
+    v-for="(card, index) in cards"
+    :key="card.id"
+    :data-tile="card.id"
+    :style="tiles.styleFor(index)"
+    @pointerdown="tiles.grab(index, $event)"
+    @click="tiles.wasDragged() || open(card)"
+>
+```
+
+with `useSortableTiles({ container, list: cards, threshold: 3 })`.
