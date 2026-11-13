@@ -249,8 +249,8 @@ Props: `items` (`{ key, label, icon?, count?, disabled?, mark?: { icon, text? } 
 `modelValue`, `iconOnly` (`false`). Slot `#end` places content at the strip's right edge.
 
 `iconOnly` is for a strip without room for its words: a tab with an icon shows only the
-icon and its count or mark, and keeps its label as accessible name and tooltip. A tab
-without an icon keeps its label.
+icon and its count or mark, and keeps its label as accessible name and tooltip. While the
+pointer rests on a mark, only the mark's tooltip shows. A tab without an icon keeps its label.
 
 ## `Card` and `CardMedia`
 

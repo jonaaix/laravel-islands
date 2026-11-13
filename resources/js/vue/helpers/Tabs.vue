@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import Icon from './Icon.vue';
 import Tooltip from './Tooltip.vue';
 import { useTheme } from './theme.js';
@@ -31,6 +31,8 @@ const skin = computed(() => theme.skins[variant.value] ?? theme.skins.underline)
 
 const Bare = (_, { slots }) => slots.default?.();
 
+const markUnderPointer = ref(null);
+
 function isIconOnly(item) {
     return props.iconOnly && Boolean(item.icon);
 }
@@ -50,7 +52,7 @@ function stateOf(item) {
             :is="isIconOnly(item) ? Tooltip : Bare"
             v-for="item in items"
             :key="item.key"
-            :text="item.label"
+            :text="markUnderPointer === item.key ? '' : item.label"
         >
             <button
                 type="button"
@@ -72,7 +74,11 @@ function stateOf(item) {
 
                 <!-- A verdict about what is inside, as a shape rather than a colour. -->
                 <Tooltip v-if="item.mark" :text="item.mark.text || ''">
-                    <Icon :name="item.mark.icon" class="il-tabs__mark ml-0.5 h-3.5 w-3.5 text-il-neutral-400 dark:text-il-neutral-500" />
+                    <Icon
+                        :name="item.mark.icon"
+                        @mouseenter="markUnderPointer = item.key"
+                        @mouseleave="markUnderPointer = null"
+                        class="il-tabs__mark ml-0.5 h-3.5 w-3.5 text-il-neutral-400 dark:text-il-neutral-500" />
                 </Tooltip>
             </button>
         </component>
