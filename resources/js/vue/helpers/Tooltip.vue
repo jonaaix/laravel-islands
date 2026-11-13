@@ -1,5 +1,15 @@
+<script>
+// Chrome lets script focus match :focus-visible until the pointer has focused something, so the last input decides too.
+let lastInputWasKeyboard = false;
+
+if (typeof document !== 'undefined') {
+    document.addEventListener('keydown', () => { lastInputWasKeyboard = true; }, true);
+    document.addEventListener('pointerdown', () => { lastInputWasKeyboard = false; }, true);
+}
+</script>
+
 <script setup>
-import { computed, ref, nextTick, onBeforeUnmount } from 'vue';
+import { computed, ref, nextTick, onBeforeUnmount, watch } from 'vue';
 import { useTheme } from './theme.js';
 
 const props = defineProps({
@@ -22,6 +32,9 @@ const arrow = ref({ side: 'top', offset: 0 });
 const triggerRef = ref(null);
 const tipRef = ref(null);
 let showTimer = null;
+let openedBy = null;
+let pressed = false;
+let domObserver = null;
 
 function reposition() {
     const trigger = triggerRef.value;
@@ -103,20 +116,65 @@ const arrowStyle = computed(() => {
 function bindViewportListeners() {
     window.addEventListener('scroll', reposition, true);
     window.addEventListener('resize', reposition);
+    document.addEventListener('pointermove', hideWhenPointerLeft, true);
+    domObserver = new MutationObserver(followTrigger);
+    domObserver.observe(document.body, { childList: true, subtree: true });
 }
 
 function unbindViewportListeners() {
     window.removeEventListener('scroll', reposition, true);
     window.removeEventListener('resize', reposition);
+    document.removeEventListener('pointermove', hideWhenPointerLeft, true);
+    domObserver?.disconnect();
+    domObserver = null;
 }
 
-function show() {
+/** A trigger that leaves the DOM never fires mouseleave; one that is moved keeps its tip beside it. */
+function followTrigger() {
+    if (!triggerRef.value?.isConnected) {
+        hide();
+        return;
+    }
+    reposition();
+}
+
+/** A trigger moved away from under a resting pointer never fires mouseleave either. */
+function hideWhenPointerLeft(event) {
+    if (openedBy === 'hover' && !triggerRef.value?.contains(event.target)) {
+        hide();
+    }
+}
+
+function hideOnEscape(event) {
+    if (event.key === 'Escape') {
+        hide();
+    }
+}
+
+function isKeyboardFocus(target) {
+    if (!lastInputWasKeyboard) {
+        return false;
+    }
+    try {
+        return target.matches(':focus-visible');
+    } catch {
+        return false;
+    }
+}
+
+function show(source) {
     if (!props.text) {
         return;
     }
     clearTimeout(showTimer);
+    openedBy = source;
+    document.addEventListener('keydown', hideOnEscape, true);
     showTimer = setTimeout(async () => {
+        const wasVisible = visible.value;
         visible.value = true;
+        if (wasVisible) {
+            return;
+        }
         await nextTick();
         reposition();
         bindViewportListeners();
@@ -125,14 +183,50 @@ function show() {
 
 function hide() {
     clearTimeout(showTimer);
+    openedBy = null;
     visible.value = false;
+    document.removeEventListener('keydown', hideOnEscape, true);
     unbindViewportListeners();
 }
 
-onBeforeUnmount(() => {
-    clearTimeout(showTimer);
-    unbindViewportListeners();
+function onMouseEnter() {
+    if (!pressed) {
+        show('hover');
+    }
+}
+
+function onMouseLeave() {
+    pressed = false;
+    if (openedBy !== 'focus') {
+        hide();
+    }
+}
+
+function onFocusIn(event) {
+    if (isKeyboardFocus(event.target)) {
+        show('focus');
+    }
+}
+
+function onFocusOut() {
+    if (openedBy !== 'hover') {
+        hide();
+    }
+}
+
+// Touch fires its compatibility mouseenter after pointerdown; the flag keeps that from reopening the tip.
+function onPointerDown() {
+    pressed = true;
+    hide();
+}
+
+watch(() => props.text, (text) => {
+    if (!text) {
+        hide();
+    }
 });
+
+onBeforeUnmount(hide);
 </script>
 
 <template>
@@ -140,10 +234,11 @@ onBeforeUnmount(() => {
         ref="triggerRef"
         class="il-tooltip inline-flex"
         :data-state="visible && text ? 'open' : 'closed'"
-        @mouseenter="show"
-        @mouseleave="hide"
-        @focusin="show"
-        @focusout="hide"
+        @mouseenter="onMouseEnter"
+        @mouseleave="onMouseLeave"
+        @focusin="onFocusIn"
+        @focusout="onFocusOut"
+        @pointerdown="onPointerDown"
     >
         <slot />
     </span>

@@ -198,6 +198,10 @@ Props: `text` (empty renders nothing), `placement` (`top` · `bottom` · `left` 
 `delay` (`80`). Positioned with fixed coordinates, so a trigger inside a scrolling table
 is not clipped. `IconButton` and `EditButton` wrap themselves in one.
 
+Hover opens it after the delay; focus only when it comes from the keyboard, so a dialog
+that focuses its first button does not show a tip. A press on the trigger and Escape close
+it, as does a trigger that leaves the page, moves from under the pointer or loses its text.
+
 ## `Badge`
 
 ```vue
