@@ -246,7 +246,11 @@ initial, for a chip that stands beside a larger avatar of the same person).
 ```
 
 Props: `items` (`{ key, label, icon?, count?, disabled?, mark?: { icon, text? } }[]`),
-`modelValue`. Slot `#end` places content at the strip's right edge.
+`modelValue`, `iconOnly` (`false`). Slot `#end` places content at the strip's right edge.
+
+`iconOnly` is for a strip without room for its words: a tab with an icon shows only the
+icon and its count or mark, and keeps its label as accessible name and tooltip. A tab
+without an icon keeps its label.
 
 ## `Card` and `CardMedia`
 
