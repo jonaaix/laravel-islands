@@ -196,7 +196,8 @@ and `maxHeight`, and the items as its default slot.
 
 Props: `text` (empty renders nothing), `placement` (`top` · `bottom` · `left` · `right`),
 `delay` (`80`). Positioned with fixed coordinates, so a trigger inside a scrolling table
-is not clipped. `IconButton` and `EditButton` wrap themselves in one.
+is not clipped. `IconButton` and `EditButton` wrap themselves in one. A `class` or other
+attribute lands on the trigger, so `class="shrink-0"` sizes it inside a flex row.
 
 Hover opens it after the delay; focus only when it comes from the keyboard, so a dialog
 that focuses its first button does not show a tip. A press on the trigger and Escape close

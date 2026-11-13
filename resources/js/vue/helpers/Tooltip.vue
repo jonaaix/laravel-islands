@@ -12,6 +12,8 @@ if (typeof document !== 'undefined') {
 import { computed, ref, nextTick, onBeforeUnmount, watch } from 'vue';
 import { useTheme } from './theme.js';
 
+defineOptions({ inheritAttrs: false });
+
 const props = defineProps({
     text: { type: String, default: '' },
     placement: { type: String, default: 'top' },
@@ -232,6 +234,7 @@ onBeforeUnmount(hide);
 <template>
     <span
         ref="triggerRef"
+        v-bind="$attrs"
         class="il-tooltip inline-flex"
         :data-state="visible && text ? 'open' : 'closed'"
         @mouseenter="onMouseEnter"
