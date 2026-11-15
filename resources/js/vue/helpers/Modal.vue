@@ -79,6 +79,21 @@ function onBackdrop() {
     }
 }
 
+// A drag that starts in the panel and ends outside fires its click on the overlay, so the press has to have started there too.
+let pressedOnBackdrop = false;
+
+function onBackdropPointerdown(event) {
+    pressedOnBackdrop = event.target === event.currentTarget;
+}
+
+function onBackdropClick(event) {
+    if (pressedOnBackdrop && event.target === event.currentTarget) {
+        onBackdrop();
+    }
+
+    pressedOnBackdrop = false;
+}
+
 function onKeydown(event) {
     if (event.key === 'Escape' && props.closeOnEscape) {
         event.stopPropagation();
@@ -165,7 +180,8 @@ onBeforeUnmount(() => {
                 :class="pinnedToTop ? 'items-start pt-[10vh]' : 'items-center'"
                 :data-size="resolvedSize"
                 :style="overlayStyle"
-                @click.self="onBackdrop"
+                @pointerdown="onBackdropPointerdown"
+                @click="onBackdropClick"
                 @keydown="onKeydown"
             >
             <div
