@@ -249,6 +249,21 @@ initial, for a chip that stands beside a larger avatar of the same person).
 Props: `items` (`{ key, label, icon?, count?, disabled?, mark?: { icon, text? } }[]`),
 `modelValue`, `iconOnly` (`false`). Slot `#end` places content at the strip's right edge.
 
+Slot `#count="{ item, active }"` fills a tab's badge with your own markup instead of the
+plain `count`. The badge still shows only on tabs that have a `count`, so other tabs fall
+back to the number:
+
+```vue
+<Tabs v-model="state.tab" :items="items">
+    <template #count="{ item }">
+        {{ item.count }}<template v-if="item.key === 'changes'"> ·
+            <span class="text-emerald-600 dark:text-emerald-400">+{{ totals.added }}</span>
+            <span class="text-red-600 dark:text-red-400">−{{ totals.removed }}</span>
+        </template>
+    </template>
+</Tabs>
+```
+
 `iconOnly` is for a strip without room for its words: a tab with an icon shows only the
 icon and its count or mark, and keeps its label as accessible name and tooltip. While the
 pointer rests on a mark, only the mark's tooltip shows. A tab without an icon keeps its label.

@@ -70,7 +70,7 @@ function stateOf(item) {
                     v-if="item.count !== null && item.count !== undefined"
                     class="il-tabs__count font-accent ml-0.5 rounded-il-control px-1.5 py-0.5 text-xs font-semibold tabular-nums"
                     :class="modelValue === item.key ? skin.countActive : skin.countInactive"
-                >{{ item.count }}</span>
+                ><slot name="count" :item="item" :active="modelValue === item.key">{{ item.count }}</slot></span>
 
                 <!-- A verdict about what is inside, as a shape rather than a colour. -->
                 <Tooltip v-if="item.mark" :text="item.mark.text || ''">
