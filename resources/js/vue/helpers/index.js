@@ -1,3 +1,4 @@
+export { default as ChatPrompt } from './ChatPrompt.vue';
 export { default as Checkbox } from './Checkbox.vue';
 export { default as ColorPicker } from './ColorPicker.vue';
 export { default as IconPicker } from './IconPicker.vue';

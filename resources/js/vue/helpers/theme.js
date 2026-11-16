@@ -19,6 +19,8 @@ import {
     MODAL_SIZES,
     MODAL_SURFACE,
     SHEET_SURFACE,
+    CHAT_PROMPT_SURFACE,
+    CHAT_PROMPT_FIELD,
     OPTION_STRIP_FRAMES,
     OPTION_STRIP_SIZES,
     OPTION_STRIP_SKINS,
@@ -116,6 +118,10 @@ export const defaultTheme = {
         sizes: MODAL_SIZES,
         surface: MODAL_SURFACE,
         divider: MODAL_DIVIDER,
+    },
+    chatPrompt: {
+        surface: CHAT_PROMPT_SURFACE,
+        field: CHAT_PROMPT_FIELD,
     },
     sheet: {
         surface: SHEET_SURFACE,

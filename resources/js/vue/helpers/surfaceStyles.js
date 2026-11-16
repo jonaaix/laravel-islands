@@ -23,6 +23,10 @@ export const MODAL_SURFACE = 'bg-white shadow-2xl ring-1 ring-il-neutral-200 dar
 
 export const SHEET_SURFACE = 'bg-white shadow-2xl ring-1 ring-il-neutral-200 dark:bg-il-neutral-900 dark:ring-white/10';
 
+export const CHAT_PROMPT_SURFACE = 'rounded-il-card bg-white p-1.5 ring-1 ring-il-neutral-200 dark:bg-il-neutral-900 dark:ring-white/10';
+
+export const CHAT_PROMPT_FIELD = 'text-il-neutral-900 placeholder:text-il-neutral-400 dark:text-white dark:placeholder:text-il-neutral-500';
+
 export const MODAL_DIVIDER = 'border-il-neutral-200 dark:border-white/10';
 
 export const BADGE_BASE = 'rounded-il-control px-2 py-0.5 text-xs font-medium';

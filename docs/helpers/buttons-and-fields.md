@@ -260,6 +260,29 @@ Props: `tone` (`primary` · `success` · `danger`), `ariaLabel`.
 takes `orientation` and `disabled`. A `Radio` outside a group takes `modelValue`, `value`
 and `name` itself.
 
+### `ChatPrompt`
+
+The message field of a chat: a text area that grows with its text, the actions beside it. Enter sends (or ⌘/Ctrl+Enter
+with `submit-on-enter` off); a word still being composed with an input method never sends; Escape leaves the field.
+
+```vue
+<ChatPrompt v-model="text" :placeholder="t('Send a message …')" :max-rows="10" autofocus @submit="send">
+    <template #leading><IconButton :label="t('Attach files')" @click="pick">…</IconButton></template>
+    <IconButton :label="t('Send')" tone="primary" @click="send">…</IconButton>
+</ChatPrompt>
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `modelValue` | `''` | Bound with `v-model`. `submit` fires only for text that is not blank. |
+| `placeholder`, `disabled`, `autofocus` | `''`, `false`, `false` | As on a text area. |
+| `maxRows` | `10` | Rows it grows to before scrolling; `0` grows without limit. |
+| `submitOnEnter` | `true` | Off, Enter adds a line and ⌘/Ctrl+Enter sends. |
+| `fieldClass` | `''` | Extra classes for the text area. |
+
+Slots: `#header` above (attachments), `#leading` before the field, the default slot after it, `#footer` below. The text
+area is exposed as `field`. Frame and text colours come from the theme (`chatPrompt.surface`, `chatPrompt.field`).
+
 ### `Slider`
 
 ```vue
