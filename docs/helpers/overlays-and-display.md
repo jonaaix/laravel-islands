@@ -137,6 +137,43 @@ hover, so it never opens there.
 | `side`, `align`, `offset`, `width` | `'right'`, `null`, `8`, `288` | As for `Popover`. |
 | `disabled` | `false` | Opens nothing, and closes an open card. |
 
+## `Progress`
+
+A filled bar for how far something has come; the tone carries the verdict.
+
+```vue
+<Progress :value="72" tone="warning" size="xs" :aria-label="t('Weekly usage')" />
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `value`, `max` | `0`, `100` | The fill is `value / max`, clamped. |
+| `tone` | `'primary'` | `primary` · `neutral` · `success` · `warning` · `danger` |
+| `size` | `'sm'` | `xs` (4 px) · `sm` (6 px) · `md` (8 px) |
+| `ariaLabel` | `''` | What the bar measures. |
+
+## `Kbd`
+
+One key of a shortcut. Pass the label the platform shows (`⌘`, `Ctrl`); a combination is several `Kbd` side by side.
+
+```vue
+<Kbd value="⌘" /><Kbd value="K" />
+```
+
+## `Separator`
+
+A hairline between groups. `orientation` is `horizontal` (default) or `vertical`; set `:decorative="false"` when a
+screen reader should announce the split.
+
+## `Avatar`
+
+A round face for a person or an agent; without a picture, or when it fails to load, the initials of `name` keep the
+shape. `size` is `2xs` (20 px) · `xs` · `sm` · `md` (32 px, default) · `lg`.
+
+```vue
+<Avatar :src="agent.avatarUrl" :name="agent.name" size="xs" />
+```
+
 ## `Menu` and `MenuItem`
 
 A dropdown of actions. Beyond three actions in a row, this replaces them.
