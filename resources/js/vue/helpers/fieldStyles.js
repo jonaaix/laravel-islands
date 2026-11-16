@@ -35,9 +35,9 @@ export const FIELD_FRAME_INVALID =
     'border border-il-danger-400 bg-white focus-within:border-il-danger-500 focus-within:ring-1 focus-within:ring-il-danger-500 ' +
     'dark:border-il-danger-500/60 dark:bg-il-neutral-800';
 
-/** Laid over the field's own box when it holds a wrong value: the border and focus ring turn red. */
+/** Laid over the field's own box when it holds a wrong value: the border and focus ring turn red, whatever box a theme draws. */
 export const FIELD_INVALID =
-    'border-il-danger-400 focus:border-il-danger-500 focus:ring-1 focus:ring-il-danger-500 dark:border-il-danger-500/60';
+    'border-il-danger-400! focus:border-il-danger-500! focus:ring-1 focus:ring-il-danger-500! dark:border-il-danger-500/60!';
 
 const DISABLED ='disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-il-neutral-50 disabled:text-il-neutral-600 dark:disabled:bg-il-neutral-800/60 dark:disabled:text-il-neutral-300';
 
