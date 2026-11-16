@@ -100,7 +100,8 @@ a place in the view is better shown there than as a toast.
 
 ## `Sheet`
 
-A panel that rises from the bottom edge on a phone — a menu, a form or a whole screen. Dragging it down, tapping the
+A panel that rises from the bottom edge on a phone — a menu, a form or a whole screen — or slides in from the right on
+a wide screen. Dragging a bottom sheet down, tapping the
 overlay or pressing Escape emits `close`. It joins the modal stack, so a sheet over a modal lands above it.
 
 ```vue
@@ -113,6 +114,7 @@ overlay or pressing Escape emits `close`. It joins the modal stack, so a sheet o
 | Prop | Default | Purpose |
 | --- | --- | --- |
 | `open` | `false` | Shown while true. |
+| `side`, `panelClass` | `'bottom'`, `'w-full max-w-md'` | `right` slides in from the right edge at full height, `panelClass` sets its width; it has no handle and does not drag. |
 | `title`, `description` | `''` | The header; also the `#title` slot. `#actions` sits beside it. |
 | `full` | `false` | Takes the full height below the status bar. |
 | `divided` | `false` | Lines under the header and above the footer. |

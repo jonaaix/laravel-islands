@@ -7,11 +7,15 @@ import { lockPageScroll, unlockPageScroll } from './scrollLock.js';
 import { useTheme } from './theme.js';
 
 /**
- * A panel that rises from the bottom edge on a phone — a menu, a form or a whole screen. Dragging it down, tapping
- * the overlay or pressing Escape emits `close`.
+ * A panel that rises from the bottom edge on a phone — a menu, a form or a whole screen — or slides in from the right
+ * on a wide screen. Dragging a bottom sheet down, tapping the overlay or pressing Escape emits `close`.
  */
 const props = defineProps({
     open: { type: Boolean, default: false },
+    /** `bottom` · `right` */
+    side: { type: String, default: 'bottom' },
+    /** The width of a right sheet. */
+    panelClass: { type: [String, Array], default: 'w-full max-w-md' },
     title: { type: String, default: '' },
     description: { type: String, default: '' },
     /** Takes the full height below the status bar instead of its content's. */
@@ -44,6 +48,7 @@ let start = null;
 let holdsScrollLock = false;
 let returnFocusTo = null;
 
+const fromRight = computed(() => props.side === 'right');
 const layer = computed(() => (overlayId.value !== null ? overlayZIndex(overlayId.value) : 70));
 const panelStyle = computed(() => ({
     zIndex: layer.value,
@@ -62,11 +67,11 @@ function holdPageScroll(hold) {
 
 function measureBody() {
     const element = body.value;
-    bodyDrags.value = !props.handleOnly && Boolean(element) && element.scrollHeight <= element.clientHeight;
+    bodyDrags.value = !fromRight.value && !props.handleOnly && Boolean(element) && element.scrollHeight <= element.clientHeight;
 }
 
 function onPointerdown(event, fromBody) {
-    if (event.button !== 0 || (fromBody && !bodyDrags.value)) {
+    if (event.button !== 0 || fromRight.value || (fromBody && !bodyDrags.value)) {
         return;
     }
     start = { y: event.clientY, time: event.timeStamp, pointer: event.pointerId, moved: false };
@@ -158,7 +163,7 @@ onBeforeUnmount(() => {
         <Transition name="il-sheet-overlay">
             <div v-if="open" class="il-sheet__overlay fixed inset-0 bg-il-neutral-900/50 dark:bg-black/60" :style="{ zIndex: layer }" @click="emit('close')"></div>
         </Transition>
-        <Transition name="il-sheet" @after-leave="releaseOverlay">
+        <Transition :name="fromRight ? 'il-sheet-right' : 'il-sheet'" @after-leave="releaseOverlay">
             <div
                 v-if="open"
                 ref="panel"
@@ -166,8 +171,9 @@ onBeforeUnmount(() => {
                 aria-modal="true"
                 tabindex="-1"
                 :aria-label="title || undefined"
-                class="il-sheet fixed inset-x-0 bottom-0 flex flex-col rounded-t-il-card focus:outline-none"
-                :class="[theme.surface, full ? 'h-[calc(100dvh-max(1rem,env(safe-area-inset-top)))]' : 'max-h-[calc(100dvh-max(1rem,env(safe-area-inset-top)))]']"
+                class="il-sheet fixed flex flex-col focus:outline-none"
+                :class="[theme.surface, fromRight ? ['inset-y-0 right-0 h-full', panelClass] : ['inset-x-0 bottom-0 rounded-t-il-card', full ? 'h-[calc(100dvh-max(1rem,env(safe-area-inset-top)))]' : 'max-h-[calc(100dvh-max(1rem,env(safe-area-inset-top)))]']]"
+                :data-side="side"
                 :style="panelStyle"
                 :data-dragging="dragging || undefined"
                 @pointermove="onPointermove"
@@ -177,8 +183,8 @@ onBeforeUnmount(() => {
                 @keydown="onKeydown"
             >
                 <div class="il-sheet__grip shrink-0 touch-none" @pointerdown="onPointerdown($event, false)">
-                    <span class="il-sheet__handle mx-auto mt-2 block h-1.5 w-10 rounded-full bg-il-neutral-300 dark:bg-white/20" aria-hidden="true"></span>
-                    <div v-if="title || description || $slots.title || $slots.actions || closeLabel" class="il-sheet__header flex items-center gap-3 px-4 pt-2 pb-3" :class="divided ? ['border-b', divider] : ''">
+                    <span v-if="!fromRight" class="il-sheet__handle mx-auto mt-2 block h-1.5 w-10 rounded-full bg-il-neutral-300 dark:bg-white/20" aria-hidden="true"></span>
+                    <div v-if="title || description || $slots.title || $slots.actions || closeLabel" class="il-sheet__header flex items-center gap-3 px-4" :class="[fromRight ? 'min-h-16 py-3' : 'pt-2 pb-3', divided ? ['border-b', divider] : '']">
                         <div class="min-w-0 flex-1">
                             <slot name="title">
                                 <p class="il-sheet__title truncate text-base font-semibold text-il-neutral-900 dark:text-il-neutral-100">{{ title }}</p>
@@ -197,7 +203,7 @@ onBeforeUnmount(() => {
                 <div
                     ref="body"
                     class="il-sheet__body min-h-0 flex-1 overflow-y-auto overscroll-contain"
-                    :class="[bodyClass, bodyDrags ? 'touch-none' : '', $slots.footer ? 'pb-3' : 'pb-[max(1rem,env(safe-area-inset-bottom))]']"
+                    :class="[bodyClass, bodyDrags ? 'touch-none' : '', $slots.footer || fromRight ? '' : 'pb-[max(1rem,env(safe-area-inset-bottom))]']"
                     @pointerdown="onPointerdown($event, true)"
                 >
                     <slot />
@@ -228,16 +234,26 @@ onBeforeUnmount(() => {
     transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.il-sheet-enter-active {
+.il-sheet-leave-active {
+    transition: transform 200ms ease-in;
+}
+
+.il-sheet-enter-active,
+.il-sheet-right-enter-active {
     transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.il-sheet-leave-active {
+.il-sheet-right-leave-active {
     transition: transform 200ms ease-in;
 }
 
 .il-sheet-enter-from,
 .il-sheet-leave-to {
     transform: translateY(100%) !important;
+}
+
+.il-sheet-right-enter-from,
+.il-sheet-right-leave-to {
+    transform: translateX(100%) !important;
 }
 </style>
