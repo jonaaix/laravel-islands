@@ -122,6 +122,16 @@ other attributes to the native element.
 | `type` | `'text'` | `text` · `email` · `url` · `tel` · `password` · `search`. |
 | `align` | `'left'` | |
 | `mono`, `tabular` | `false` | Monospace for codes; tabular figures for numbers. |
+| `icon` | `null` | An icon from your icon set at the start; also the `#leading` slot. |
+| `loading` | `false` | A spinner at the end; takes the place of `#trailing`. |
+| `invalid` | `false` | Draws the field red; inside a `FormField` with an error it happens on its own. |
+
+`#trailing` holds a unit or a small button at the end, such as a clear button on a search field. With either end
+filled the caller's class goes on the wrapper around the field. `focus()` and `select()` are exposed.
+
+```vue
+<TextField v-model="term" type="search" icon="o-magnifying-glass" :loading="searching" />
+```
 
 ### `NumberField`
 
@@ -142,7 +152,8 @@ The model is a number, or `null` while empty.
 
 ### `TextArea`
 
-Props: `rows` (`4`), `mono`. Multi-line fields grow from the shared height.
+Props: `rows` (`4`), `mono`, `autoresize` with `maxRows` (grows with its text, then scrolls), `invalid`. Multi-line
+fields grow from the shared height. `focus()` and `select()` are exposed.
 
 ### `SelectField`
 
