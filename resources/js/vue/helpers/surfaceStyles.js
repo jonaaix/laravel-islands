@@ -162,7 +162,7 @@ export const FORM_FIELD_VARIANTS = {
  * first column on a round halo, a medium title and a muted description. The tone tints frame, fill, halo and icon;
  * neutral stays grey.
  */
-export const ALERT_BASE = 'relative grid w-full items-start gap-y-0.5 rounded-lg border px-4 py-3 text-sm';
+export const ALERT_BASE = 'relative grid w-full items-start gap-y-0.5 rounded-lg border px-3.5 py-2.5 text-sm';
 
 export const ALERT_TONES = {
     neutral: {

@@ -29,7 +29,7 @@ const resolvedTone = computed(() => props.tone ?? theme.tone ?? 'neutral');
 const look = computed(() => theme.tones?.[resolvedTone.value] ?? theme.tones?.neutral ?? {});
 const hasIcon = computed(() => Boolean(props.icon || slots.icon));
 // With an icon the halo sits as far from the left edge as from the top, and the title drops to its middle.
-const columns = computed(() => (hasIcon.value ? 'grid-cols-[1.75rem_1fr] gap-x-3 ps-3' : 'grid-cols-[0_1fr]'));
+const columns = computed(() => (hasIcon.value ? 'grid-cols-[1.75rem_1fr] gap-x-3 ps-2.5' : 'grid-cols-[0_1fr]'));
 const role = computed(() => (resolvedTone.value === 'danger' || resolvedTone.value === 'warning' ? 'alert' : 'status'));
 </script>
 
