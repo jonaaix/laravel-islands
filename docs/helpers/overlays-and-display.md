@@ -206,6 +206,28 @@ Hover opens it after the delay; focus only when it comes from the keyboard, so a
 that focuses its first button does not show a tip. A press on the trigger and Escape close
 it, as does a trigger that leaves the page, moves from under the pointer or loses its text.
 
+## `Alert`
+
+A message inside the view, beside what it talks about — never a toast. Built after shadcn's alert: a hairline frame,
+the icon in a narrow first column, a medium title naming the state and a muted sentence for what follows. The tone
+tints frame, fill and icon: amber warns, emerald confirms, red is wrong, neutral carries plain information.
+
+```vue
+<Alert tone="warning" icon="o-exclamation-triangle" :title="t('Folder not found')" :description="folder" />
+<Alert icon="o-arrow-path" :title="t('Update available')">
+    <template #actions><Button tone="primary" size="sm" @click="reload">{{ t('Reload') }}</Button></template>
+</Alert>
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `tone` | theme (`neutral`) | `neutral` · `info` · `success` · `warning` · `danger`. |
+| `icon` | `null` | From your icon set; also the `#icon` slot. |
+| `title`, `description` | `''` | Also the `#title` and default slots. |
+| `closeLabel` | `''` | Set, a close button ends the alert and emits `close`. |
+
+Slots: `#actions` under the text. Warnings and dangers carry `role="alert"`, the rest `role="status"`.
+
 ## `Badge`
 
 ```vue

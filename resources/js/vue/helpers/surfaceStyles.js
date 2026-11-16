@@ -156,3 +156,38 @@ export const FORM_FIELD_VARIANTS = {
         error: 'mt-2 text-sm text-il-danger-600 dark:text-il-danger-400',
     },
 };
+
+/**
+ * A message that sits in the view beside what it is about — shadcn's alert: a hairline frame, the icon in a narrow
+ * first column, a medium title and a muted description. The tone tints frame, fill and icon; neutral stays grey.
+ */
+export const ALERT_BASE = 'relative grid w-full grid-cols-[0_1fr] items-start gap-y-0.5 rounded-lg border px-4 py-3 text-sm has-[>.il-alert__icon]:grid-cols-[1rem_1fr] has-[>.il-alert__icon]:gap-x-3';
+
+export const ALERT_TONES = {
+    neutral: {
+        frame: 'border-il-neutral-200 bg-white text-il-neutral-900 dark:border-white/10 dark:bg-il-neutral-900 dark:text-il-neutral-100',
+        icon: 'text-il-neutral-500 dark:text-il-neutral-400',
+        description: 'text-il-neutral-500 dark:text-il-neutral-400',
+    },
+    info: {
+        frame: 'border-il-info-200 bg-il-info-50 text-il-info-900 dark:border-il-info-500/25 dark:bg-il-info-500/10 dark:text-il-info-100',
+        icon: 'text-il-info-500 dark:text-il-info-400',
+        description: 'text-il-info-800/80 dark:text-il-info-200/80',
+    },
+    success: {
+        frame: 'border-il-success-200 bg-il-success-50 text-il-success-900 dark:border-il-success-500/25 dark:bg-il-success-500/10 dark:text-il-success-100',
+        icon: 'text-il-success-500 dark:text-il-success-400',
+        description: 'text-il-success-800/80 dark:text-il-success-200/80',
+    },
+    warning: {
+        frame: 'border-il-warning-200 bg-il-warning-50 text-il-warning-900 dark:border-il-warning-500/25 dark:bg-il-warning-500/10 dark:text-il-warning-100',
+        icon: 'text-il-warning-500 dark:text-il-warning-400',
+        description: 'text-il-warning-800/80 dark:text-il-warning-200/80',
+    },
+    danger: {
+        frame: 'border-il-danger-200 bg-il-danger-50 text-il-danger-900 dark:border-il-danger-500/25 dark:bg-il-danger-500/10 dark:text-il-danger-100',
+        icon: 'text-il-danger-500 dark:text-il-danger-400',
+        description: 'text-il-danger-800/80 dark:text-il-danger-200/80',
+    },
+};
+

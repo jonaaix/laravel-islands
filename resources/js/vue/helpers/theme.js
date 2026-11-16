@@ -3,6 +3,8 @@ import { BADGE_TONES, BUTTON_SHAPES, BUTTON_SIZES, BUTTON_SPLIT, BUTTON_TONES, I
 import { FIELD_BASE, FIELD_FRAME, FIELD_FRAME_INVALID, FIELD_INVALID, FIELD_SHAPES, FIELD_SIZES, TEXTAREA_SIZES } from './fieldStyles.js';
 import { SELECT_SKINS } from './selectSkins.js';
 import {
+    ALERT_BASE,
+    ALERT_TONES,
     BADGE_BASE,
     CHOICE_BOXES,
     CHOICE_RING,
@@ -90,6 +92,11 @@ export const defaultTheme = {
     },
     skeleton: {
         surface: SKELETON_SURFACE,
+    },
+    alert: {
+        tone: 'neutral',
+        base: ALERT_BASE,
+        tones: ALERT_TONES,
     },
     formField: {
         variant: 'caption',
