@@ -29,7 +29,7 @@ const initials = computed(() => props.name.trim().split(/\s+/).slice(0, 2).map((
 </script>
 
 <template>
-    <span class="il-avatar relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-il-neutral-100 font-medium text-il-neutral-600 dark:bg-white/10 dark:text-il-neutral-300" :class="SIZES[size] ?? SIZES.md">
+    <span class="il-avatar relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-il-neutral-300 font-medium text-il-neutral-700 dark:bg-white/20 dark:text-il-neutral-200" :class="SIZES[size] ?? SIZES.md">
         <img v-if="src && !failed" :src="src" :alt="alt" loading="lazy" class="il-avatar__image h-full w-full object-cover" @error="failed = true" />
         <span v-else class="il-avatar__initials" aria-hidden="true">{{ initials }}</span>
     </span>

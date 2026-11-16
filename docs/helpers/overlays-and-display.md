@@ -149,7 +149,7 @@ A filled bar for how far something has come; the tone carries the verdict.
 | --- | --- | --- |
 | `value`, `max` | `0`, `100` | The fill is `value / max`, clamped. |
 | `tone` | `'primary'` | `primary` · `neutral` · `success` · `warning` · `danger` |
-| `size` | `'sm'` | `xs` (4 px) · `sm` (6 px) · `md` (8 px) |
+| `size` | `'sm'` | `xs` (2 px, the active tab line) · `sm` (4 px) · `md` (6 px) |
 | `ariaLabel` | `''` | What the bar measures. |
 
 ## `Kbd`

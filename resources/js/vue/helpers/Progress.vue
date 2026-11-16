@@ -10,7 +10,7 @@ const props = defineProps({
     max: { type: Number, default: 100 },
     /** `primary` · `neutral` · `success` · `warning` · `danger` */
     tone: { type: String, default: 'primary' },
-    /** `xs` · `sm` · `md` */
+    /** `xs` matches the active tab line · `sm` · `md` */
     size: { type: String, default: 'sm' },
     ariaLabel: { type: String, default: '' },
 });
@@ -22,7 +22,7 @@ const TONES = {
     warning: 'bg-il-warning-500 dark:bg-il-warning-400',
     danger: 'bg-il-danger-600 dark:bg-il-danger-500',
 };
-const SIZES = { xs: 'h-1', sm: 'h-1.5', md: 'h-2' };
+const SIZES = { xs: 'h-0.5', sm: 'h-1', md: 'h-1.5' };
 
 const percent = computed(() => (props.max > 0 ? Math.min(100, Math.max(0, (props.value / props.max) * 100)) : 0));
 </script>
