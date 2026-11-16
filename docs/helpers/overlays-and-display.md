@@ -209,8 +209,9 @@ it, as does a trigger that leaves the page, moves from under the pointer or lose
 ## `Alert`
 
 A message inside the view, beside what it talks about — never a toast. Built after shadcn's alert: a hairline frame,
-the icon in a narrow first column, a medium title naming the state and a muted sentence for what follows. The tone
-tints frame, fill and icon: amber warns, emerald confirms, red is wrong, neutral carries plain information.
+the icon on a round halo in a narrow first column, a medium title naming the state and a muted sentence for what
+follows. The tone
+tints frame, fill, halo and icon: amber warns, emerald confirms, red is wrong, neutral carries plain information.
 
 ```vue
 <Alert tone="warning" icon="o-exclamation-triangle" :title="t('Folder not found')" :description="folder" />

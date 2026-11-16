@@ -27,13 +27,13 @@ const slots = useSlots();
 
 const resolvedTone = computed(() => props.tone ?? theme.tone ?? 'neutral');
 const look = computed(() => theme.tones?.[resolvedTone.value] ?? theme.tones?.neutral ?? {});
-const columns = computed(() => (props.icon || slots.icon ? 'grid-cols-[1rem_1fr] gap-x-3' : 'grid-cols-[0_1fr]'));
+const columns = computed(() => (props.icon || slots.icon ? 'grid-cols-[1.75rem_1fr] gap-x-3' : 'grid-cols-[0_1fr]'));
 const role = computed(() => (resolvedTone.value === 'danger' || resolvedTone.value === 'warning' ? 'alert' : 'status'));
 </script>
 
 <template>
     <div :class="['il-alert', theme.base, columns, look.frame, closeLabel ? 'pe-10' : '']" :role="role" :data-tone="resolvedTone">
-        <span v-if="icon || $slots.icon" :class="['il-alert__icon flex h-5 items-center', look.icon]">
+        <span v-if="icon || $slots.icon" :class="['il-alert__icon -my-1 flex h-7 w-7 items-center justify-center rounded-full', look.halo, look.icon]">
             <slot name="icon"><Icon :name="icon" class="h-4 w-4" /></slot>
         </span>
         <p v-if="title || $slots.title" class="il-alert__title col-start-2 font-medium tracking-tight">
