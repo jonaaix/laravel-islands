@@ -15,7 +15,13 @@ const props = defineProps({
     trigger: { type: String, default: 'click' },
     label: { type: String, default: '' },
     zIndex: { type: Number, default: 60 },
+    /** Bound with `v-model:open` to open and close the menu from outside; a context menu only closes this way. */
+    open: { type: Boolean, default: null },
+    /** Switched off, the trigger opens nothing and a context area leaves the browser's own menu alone. */
+    disabled: { type: Boolean, default: false },
 });
+
+const emit = defineEmits(['update:open']);
 
 const LONG_PRESS = 500;
 const LONG_PRESS_TOLERANCE = 10;
@@ -75,6 +81,10 @@ onMounted(syncTrigger);
 onUpdated(syncTrigger);
 
 function show(intent = null) {
+    if (props.disabled) {
+        return;
+    }
+
     focusIntent = intent;
     returnFocusTo = isContext.value ? document.activeElement : triggerElement();
     open.value = true;
@@ -131,7 +141,7 @@ function cancelPress() {
 }
 
 function onPointerDown(event) {
-    if (event.pointerType !== 'touch') {
+    if (event.pointerType !== 'touch' || props.disabled) {
         return;
     }
 
@@ -151,6 +161,10 @@ function onPointerMove(event) {
 }
 
 function onContextMenu(event) {
+    if (props.disabled) {
+        return;
+    }
+
     event.preventDefault();
     cancelPress();
 
@@ -214,6 +228,26 @@ watch(open, (isOpen) => {
         navigation.revealChecked();
     }
 }, { flush: 'post' });
+
+watch(open, isOpen => emit('update:open', isOpen));
+
+watch(() => props.open, (wanted) => {
+    if (wanted === null || wanted === open.value) {
+        return;
+    }
+
+    if (!wanted) {
+        close();
+    } else if (!isContext.value) {
+        show('first');
+    }
+});
+
+onMounted(() => {
+    if (props.open && !isContext.value) {
+        show();
+    }
+});
 
 defineExpose({ openAt, close });
 </script>

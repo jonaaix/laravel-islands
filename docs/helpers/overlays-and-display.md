@@ -148,6 +148,8 @@ menu; the default slot still receives `close` for anything else.
 | `trigger` | `'click'` | `context` makes `#trigger` an area that opens the menu at the pointer on right-click and long-press. |
 | `label` | `''` | Names the menu for screen readers where no trigger does — a context menu. |
 | `zIndex` | `60` | |
+| `open` | `null` | Bound with `v-model:open`: opens and closes the menu from outside and reports each change. A context menu only closes this way. |
+| `disabled` | `false` | The trigger opens nothing; a context area leaves the browser's own menu alone (e.g. on touch). |
 
 Exposes `openAt(event)` — one menu shared by many rows opens beside the row that was
 right-clicked — and `close()`.
@@ -167,8 +169,9 @@ Slots: default (the label), `#leading` (any content, `#icon` still works), `#des
 
 `MenuGroup` gathers items under a `label` (or `#label`), `MenuSeparator` draws the line
 between groups. `MenuSub` opens a nested menu beside its item on hover, →, Enter or Space;
-← and Escape close it again. It takes `label`, `description`, `disabled`, `width` (`200`)
-and `maxHeight`, and the items as its default slot.
+← and Escape close it again. It takes `label`, `description`, `disabled`, `width` (`200`),
+`maxHeight` and `value` — the current choice inside, shown beside the label ("Effort · High") — and the items as its
+default slot.
 
 ```vue
 <Menu :width="240" :max-height="320">

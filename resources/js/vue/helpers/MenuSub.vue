@@ -12,6 +12,8 @@ const props = defineProps({
     disabled: { type: Boolean, default: false },
     width: { type: Number, default: 200 },
     maxHeight: { type: Number, default: null },
+    /** The current choice inside, shown beside the label: "Effort · High". */
+    value: { type: String, default: '' },
 });
 
 const parent = useMenuLevel();
@@ -115,7 +117,10 @@ watch(open, (isOpen) => {
             </template>
             {{ label }}
             <template #trailing>
-                <ChevronRightIcon class="il-menu-sub__chevron h-4 w-4 shrink-0 opacity-60" />
+                <span class="flex shrink-0 items-center gap-1.5">
+                    <span v-if="value" class="il-menu-sub__value text-xs text-il-neutral-500 dark:text-il-neutral-400">{{ value }}</span>
+                    <ChevronRightIcon class="il-menu-sub__chevron h-4 w-4 shrink-0 opacity-60" />
+                </span>
             </template>
         </MenuItem>
 
