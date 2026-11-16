@@ -117,6 +117,26 @@ resize, flips at the viewport edge.
 
 Event: `close` on a click outside or Escape. Exposes `position()`.
 
+## `HoverCard`
+
+A panel that opens while the pointer rests on its trigger — a preview, never an action. It waits before opening
+and closing, so passing over the trigger does not flash it; moving into the panel keeps it open. Touch has no
+hover, so it never opens there.
+
+```vue
+<HoverCard v-model:open="previewOpen" side="right" :open-delay="300">
+    <Avatar :src="person.photo" />
+    <template #content><PersonSummary :person="person" /></template>
+</HoverCard>
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `open` | `false` | Bound with `v-model:open`. |
+| `openDelay`, `closeDelay` | `300`, `150` | Milliseconds; a card already open moves to the next trigger at once. |
+| `side`, `align`, `offset`, `width` | `'right'`, `null`, `8`, `288` | As for `Popover`. |
+| `disabled` | `false` | Opens nothing, and closes an open card. |
+
 ## `Menu` and `MenuItem`
 
 A dropdown of actions. Beyond three actions in a row, this replaces them.

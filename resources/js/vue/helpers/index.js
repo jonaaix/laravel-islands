@@ -23,6 +23,7 @@ export { default as PersonChip } from './PersonChip.vue';
 export { default as RemovableChip } from './RemovableChip.vue';
 export { default as Alert } from './Alert.vue';
 export { default as Badge } from './Badge.vue';
+export { default as HoverCard } from './HoverCard.vue';
 export { default as Tooltip } from './Tooltip.vue';
 export { default as Icon } from './Icon.vue';
 export { default as Modal } from './Modal.vue';
