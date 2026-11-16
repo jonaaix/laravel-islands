@@ -7,6 +7,8 @@ import Popover from './Popover.vue';
  * before it opens and `closeDelay` before it closes, so passing over the trigger does not flash it, and moving the
  * pointer from the trigger into the panel keeps it open. Touch has no hover, so it never opens there.
  */
+defineOptions({ inheritAttrs: false });
+
 const props = defineProps({
     /** Bound with `v-model:open`; the card reports each change. */
     open: { type: Boolean, default: false },
@@ -57,7 +59,7 @@ onBeforeUnmount(() => clearTimeout(timer));
 </script>
 
 <template>
-    <span ref="anchor" class="il-hover-card inline-flex" @pointerenter="enter" @pointerleave="leave">
+    <span ref="anchor" class="il-hover-card inline-flex" v-bind="$attrs" @pointerenter="enter" @pointerleave="leave">
         <slot />
     </span>
     <Popover :anchor="anchor" :open="shown" :side="side" :align="align" :offset="offset" :width="width" :backdrop="false">
