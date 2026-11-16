@@ -133,3 +133,26 @@ export const MENU_ITEM_TONES = {
 };
 
 export const EDIT_BUTTON_SIZES = { sm: 'h-3.5 w-3.5', md: 'h-4 w-4' };
+
+/**
+ * The two ways a FormField labels its control. `caption` is the house caption above a value — small,
+ * uppercase, grey; `label` is a plain sentence-case label in the text size, for long settings forms.
+ */
+export const FORM_FIELD_VARIANTS = {
+    caption: {
+        head: 'flex items-baseline justify-between gap-2',
+        label: 'block text-[10px] font-medium uppercase tracking-wide text-il-neutral-500 dark:text-il-neutral-400',
+        hint: 'text-[10px] font-medium uppercase tracking-wide text-il-neutral-400 dark:text-il-neutral-500',
+        description: 'mt-0.5 text-xs text-il-neutral-500 dark:text-il-neutral-400',
+        control: 'mt-1.5',
+        error: 'mt-1.5 text-xs text-il-danger-600 dark:text-il-danger-400',
+    },
+    label: {
+        head: 'flex items-center justify-between gap-2',
+        label: 'block text-sm font-medium text-il-neutral-900 dark:text-white',
+        hint: 'text-sm text-il-neutral-500 dark:text-il-neutral-400',
+        description: 'text-sm text-il-neutral-500 dark:text-il-neutral-400',
+        control: 'mt-1',
+        error: 'mt-2 text-sm text-il-danger-600 dark:text-il-danger-400',
+    },
+};

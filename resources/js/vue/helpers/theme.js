@@ -10,6 +10,7 @@ import {
     FIELD_GROUP_SURFACES,
     FIELD_GROUP_TONES,
     FILE_FIELD_ZONES,
+    FORM_FIELD_VARIANTS,
     LIST_ITEM_TONES,
     MENU_ITEM_TONES,
     MODAL_DIVIDER,
@@ -88,6 +89,10 @@ export const defaultTheme = {
     },
     skeleton: {
         surface: SKELETON_SURFACE,
+    },
+    formField: {
+        variant: 'caption',
+        variants: FORM_FIELD_VARIANTS,
     },
     tooltip: {
         surface: TOOLTIP_SURFACE,

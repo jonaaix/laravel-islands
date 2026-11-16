@@ -384,6 +384,7 @@ their own; other controls call `useFormFieldAttributes(attrs)` and spread the re
 | `description` | `''` | Under the label; also the `#description` slot. |
 | `error` | `''` | A sentence under the control, or `true` to mark it invalid. |
 | `required` | `false` | An asterisk after the label. |
+| `variant` | theme (`caption`) | `caption`: the house caption — 10px, uppercase, grey, as `FieldCaption`. `label`: a plain label in the text size, for long settings forms. Switch it per field or for a whole app with `formField: { variant: 'label' }` in the theme. |
 
 ### `FieldCaption` and `FieldGroup`
 
