@@ -200,6 +200,32 @@ shape. `size` is `2xs` (20 px) · `xs` · `sm` · `md` (32 px, default) · `lg`.
 <Avatar :src="agent.avatarUrl" :name="agent.name" size="xs" />
 ```
 
+## `Collapsible`
+
+A quiet line that folds its details open beneath it — a step in a log, a tool call, fine print. The details are
+built on first opening, so a long list of closed lines stays cheap. Without details the line does not open.
+
+```vue
+<Collapsible v-model:open="open" :label="step.label" :icon="running ? 'arrow-path' : step.icon" :spinning="running" :tone="step.failed ? 'danger' : 'neutral'">
+    <StepDetails :step="step" />
+</Collapsible>
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `open` | `false` | Bound with `v-model:open`. |
+| `label` | — | The line's text, truncated. |
+| `icon`, `spinning`, `tone` | `null`, `false`, `'neutral'` | Leading icon (also `#icon`), turning while a step runs, red for `danger`. |
+
+## `ShimmerText`
+
+Text a soft shine runs across while something is in progress. The shine moves by transforms only, so it does not
+repaint the text; with reduced motion the text stays still.
+
+```vue
+<ShimmerText :text="t('Thinking …')" class="font-medium" />
+```
+
 ## `Menu` and `MenuItem`
 
 A dropdown of actions. Beyond three actions in a row, this replaces them.
