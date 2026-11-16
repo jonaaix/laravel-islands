@@ -33,6 +33,13 @@ function fitRows() {
     if (!element) {
         return;
     }
+    // An empty field is one row; measuring it would force a layout of the whole page, which is costly while a view opens.
+    if (element.value === '') {
+        if (element.rows !== 1) {
+            element.rows = 1;
+        }
+        return;
+    }
     const style = getComputedStyle(element);
     const lineHeight = Number.parseFloat(style.lineHeight);
     const padding = Number.parseFloat(style.paddingTop) + Number.parseFloat(style.paddingBottom);
