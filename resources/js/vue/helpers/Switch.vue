@@ -1,5 +1,6 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, useAttrs } from 'vue';
+import { useFormFieldAttributes } from './formField.js';
 import { useTheme } from './theme.js';
 
 const props = defineProps({
@@ -12,6 +13,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:modelValue']);
+
+const fieldAttributes = useFormFieldAttributes(useAttrs());
 
 const theme = useTheme('switch');
 
@@ -39,6 +42,7 @@ const skin = computed(() => theme.tones[resolvedTone.value] ?? theme.tones.prima
             :checked="modelValue"
             :disabled="disabled"
             :aria-label="ariaLabel || undefined"
+            v-bind="fieldAttributes"
             @change="emit('update:modelValue', $event.target.checked)"
         />
 

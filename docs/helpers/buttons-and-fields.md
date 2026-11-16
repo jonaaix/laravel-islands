@@ -364,6 +364,27 @@ beyond the starter kit, and the `tools` slot renders after the built-in buttons 
 </WysiwygEditor>
 ```
 
+### `FormField`
+
+A control with its label: an optional `hint` at the label's end, a `description` under the label and an `error`
+under the control (`true` only marks the control invalid). `required` adds an asterisk. `TextField`, `TextArea`,
+`SelectField` and `Switch` inside take the label's id and point `aria-describedby` at the description and error on
+their own; other controls call `useFormFieldAttributes(attrs)` and spread the result on their focusable element.
+
+```vue
+<FormField :label="t('Name')" :hint="t('Optional')" :error="errors.name">
+    <TextField v-model="name" />
+</FormField>
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `label` | `''` | Also the `#label` slot. |
+| `hint` | `''` | Beside the label; also the `#hint` slot. |
+| `description` | `''` | Under the label; also the `#description` slot. |
+| `error` | `''` | A sentence under the control, or `true` to mark it invalid. |
+| `required` | `false` | An asterisk after the label. |
+
 ### `FieldCaption` and `FieldGroup`
 
 `FieldCaption` is the 10px uppercase caption above a value — always a `<span>`, wrapped by

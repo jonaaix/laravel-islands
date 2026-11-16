@@ -41,6 +41,8 @@ export { BADGE_TONES, BUTTON_SHAPES, BUTTON_SIZES, BUTTON_SPLIT, BUTTON_TONES, I
 export { EDIT_BUTTON_SIZES, FIELD_GROUP_SURFACES, FIELD_GROUP_TONES, LIST_ITEM_TONES, MENU_ITEM_TONES, MODAL_SIZES, OPTION_STRIP_FRAMES, OPTION_STRIP_SIZES, OPTION_STRIP_SKINS, SWITCH_TONES, TOAST_SURFACE, TOAST_TONES } from './surfaceStyles.js';
 export { default as EditButton } from './EditButton.vue';
 export { default as FieldCaption } from './FieldCaption.vue';
+export { default as FormField } from './FormField.vue';
+export { provideFormField, useFormFieldAttributes } from './formField.js';
 export { default as FieldGroup } from './FieldGroup.vue';
 export { default as FieldSegment } from './FieldSegment.vue';
 export { default as TextField } from './TextField.vue';

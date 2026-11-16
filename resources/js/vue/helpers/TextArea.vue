@@ -2,6 +2,7 @@
 import { computed, useAttrs } from 'vue';
 import { textareaClasses } from './fieldStyles.js';
 import { useTheme } from './theme.js';
+import { useFormFieldAttributes } from './formField.js';
 
 defineOptions({ inheritAttrs: false });
 
@@ -21,6 +22,7 @@ const props = defineProps({
 defineEmits(['update:modelValue']);
 
 const attrs = useAttrs();
+const fieldAttributes = useFormFieldAttributes(attrs);
 const field = useTheme('field');
 
 const classes = computed(() =>
@@ -47,7 +49,7 @@ const classes = computed(() =>
         :class="['il-text-area', classes]"
         :data-size="size ?? field.size"
         :data-shape="shape ?? field.shape"
-        v-bind="{ ...attrs, class: undefined }"
+        v-bind="{ ...attrs, ...fieldAttributes, class: undefined }"
         @input="$emit('update:modelValue', $event.target.value)"
     ></textarea>
 </template>
