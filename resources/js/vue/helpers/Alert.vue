@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, useSlots } from 'vue';
 import Icon from './Icon.vue';
 import XMarkIcon from './XMarkIcon.vue';
 import { useTheme } from './theme.js';
@@ -22,14 +22,16 @@ const props = defineProps({
 const emit = defineEmits(['close']);
 
 const theme = useTheme('alert');
+const slots = useSlots();
 
 const resolvedTone = computed(() => props.tone ?? theme.tone ?? 'neutral');
 const look = computed(() => theme.tones?.[resolvedTone.value] ?? theme.tones?.neutral ?? {});
+const columns = computed(() => (props.icon || slots.icon ? 'grid-cols-[1rem_1fr] gap-x-3' : 'grid-cols-[0_1fr]'));
 const role = computed(() => (resolvedTone.value === 'danger' || resolvedTone.value === 'warning' ? 'alert' : 'status'));
 </script>
 
 <template>
-    <div :class="['il-alert', theme.base, look.frame, closeLabel ? 'pe-10' : '']" :role="role" :data-tone="resolvedTone">
+    <div :class="['il-alert', theme.base, columns, look.frame, closeLabel ? 'pe-10' : '']" :role="role" :data-tone="resolvedTone">
         <span v-if="icon || $slots.icon" :class="['il-alert__icon flex h-5 items-center', look.icon]">
             <slot name="icon"><Icon :name="icon" class="h-4 w-4" /></slot>
         </span>

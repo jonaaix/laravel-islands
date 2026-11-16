@@ -161,7 +161,7 @@ export const FORM_FIELD_VARIANTS = {
  * A message that sits in the view beside what it is about — shadcn's alert: a hairline frame, the icon in a narrow
  * first column, a medium title and a muted description. The tone tints frame, fill and icon; neutral stays grey.
  */
-export const ALERT_BASE = 'relative grid w-full grid-cols-[0_1fr] items-start gap-y-0.5 rounded-lg border px-4 py-3 text-sm has-[>.il-alert__icon]:grid-cols-[1rem_1fr] has-[>.il-alert__icon]:gap-x-3';
+export const ALERT_BASE = 'relative grid w-full items-start gap-y-0.5 rounded-lg border px-4 py-3 text-sm';
 
 export const ALERT_TONES = {
     neutral: {
