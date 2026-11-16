@@ -98,6 +98,28 @@ toast({ tone: 'danger', title: t('Upload failed'), message: error.message, durat
 `provideToasts()` must live in the component that renders `ToastHost`. A result that has
 a place in the view is better shown there than as a toast.
 
+## `Sheet`
+
+A panel that rises from the bottom edge on a phone — a menu, a form or a whole screen. Dragging it down, tapping the
+overlay or pressing Escape emits `close`. It joins the modal stack, so a sheet over a modal lands above it.
+
+```vue
+<Sheet :open="open" :title="t('Model')" :close-label="t('Close')" @close="open = false">
+    <ModelList />
+    <template #footer><Button :label="t('Done')" @click="open = false" /></template>
+</Sheet>
+```
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `open` | `false` | Shown while true. |
+| `title`, `description` | `''` | The header; also the `#title` slot. `#actions` sits beside it. |
+| `full` | `false` | Takes the full height below the status bar. |
+| `divided` | `false` | Lines under the header and above the footer. |
+| `handleOnly` | `false` | Only handle and header start a drag; otherwise a body that does not scroll drags too. |
+| `closeLabel` | `''` | Set, a close button ends the header. |
+| `bodyClass` | `'px-4 pt-3'` | Padding of the content; the bottom safe area is always added. |
+
 ## `Popover`
 
 The anchored panel behind menus, comboboxes and inline editors. Repositions on scroll and

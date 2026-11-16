@@ -27,6 +27,7 @@ export { default as Badge } from './Badge.vue';
 export { default as Kbd } from './Kbd.vue';
 export { default as Progress } from './Progress.vue';
 export { default as Separator } from './Separator.vue';
+export { default as Sheet } from './Sheet.vue';
 export { default as HoverCard } from './HoverCard.vue';
 export { default as Tooltip } from './Tooltip.vue';
 export { default as Icon } from './Icon.vue';
