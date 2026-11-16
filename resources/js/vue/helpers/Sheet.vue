@@ -4,6 +4,7 @@ import IconButton from './IconButton.vue';
 import XMarkIcon from './XMarkIcon.vue';
 import { overlayZIndex, registerOverlay, unregisterOverlay } from './overlayStack.js';
 import { lockPageScroll, unlockPageScroll } from './scrollLock.js';
+import { useTheme } from './theme.js';
 
 /**
  * A panel that rises from the bottom edge on a phone — a menu, a form or a whole screen. Dragging it down, tapping
@@ -25,6 +26,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close']);
+
+const theme = useTheme('sheet');
 
 const DISMISS_RATIO = 0.25;
 const DISMISS_VELOCITY = 0.5;
@@ -163,8 +166,8 @@ onBeforeUnmount(() => {
                 aria-modal="true"
                 tabindex="-1"
                 :aria-label="title || undefined"
-                class="il-sheet fixed inset-x-0 bottom-0 flex flex-col rounded-t-il-card bg-white shadow-2xl ring-1 ring-il-neutral-200 focus:outline-none dark:bg-il-neutral-900 dark:ring-white/10"
-                :class="full ? 'h-[calc(100dvh-max(1rem,env(safe-area-inset-top)))]' : 'max-h-[calc(100dvh-max(1rem,env(safe-area-inset-top)))]'"
+                class="il-sheet fixed inset-x-0 bottom-0 flex flex-col rounded-t-il-card focus:outline-none"
+                :class="[theme.surface, full ? 'h-[calc(100dvh-max(1rem,env(safe-area-inset-top)))]' : 'max-h-[calc(100dvh-max(1rem,env(safe-area-inset-top)))]']"
                 :style="panelStyle"
                 :data-dragging="dragging || undefined"
                 @pointermove="onPointermove"

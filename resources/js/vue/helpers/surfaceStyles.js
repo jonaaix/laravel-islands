@@ -21,6 +21,8 @@ export const SELECT_MENU_SURFACE = 'bg-white shadow-lg ring-1 ring-il-neutral-20
 
 export const MODAL_SURFACE = 'bg-white shadow-2xl ring-1 ring-il-neutral-200 dark:bg-il-neutral-900 dark:ring-white/10';
 
+export const SHEET_SURFACE = 'bg-white shadow-2xl ring-1 ring-il-neutral-200 dark:bg-il-neutral-900 dark:ring-white/10';
+
 export const MODAL_DIVIDER = 'border-il-neutral-200 dark:border-white/10';
 
 export const BADGE_BASE = 'rounded-il-control px-2 py-0.5 text-xs font-medium';

@@ -120,6 +120,8 @@ overlay or pressing Escape emits `close`. It joins the modal stack, so a sheet o
 | `closeLabel` | `''` | Set, a close button ends the header. |
 | `bodyClass` | `'px-4 pt-3'` | Padding of the content; the bottom safe area is always added. |
 
+The panel's colour comes from the theme: `mergeTheme(theme, { sheet: { surface: 'bg-… ring-…' } })`.
+
 ## `Popover`
 
 The anchored panel behind menus, comboboxes and inline editors. Repositions on scroll and

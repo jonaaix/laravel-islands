@@ -18,6 +18,7 @@ import {
     MODAL_DIVIDER,
     MODAL_SIZES,
     MODAL_SURFACE,
+    SHEET_SURFACE,
     OPTION_STRIP_FRAMES,
     OPTION_STRIP_SIZES,
     OPTION_STRIP_SKINS,
@@ -115,6 +116,9 @@ export const defaultTheme = {
         sizes: MODAL_SIZES,
         surface: MODAL_SURFACE,
         divider: MODAL_DIVIDER,
+    },
+    sheet: {
+        surface: SHEET_SURFACE,
     },
     toast: {
         surface: TOAST_SURFACE,
