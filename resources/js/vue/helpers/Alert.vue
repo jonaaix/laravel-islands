@@ -1,6 +1,7 @@
 <script setup>
 import { computed, useSlots } from 'vue';
 import Icon from './Icon.vue';
+import IconButton from './IconButton.vue';
 import XMarkIcon from './XMarkIcon.vue';
 import { useTheme } from './theme.js';
 
@@ -44,14 +45,10 @@ const role = computed(() => (resolvedTone.value === 'danger' || resolvedTone.val
         <div v-if="$slots.actions" class="il-alert__actions col-start-2 mt-2 flex flex-wrap items-center gap-2">
             <slot name="actions" />
         </div>
-        <button
-            v-if="closeLabel"
-            type="button"
-            class="il-alert__close absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-md opacity-60 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-il-primary-500"
-            :aria-label="closeLabel"
-            @click="emit('close')"
-        >
-            <XMarkIcon class="h-4 w-4" />
-        </button>
+        <span v-if="closeLabel" class="il-alert__close absolute right-2 top-2.5 flex">
+            <IconButton :label="closeLabel" size="xs" tone="plain" class="opacity-60 transition-opacity hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/10" @click="emit('close')">
+                <XMarkIcon />
+            </IconButton>
+        </span>
     </div>
 </template>
