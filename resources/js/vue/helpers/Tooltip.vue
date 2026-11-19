@@ -38,6 +38,29 @@ let openedBy = null;
 let pressed = false;
 let domObserver = null;
 
+function hasArea(element) {
+    const box = element.getBoundingClientRect();
+    return box.width > 0 || box.height > 0;
+}
+
+function firstWithArea(element) {
+    if (hasArea(element)) {
+        return element;
+    }
+    for (const child of element.children) {
+        const found = firstWithArea(child);
+        if (found) {
+            return found;
+        }
+    }
+    return null;
+}
+
+// Wrappers such as a menu's `display: contents` root take no space; measuring one would put the tip in the window's corner.
+function anchorOf(trigger) {
+    return firstWithArea(trigger.children.length === 1 ? trigger.firstElementChild : trigger);
+}
+
 function reposition() {
     const trigger = triggerRef.value;
     const tip = tipRef.value;
@@ -51,7 +74,11 @@ function reposition() {
     // Measured on the wrapped element rather than the wrapper. For an ordinary child the
     // two boxes coincide, but one that is absolutely positioned leaves the wrapper behind
     // as an empty box somewhere else entirely — and the tip would follow that box.
-    const anchor = trigger.children.length === 1 ? trigger.firstElementChild : trigger;
+    const anchor = anchorOf(trigger);
+    if (!anchor) {
+        hide();
+        return;
+    }
     const tr = anchor.getBoundingClientRect();
     const tp = tip.getBoundingClientRect();
     const vw = window.innerWidth;
@@ -172,6 +199,9 @@ function show(source) {
     openedBy = source;
     document.addEventListener('keydown', hideOnEscape, true);
     showTimer = setTimeout(async () => {
+        if (!triggerRef.value || !anchorOf(triggerRef.value)) {
+            return;
+        }
         const wasVisible = visible.value;
         visible.value = true;
         if (wasVisible) {
