@@ -11,6 +11,7 @@ if (typeof document !== 'undefined') {
 <script setup>
 import { computed, ref, nextTick, onBeforeUnmount, watch } from 'vue';
 import { useTheme } from './theme.js';
+import { useTeleportTarget } from './teleportTarget.js';
 
 defineOptions({ inheritAttrs: false });
 
@@ -29,6 +30,9 @@ const OFFSET = ARROW;
 const EDGE = 8;
 
 const visible = ref(false);
+const teleportTarget = useTeleportTarget();
+// Mounted on first show, so a provided target that is still rendering when the tooltip mounts exists by then.
+const teleportReady = ref(false);
 const coords = ref({ top: 0, left: 0 });
 const arrow = ref({ side: 'top', offset: 0 });
 const triggerRef = ref(null);
@@ -196,6 +200,7 @@ function show(source) {
         return;
     }
     clearTimeout(showTimer);
+    teleportReady.value = true;
     openedBy = source;
     document.addEventListener('keydown', hideOnEscape, true);
     showTimer = setTimeout(async () => {
@@ -276,7 +281,7 @@ onBeforeUnmount(hide);
         <slot />
     </span>
 
-    <Teleport to="body">
+    <Teleport v-if="teleportReady" :to="teleportTarget">
         <transition name="tooltip-fade">
             <div
                 v-if="visible && text"

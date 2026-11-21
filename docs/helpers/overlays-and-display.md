@@ -315,6 +315,10 @@ Hover opens it after the delay; focus only when it comes from the keyboard, so a
 that focuses its first button does not show a tip. A press on the trigger and Escape close
 it, as does a trigger that leaves the page, moves from under the pointer or loses its text.
 
+The tip renders into `body`. A component that lives elsewhere — inside a shadow root, say —
+hands its descendants another target with `provideTeleportTarget(element)`; a ref works too,
+read when the tip first shows.
+
 ## `Alert`
 
 A message inside the view, beside what it talks about — never a toast. Built after shadcn's alert: a hairline frame,
