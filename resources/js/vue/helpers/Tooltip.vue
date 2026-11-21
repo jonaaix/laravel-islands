@@ -173,7 +173,7 @@ function followTrigger() {
 
 /** A trigger moved away from under a resting pointer never fires mouseleave either. */
 function hideWhenPointerLeft(event) {
-    if (openedBy === 'hover' && !triggerRef.value?.contains(event.target)) {
+    if (openedBy === 'hover' && !event.composedPath().includes(triggerRef.value)) {
         hide();
     }
 }
