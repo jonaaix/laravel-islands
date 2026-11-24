@@ -7,6 +7,8 @@ const props = defineProps({
     /** Neither on nor off — for a box standing in for several that disagree. */
     indeterminate: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
+    /** A circle instead of a square, for ticking off items such as a to-do. */
+    round: { type: Boolean, default: false },
     /** Required when no visible label sits beside the box. */
     ariaLabel: { type: String, default: '' },
 });
@@ -55,8 +57,8 @@ const TICK_LENGTH = 20;
 
         <span
             aria-hidden="true"
-            class="il-checkbox__box pointer-events-none relative flex h-full w-full items-center justify-center rounded-[4px] border-2 transition-colors duration-[var(--il-duration-fast)]"
-            :class="marked ? boxes.on : boxes.off"
+            class="il-checkbox__box pointer-events-none relative flex h-full w-full items-center justify-center border-2 transition-colors duration-[var(--il-duration-fast)]"
+            :class="[round ? 'rounded-full' : 'rounded-[4px]', marked ? boxes.on : boxes.off]"
         >
             <svg viewBox="0 0 18 18" class="h-full w-full text-white">
                 <!-- Drawn rather than switched on: the stroke is wiped off and runs back in. -->

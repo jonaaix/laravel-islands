@@ -240,7 +240,7 @@ is exported alongside: `8 – 16 Sep 2026`, or the single day when both are the 
 
 ### `Checkbox`
 
-Props: `indeterminate`, `ariaLabel` (required when no visible label sits beside it).
+Props: `indeterminate`, `round` (a circle, for ticking off items such as a to-do), `ariaLabel` (required when no visible label sits beside it).
 
 ### `Switch`
 
